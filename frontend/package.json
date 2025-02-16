@@ -30,7 +30,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build --branch gh-pages --message 'Deploy update' --silent",
+    "deploy": "gh-pages -d build --branch main --message 'Deploy update' --silent",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
