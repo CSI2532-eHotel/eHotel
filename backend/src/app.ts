@@ -1,11 +1,19 @@
 import express from 'express';
 import { pool } from './config/database';
+import cors from 'cors';
 import routes from './routes';
 
 const app = express();
 const port = 5000;
 
 app.use(express.json());
+// Allow requests from frontend
+app.use(cors({
+  origin: 'http://localhost:3000',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow only these methods
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
 
 // Test database connection
 app.get('/test-db', async (req, res) => {
