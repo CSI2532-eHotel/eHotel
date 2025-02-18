@@ -1,23 +1,14 @@
 import React from 'react';
+import { Routes, Route } from 'react-router-dom';
 import axios from 'axios';
-import './App.css';
+import './app.css';
+import './app.scss';
+import Navbar from './components/navbar';
 
 function App() {
-  
-  const testFunction2 = async () => {
-    try {
-      const response = await axios.get('http://localhost:5000/test-db');
-      console.log(response.data);
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  }
-
   return (
     <div className="App">
-      <header className="App-header">
-        <button onClick={testFunction2}>Test database connection</button>
-      </header>
+      <Navbar />
     </div>
   );
 }
