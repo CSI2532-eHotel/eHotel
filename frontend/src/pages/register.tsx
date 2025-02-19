@@ -2,8 +2,8 @@ import React from "react";
 import { Navbar, Container, Nav, Button } from "react-bootstrap";
 import { Link } from 'react-router-dom';
 import logo from '../assets/logo1.png'
-import './navbar.css';
-function navbar() {
+import './register.css';
+function register() {
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container fluid>
@@ -27,4 +27,4 @@ function navbar() {
     </Navbar>
   );
 }
-export default navbar;
+export default register;
