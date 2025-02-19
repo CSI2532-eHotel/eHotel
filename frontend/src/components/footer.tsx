@@ -7,11 +7,11 @@ import youtube from '../assets/youtube.svg';
 
 const footer = () => {
     return (
-        <footer className="bg-primary mt-4 pt-4 pb-3">
+        <footer className="bg-primary mt-1 pt-4 pb-3">
             <Container>
                 <Row>
                     <Col className="">
-                        <p className='fs-5'>&copy; 2024 Paradise Hotel. All rights reserved.</p>
+                        <p className='fs-5'>&copy; 2025 Paradise Hotel. All rights reserved.</p>
                     </Col>
                     <Col>
                         <div style={{ paddingLeft: "100px" }}>
