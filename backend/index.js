@@ -12,11 +12,14 @@ app.use(cors());
 
 // =================================route pour insertion (post)===========================
 //route pour inserer un client
-// Déclare une route POST, utilisée pour insérer des données
-// Route pour insérer un client
 app.post('/api/client', insertClient); 
 
+// =================================route pour selection (get)===========================
 
+
+// =================================route pour mis à jour (put)===========================
+
+// =================================route pour suppression (delete)===========================
 
 app.listen(5000, () => {
     console.log('Server has started on port 5000');
