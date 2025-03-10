@@ -78,7 +78,7 @@ CREATE TABLE Client (
     rue VARCHAR(100),
     ville VARCHAR(50),
     code_postal VARCHAR(7) CHECK (code_postal ~ '^[A-Z][0-9][A-Z] [0-9][A-Z][0-9]$'),
-    courriel_client VARCHAR(25) CHECK (courriel_employee ~ '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'), --ajouter pour l'authentication
+    courriel_client VARCHAR(25) CHECK (courriel_client ~ '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'), --ajouter pour l'authentication
     motpasse_client VARCHAR(20),
     date_enregistrement DATE,
     PRIMARY KEY (NAS_client),
