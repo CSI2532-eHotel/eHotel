@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/eHotel/static/css/main.edc3d8d0.css",
+    "main.js": "/eHotel/static/js/main.81ab2c0c.js",
+    "static/js/453.8ab44547.chunk.js": "/eHotel/static/js/453.8ab44547.chunk.js",
+    "static/media/logo.png": "/eHotel/static/media/logo.1539052aee3cc826cdbd.png",
+    "static/media/youtube.svg": "/eHotel/static/media/youtube.5d2032e076bd499245e73783ad03f404.svg",
+    "index.html": "/eHotel/index.html",
+    "static/media/instagram.svg": "/eHotel/static/media/instagram.79234b3053de69fd2ca03ff96b7b49b7.svg",
+    "static/media/facebook.svg": "/eHotel/static/media/facebook.839352cca29a040062fd5f1a1fcdfb94.svg",
+    "static/media/twitter-x.svg": "/eHotel/static/media/twitter-x.d496046b3a16d71f6700430c9145bd16.svg",
+    "main.edc3d8d0.css.map": "/eHotel/static/css/main.edc3d8d0.css.map",
+    "main.81ab2c0c.js.map": "/eHotel/static/js/main.81ab2c0c.js.map",
+    "453.8ab44547.chunk.js.map": "/eHotel/static/js/453.8ab44547.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.edc3d8d0.css",
+    "static/js/main.81ab2c0c.js"
+  ]
+}
