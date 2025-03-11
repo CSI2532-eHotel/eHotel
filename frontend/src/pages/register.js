@@ -79,7 +79,7 @@ function Register() {
       };
 
       // Send data to backend
-      const response = await axios.post('http://localhost:5000/api/client', clientData);
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/client`, clientData);
       
       console.log("Registration successful:", response.data);
       
@@ -98,7 +98,7 @@ function Register() {
   return (
     <Container fluid className="d-flex flex-column mb-4">
       {/* Navbar */}
-      <Navbar expand="lg" className="bg-body-tertiary px-3 shadow-sm">
+      <Navbar expand="lg" className="bg-body-tertiary px-3 shadow-sm pb-3">
         <Navbar.Brand href="#" className="d-flex align-items-center">
           <img src={logo} style={{ width: "50px", marginRight: "10px" }} alt="Logo" />
           eHotel

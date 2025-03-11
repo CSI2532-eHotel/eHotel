@@ -1,0 +1,97 @@
+/*** Navbar ***/
+.custom-container {
+  margin-top: 10px;
+  margin-left: 30px !important;
+  margin-right: 50px !important;
+}
+/* change the text in navbar to lowecase */
+.capitalize {
+  text-transform: capitalize !important;
+}
+#basic-nav-dropdown {
+  text-transform: capitalize !important;
+}
+
+/* Navbar brand */
+.navbar-brand {
+  color: #D1A062!important;
+  position: relative;
+  margin-left: 10px;
+  font-size: 27px !important;
+  text-transform: uppercase;
+  font-weight: 500 !important;
+}
+/* Navbar links */
+.nav-link {
+  color: #D1A062 !important;
+  position: relative;
+  margin-left: 5px;
+  font-size: 18px !important;
+  text-transform: uppercase;
+  font-weight: 500 !important;
+}
+.nav-link:hover {
+  color: #6c757d !important;
+}
+#loginOutbtn {
+    width: 120px !important;
+}
+.form-check-input:checked {
+  background-color: #D1A062 !important;
+  border-color: #D1A062 !important;
+}
+
+.form-check-input:focus {
+  border-color: #dab88a !important;
+  outline: 0;
+  box-shadow: none !important;
+}
+/* Style du slider */
+.custom-range {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  width: 100%;
+  height: 5px;
+  outline: none !important;
+  background: initial !important; 
+}
+.custom-range::-webkit-slider-thumb {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  width: 15px;
+  height: 15px;
+  background: #dab88a !important; 
+  border-radius: 50%;
+  border: none !important;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+  outline: none !important;
+  box-shadow: none !important; 
+}
+
+.custom-range:focus::-webkit-slider-thumb,
+.custom-range:active::-webkit-slider-thumb {
+  transform: scale(1.2);
+  outline: none !important;
+  box-shadow: none !important; 
+}
+
+/* Pour Firefox */
+.custom-range::-moz-range-thumb {
+  background: #dab88a !important;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: none !important;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+  outline: none !important;
+  box-shadow: none !important; 
+}
+
+.custom-range:focus::-moz-range-thumb,
+.custom-range:active::-moz-range-thumb {
+  transform: scale(1.2);
+  outline: none !important;
+  box-shadow: none !important; 
+}

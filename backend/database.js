@@ -19,7 +19,6 @@ const pool = new Pool({
 
 // ==================================insertion(insert)====================================
 //fonction pour inserer un client
-//fonction pour inserer un client
 export const insertClient = async (req, res) => {
     try {
         const { NAS_client, nom_client, prenom_client, rue, ville, code_postal, courriel_client, motpasse_client, date_enregistrement } = req.body;
@@ -36,7 +35,6 @@ export const insertClient = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
-
 
 
 

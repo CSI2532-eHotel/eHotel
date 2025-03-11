@@ -85,7 +85,7 @@ function Login() {
               {/* Forgot Password & Login Button */}
               <Row className="mb-2 mt-2">
                 <Col>
-                  <Link to="/forgot-password" className="text-primary">Oubliez mot de passe?</Link>
+                  <Link to="/" className="text-primary">Oubliez mot de passe?</Link>
                 </Col>
               </Row>
               <Row>
