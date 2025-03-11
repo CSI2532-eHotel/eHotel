@@ -4,15 +4,17 @@
 
 //prend toutes les informations de la base de données pg et mettre dans l'objet pool
 import pkg from 'pg';
+import env from 'dotenv';
 const { Pool } = pkg;
+env.config(); // Load environment variables
 
 //on crée un instance de pool pour se connecter à la base de données
 const pool = new Pool({
-    user: "csi2532_ehotel",
-    database:"ehotel",
-    password:"ehotel",
-    host:"ehotel.ddns.net",
-    port:5432
+    user: process.env.DB_USER,
+    database: process.env.DB_DATABASE,
+    password: process.env.DB_PASSWORD,
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT
 });
 
 // ==================================insertion(insert)====================================

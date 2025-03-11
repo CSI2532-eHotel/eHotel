@@ -1,7 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import { insertClient } from './database.js';
-
+import env from 'dotenv';
+env.config(); 
 const app = express();
 
 // Middleware- nous permet de lire les données envoyées par le client 
@@ -21,6 +22,7 @@ app.post('/api/client', insertClient);
 
 // =================================route pour suppression (delete)===========================
 
-app.listen(5000, () => {
-    console.log('Server has started on port 5000');
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+    console.log(`Server has started on port ${PORT}`);
 });
