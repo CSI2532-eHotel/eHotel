@@ -1,8 +1,8 @@
 /* Make the customizations */
 $theme-colors: (
-  'primary': #D1A062,
-  'secondary': lighten(#dab88a, 25%),
-//   'info': #4471BF,
+  "primary": #d1a062,
+  "secondary": lighten(#dab88a, 25%),
+  "info": #cead81,
 );
 
-@import '~bootstrap/scss/bootstrap';
+@import "~bootstrap/scss/bootstrap";
