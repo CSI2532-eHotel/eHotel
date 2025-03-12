@@ -408,16 +408,7 @@ const ClientHome = () => {
               </Nav.Link>
               <Nav.Link
                 as={Link}
-                to="/booking"
-                className="capitalize"
-                id="BookingLink"
-                style={{ marginRight: "8px" }}
-              >
-                Mes Reservations
-              </Nav.Link>
-              <Nav.Link
-                as={Link}
-                to="/profile"
+                to="/ClientProfile"
                 className="capitalize"
                 id="ProfileLink"
                 style={{ marginRight: "8px" }}
@@ -522,7 +513,7 @@ const ClientHome = () => {
                     <div style={{ position: "relative", width: "100%" }}>
                       <Form.Range
                         min={0}
-                        max={10000}
+                        max={1000}
                         value={price}
                         onChange={handleChange}
                         className="custom-range"
@@ -531,7 +522,7 @@ const ClientHome = () => {
                       <span
                         style={{
                           position: "absolute",
-                          left: `calc(${(price / 10000) * 100}% - 10px)`, // Position it relative to the thumb
+                          left: `calc(${(price / 1000) * 100}% - 10px)`, // Position it relative to the thumb
                           bottom: "25px",
                           fontWeight: "bold",
                           color: "#D1A062",
@@ -542,7 +533,7 @@ const ClientHome = () => {
                         ${price}
                       </span>
                     </div>
-                    <Form.Label className="ms-2">$10,000</Form.Label>
+                    <Form.Label className="ms-2">$1000</Form.Label>
                   </Form>
                 </Row>
 
@@ -624,7 +615,6 @@ const ClientHome = () => {
                   {groupedHotels[group].map((hotel) => (
                     <Col md={3} key={hotel.hotel_ID} className="mb-4">
                       <Card className="h-100 hotel-card">
-                        <Card.Img variant="top" src={image} />
                         <Card.Body>
                           <Card.Title>{hotel.hotel_name}</Card.Title>
                           <Card.Text>
