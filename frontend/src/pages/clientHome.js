@@ -139,7 +139,7 @@ const ClientHome = () => {
       return;
     }
 
-    // Get current user's NAS_client (would normally come from authentication/session)
+    // Get current user's NAS_client (use getClientLoginDetail)
     // For demo purposes, using a hardcoded value
     const userNASClient = "123456789"; // This would come from auth context in a real app
 
@@ -793,17 +793,6 @@ const ClientHome = () => {
             <p className="mb-0">
               Présentez votre identifiant de réservation <strong>{reservationId}</strong> à l'hôtel pour transformer votre réservation en une location.
             </p>
-          </div>
-          <div className="reservation-details mt-4">
-            <h6>Détails de la réservation:</h6>
-            {selectedRoom && (
-              <p>
-                <strong>Hôtel:</strong> {selectedRoom.hotel_name}<br />
-                <strong>Chambre:</strong> {selectedRoom.capacite}<br />
-                <strong>Check-in:</strong> {reservationData.debut_date}<br />
-                <strong>Check-out:</strong> {reservationData.fin_date}
-              </p>
-            )}
           </div>
         </Modal.Body>
         <Modal.Footer>
