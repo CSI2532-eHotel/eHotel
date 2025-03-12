@@ -86,7 +86,7 @@ CREATE TABLE Client (
 
 -- Création de la table Reservation
 CREATE TABLE Reservation (
-    reservation_ID VARCHAR(4) NOT NULL UNIQUE CHECK (reservation_ID ~ '^1[0-9]{3}$'),
+    reservation_ID VARCHAR(4) SERIAL NOT NULL UNIQUE CHECK (reservation_ID ~ '^1[0-9]{3}$'),
     debut_date_reservation DATE,
     fin_date_reservation DATE,
     NAS_client VARCHAR(9),

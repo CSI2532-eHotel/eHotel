@@ -1,26 +1,382 @@
-import {
-  Button,
-  Card,
-  CardText,
-  Col,
-  Container,
-  Form,
-  Nav,
-  Navbar,
-  Row,
-} from "react-bootstrap";
-import { useState } from "react";
+import {Button,Card,CardText,Col,Container,Form,Nav,Navbar,Row,Badge,Modal,} from "react-bootstrap";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/logo.png";
 import "./clientHome.css";
 import image from "../assets/chambre.jpg";
 
+//To do -remove the mock data and replace with actual data from the backend (API)
+
 const ClientHome = () => {
   const [price, setPrice] = useState(0); // State to store the price
+  const [viewMode, setViewMode] = useState("zone"); // "zone" or "capacity"
+  const [hotelData, setHotelData] = useState([]); // State to store hotel data
+  const [groupedHotels, setGroupedHotels] = useState({}); // State to store grouped hotels
+  const [showModal, setShowModal] = useState(false); // State to control modal visibility
+  const [selectedRoom, setSelectedRoom] = useState(null); // State to store selected room for reservation
+  const [reservationData, setReservationData] = useState({
+    debut_date: "",
+    fin_date: "",
+  });
+  const [filters, setFilters] = useState({
+    montagne: false,
+    mer: false,
+    extensive: null,
+    tv: false,
+    sofa: false,
+    fridge: false,
+    price: 0,
+  });
+  // New states for success modal
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [reservationId, setReservationId] = useState("");
 
+  // Handle change of price slider
   const handleChange = (e) => {
     setPrice(e.target.value);
+    setFilters({ ...filters, price: parseInt(e.target.value) });
   };
+
+  // Handle filter checkbox changes
+  const handleFilterChange = (e) => {
+    setFilters({
+      ...filters,
+      [e.target.id.replace("Checkbox", "").toLowerCase()]: e.target.checked,
+    });
+  };
+
+  // Handle extensive filter changes
+  const handleExtensiveChange = (e) => {
+    if (e.target.id === "extensive-oui") {
+      setFilters({ ...filters, extensive: e.target.checked ? true : null });
+    } else if (e.target.id === "extensive-non") {
+      setFilters({ ...filters, extensive: e.target.checked ? false : null });
+    }
+  };
+
+  // Handle commodité filter changes
+  const handleCommoditeChange = (e) => {
+    setFilters({
+      ...filters,
+      [e.target.id.replace("checkbox", "").toLowerCase()]: e.target.checked,
+    });
+  };
+
+  // Function to switch view mode
+  const switchViewMode = (mode) => {
+    setViewMode(mode);
+    // Fetch data based on the selected mode
+    fetchHotelData(mode);
+  };
+
+  // Function to clear all filters
+  const clearFilters = () => {
+    setFilters({
+      montagne: false,
+      mer: false,
+      extensive: null,
+      tv: false,
+      sofa: false,
+      fridge: false,
+      price: 0,
+    });
+    setPrice(0);
+    // Re-fetch data for the current view mode
+    fetchHotelData(viewMode);
+  };
+
+  // Function to open reservation modal
+  const openReservationModal = (room) => {
+    setSelectedRoom(room);
+    setShowModal(true);
+  };
+
+  // Function to close reservation modal
+  const closeReservationModal = () => {
+    setShowModal(false);
+    setSelectedRoom(null);
+    setReservationData({
+      debut_date: "",
+      fin_date: "",
+    });
+  };
+
+  // Function to close success modal
+  const closeSuccessModal = () => {
+    setShowSuccessModal(false);
+  };
+
+  // Handle reservation form input changes
+  const handleReservationInputChange = (e) => {
+    const { name, value } = e.target;
+    setReservationData({
+      ...reservationData,
+      [name]: value,
+    });
+  };
+
+  // Function to generate a random reservation ID
+  const generateReservationId = () => {
+    // Generate a random 4-digit number starting with 1 (as per your schema)
+    return "1" + Math.floor(Math.random() * 900 + 100);
+  };
+
+  // Function to submit reservation
+  const submitReservation = () => {
+    // Validation
+    if (!reservationData.debut_date || !reservationData.fin_date) {
+      alert("Veuillez sélectionner les dates de début et de fin.");
+      return;
+    }
+
+    const startDate = new Date(reservationData.debut_date);
+    const endDate = new Date(reservationData.fin_date);
+    
+    if (startDate >= endDate) {
+      alert("La date de fin doit être postérieure à la date de début.");
+      return;
+    }
+
+    // Get current user's NAS_client (would normally come from authentication/session)
+    // For demo purposes, using a hardcoded value
+    const userNASClient = "123456789"; // This would come from auth context in a real app
+
+    /* 
+    // This would be the actual API call to backend
+    fetch('/api/reservations', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        NAS_client: userNASClient,
+        chambre_ID: selectedRoom.chambre_ID,
+        debut_date_reservation: reservationData.debut_date,
+        fin_date_reservation: reservationData.fin_date
+      }),
+    })
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      }
+      throw new Error('Échec de la réservation');
+    })
+    .then(data => {
+      // Success handling
+      const newReservationId = data.reservation_ID; // Get ID from response
+      setReservationId(newReservationId);
+      closeReservationModal();
+      setShowSuccessModal(true);
+    })
+    .catch(error => {
+      console.error('Erreur lors de la réservation:', error);
+      alert("Erreur lors de la réservation. Veuillez réessayer.");
+    });
+    */
+
+    // For demo - generate a reservation ID and show success modal
+    const newReservationId = generateReservationId();
+    
+    console.log("Réservation soumise:", {
+      reservation_ID: newReservationId,
+      NAS_client: userNASClient,
+      chambre_ID: selectedRoom.chambre_ID,
+      debut_date_reservation: reservationData.debut_date,
+      fin_date_reservation: reservationData.fin_date
+    });
+    
+    setReservationId(newReservationId);
+    closeReservationModal();
+    setShowSuccessModal(true);
+  };
+
+  // Mock function to fetch hotel data (replace with actual API calls later)
+  const fetchHotelData = (mode) => {
+    // This would be replaced with actual API calls to your backend
+    // For now, using mock data
+    
+    /* 
+    // Actual API call would look something like this:
+    let endpoint = '';
+    if (mode === 'zone') {
+      endpoint = '/api/hotels/by-zone';
+    } else if (mode === 'capacity') {
+      endpoint = '/api/hotels/by-capacity';
+    }
+
+    fetch(endpoint)
+      .then(response => response.json())
+      .then(data => {
+        setHotelData(data);
+        groupHotels(data, mode);
+      })
+      .catch(error => console.error('Error fetching hotel data:', error));
+    */
+
+    // Mock data for demonstration
+    const mockData = [
+      {
+        hotel_ID: "0001",
+        hotel_name: "Hôtel du Centre",
+        rue: "123 Rue Principale",
+        ville: "Ottawa",
+        code_postal: "K1P 1J1",
+        vue: "Montagne",
+        extensible: true,
+        commodite: ["TV", "Sofa", "Fridge"],
+        prix: 150,
+        capacite: "Simple",
+        chambre_ID: "101"
+      },
+      {
+        hotel_ID: "0002",
+        hotel_name: "Hôtel Riverside",
+        rue: "456 Rue du Pont",
+        ville: "Ottawa",
+        code_postal: "K1P 2K2",
+        vue: "Mer",
+        extensible: true,
+        commodite: ["TV", "Fridge"],
+        prix: 200,
+        capacite: "Double",
+        chambre_ID: "102"
+      },
+      {
+        hotel_ID: "0003",
+        hotel_name: "Hôtel Central",
+        rue: "789 Rue Saint-Paul",
+        ville: "Toronto",
+        code_postal: "M5V 2L6",
+        vue: "Mer",
+        extensible: false,
+        commodite: ["TV", "Sofa"],
+        prix: 180,
+        capacite: "Simple",
+        chambre_ID: "103"
+      },
+      {
+        hotel_ID: "0004",
+        hotel_name: "Hôtel Familial",
+        rue: "101 Avenue des Pins",
+        ville: "Toronto",
+        code_postal: "M5V 3L7",
+        vue: "Montagne",
+        extensible: true,
+        commodite: ["TV", "Sofa", "Fridge"],
+        prix: 250,
+        capacite: "Famille",
+        chambre_ID: "104"
+      },
+      {
+        hotel_ID: "0005",
+        hotel_name: "Hôtel Economique",
+        rue: "202 Boulevard Est",
+        ville: "Montreal",
+        code_postal: "H2X 1Y6",
+        vue: "Montagne",
+        extensible: false,
+        commodite: ["TV"],
+        prix: 120,
+        capacite: "Simple",
+        chambre_ID: "105"
+      },
+      {
+        hotel_ID: "0006",
+        hotel_name: "Hôtel Luxe",
+        rue: "303 Avenue de Luxe",
+        ville: "Montreal",
+        code_postal: "H2X 2Z7",
+        vue: "Mer",
+        extensible: true,
+        commodite: ["TV", "Sofa", "Fridge"],
+        prix: 350,
+        capacite: "Double",
+        chambre_ID: "106"
+      },
+    ];
+
+    setHotelData(mockData);
+    groupHotels(mockData, mode);
+  };
+
+  // Function to group hotels based on the selected view mode
+  const groupHotels = (data, mode) => {
+    const grouped = {};
+    
+    if (mode === "zone") {
+      // Group by city/zone
+      data.forEach(hotel => {
+        if (!grouped[hotel.ville]) {
+          grouped[hotel.ville] = [];
+        }
+        grouped[hotel.ville].push(hotel);
+      });
+    } else if (mode === "capacity") {
+      // Group by capacity
+      data.forEach(hotel => {
+        if (!grouped[hotel.capacite]) {
+          grouped[hotel.capacite] = [];
+        }
+        grouped[hotel.capacite].push(hotel);
+      });
+    }
+    
+    setGroupedHotels(grouped);
+  };
+
+  // Filter hotels based on selected criteria
+  const filterHotels = () => {
+    // Start with all hotels
+    let filteredData = [...hotelData];
+    
+    // Apply filters
+    if (filters.montagne) {
+      filteredData = filteredData.filter(hotel => hotel.vue === "Montagne");
+    }
+    
+    if (filters.mer) {
+      filteredData = filteredData.filter(hotel => hotel.vue === "Mer");
+    }
+    
+    if (filters.extensive !== null) {
+      filteredData = filteredData.filter(hotel => hotel.extensible === filters.extensive);
+    }
+    
+    if (filters.tv) {
+      filteredData = filteredData.filter(hotel => hotel.commodite.includes("TV"));
+    }
+    
+    if (filters.sofa) {
+      filteredData = filteredData.filter(hotel => hotel.commodite.includes("Sofa"));
+    }
+    
+    if (filters.fridge) {
+      filteredData = filteredData.filter(hotel => hotel.commodite.includes("Fridge"));
+    }
+    
+    if (filters.price > 0) {
+      filteredData = filteredData.filter(hotel => hotel.prix <= filters.price);
+    }
+    
+    // Re-group filtered data
+    groupHotels(filteredData, viewMode);
+  };
+
+  // Apply filters when they change
+  useEffect(() => {
+    if (hotelData.length > 0) {
+      filterHotels();
+    }
+  }, [filters]);
+
+  // Initial data fetch
+  useEffect(() => {
+    fetchHotelData("zone"); // Default view is by zone
+  }, []);
+
+  // Calculate minimum date for reservation (today)
+  const today = new Date().toISOString().split('T')[0];
+
   return (
     <div>
       <Navbar expand="lg" className="navbar bg-body-tertiary sticky-top pb-3">
@@ -52,16 +408,7 @@ const ClientHome = () => {
               </Nav.Link>
               <Nav.Link
                 as={Link}
-                to="/booking"
-                className="capitalize"
-                id="BookingLink"
-                style={{ marginRight: "8px" }}
-              >
-                Mes Reservations
-              </Nav.Link>
-              <Nav.Link
-                as={Link}
-                to="/profile"
+                to="/ClientProfile"
                 className="capitalize"
                 id="ProfileLink"
                 style={{ marginRight: "8px" }}
@@ -88,7 +435,7 @@ const ClientHome = () => {
             <img
               src={image}
               style={{ width: "100%", height: "100%" }}
-              alt="iamge d'une chambre"
+              alt="image d'une chambre"
             />
           </Col>
           <Col md={7} className="mt-4 mb-5">
@@ -104,14 +451,16 @@ const ClientHome = () => {
                       type="submit"
                       value="Par Zone"
                       id="zonebtn"
-                      className="custom-button"
+                      className={`custom-button ${viewMode === "zone" ? "active" : ""}`}
+                      onClick={() => switchViewMode("zone")}
                     />
                     <Button
                       as="input"
                       type="submit"
                       value="Par capacité"
                       id="capacitebtn"
-                      className="custom-button"
+                      className={`custom-button ${viewMode === "capacity" ? "active" : ""}`}
+                      onClick={() => switchViewMode("capacity")}
                     />
                     <Button
                       as="input"
@@ -119,6 +468,7 @@ const ClientHome = () => {
                       value="Effacer Filtre"
                       id="effacerfiltrebtn"
                       className="custom-button"
+                      onClick={clearFilters}
                     />
                   </Col>
                 </Row>
@@ -135,6 +485,8 @@ const ClientHome = () => {
                         type="checkbox"
                         id="MontagneCheckbox"
                         className="custom-checkbox"
+                        checked={filters.montagne}
+                        onChange={handleFilterChange}
                       />
                       <Form.Check
                         inline
@@ -143,6 +495,8 @@ const ClientHome = () => {
                         type="checkbox"
                         id="MerCheckbox"
                         className="custom-checkbox"
+                        checked={filters.mer}
+                        onChange={handleFilterChange}
                       />
                     </div>
                   </Form>
@@ -159,7 +513,7 @@ const ClientHome = () => {
                     <div style={{ position: "relative", width: "100%" }}>
                       <Form.Range
                         min={0}
-                        max={10000}
+                        max={1000}
                         value={price}
                         onChange={handleChange}
                         className="custom-range"
@@ -168,7 +522,7 @@ const ClientHome = () => {
                       <span
                         style={{
                           position: "absolute",
-                          left: `calc(${(price / 10000) * 100}% - 10px)`, // Position it relative to the thumb
+                          left: `calc(${(price / 1000) * 100}% - 10px)`, // Position it relative to the thumb
                           bottom: "25px",
                           fontWeight: "bold",
                           color: "#D1A062",
@@ -179,7 +533,7 @@ const ClientHome = () => {
                         ${price}
                       </span>
                     </div>
-                    <Form.Label className="ms-2">$10,000</Form.Label>
+                    <Form.Label className="ms-2">$1000</Form.Label>
                   </Form>
                 </Row>
 
@@ -194,6 +548,8 @@ const ClientHome = () => {
                       type="checkbox"
                       id="extensive-oui"
                       className="custom-checkbox"
+                      checked={filters.extensive === true}
+                      onChange={handleExtensiveChange}
                     />
                     <Form.Check
                       inline
@@ -202,6 +558,8 @@ const ClientHome = () => {
                       type="checkbox"
                       id="extensive-non"
                       className="custom-checkbox"
+                      checked={filters.extensive === false}
+                      onChange={handleExtensiveChange}
                     />
                   </Form>
                 </Row>
@@ -217,6 +575,8 @@ const ClientHome = () => {
                       type="checkbox"
                       id="tvcheckbox"
                       className="custom-checkbox"
+                      checked={filters.tv}
+                      onChange={handleCommoditeChange}
                     />
                     <Form.Check
                       inline
@@ -225,6 +585,8 @@ const ClientHome = () => {
                       type="checkbox"
                       id="sofacheckbox"
                       className="custom-checkbox"
+                      checked={filters.sofa}
+                      onChange={handleCommoditeChange}
                     />
                     <Form.Check
                       inline
@@ -233,6 +595,8 @@ const ClientHome = () => {
                       type="checkbox"
                       id="fridgecheckbox"
                       className="custom-checkbox"
+                      checked={filters.fridge}
+                      onChange={handleCommoditeChange}
                     />
                   </Form>
                 </Row>
@@ -240,7 +604,191 @@ const ClientHome = () => {
             </Card>
           </Col>
         </Row>
+
+        {/* Hotel Display Section */}
+        <div className="hotel-results mt-4 mb-5">
+          {Object.keys(groupedHotels).length > 0 ? (
+            Object.keys(groupedHotels).map((group, index) => (
+              <div key={index} className="group-section mb-5">
+                <h2 className="group-heading mb-4">{group}</h2>
+                <Row>
+                  {groupedHotels[group].map((hotel) => (
+                    <Col md={3} key={hotel.hotel_ID} className="mb-4">
+                      <Card className="h-100 hotel-card">
+                        <Card.Body>
+                          <Card.Title>{hotel.hotel_name}</Card.Title>
+                          <Card.Text>
+                            <strong>Adresse:</strong> {hotel.rue}, {hotel.ville}, {hotel.code_postal}
+                          </Card.Text>
+                          <Card.Text>
+                            <strong>Vue:</strong> {hotel.vue}
+                          </Card.Text>
+                          <Card.Text>
+                            <strong>Extensive:</strong> {hotel.extensible ? "Oui" : "Non"}
+                          </Card.Text>
+                          <Card.Text>
+                            <strong>Commodités:</strong>
+                            <div className="d-flex flex-wrap gap-1 mt-1">
+                              {hotel.commodite.map((item, idx) => (
+                                <Badge key={idx} bg="primary" className="me-1">{item}</Badge>
+                              ))}
+                            </div>
+                          </Card.Text>
+                          <Card.Text>
+                            <strong>Prix:</strong> ${hotel.prix}/nuit
+                          </Card.Text>
+                          <Card.Text>
+                            <strong>Capacité:</strong> {hotel.capacite}
+                          </Card.Text>
+                        </Card.Body>
+                        <Card.Footer>
+                          <Button 
+                            variant="primary" 
+                            className="w-100"
+                            onClick={() => openReservationModal(hotel)}
+                          >
+                            Réserver
+                          </Button>
+                        </Card.Footer>
+                      </Card>
+                    </Col>
+                  ))}
+                </Row>
+              </div>
+            ))
+          ) : (
+            <div className="text-center py-5">
+              <h3>Aucun hôtel trouvé correspondant à vos critères</h3>
+            </div>
+          )}
+        </div>
       </Container>
+
+      {/* Reservation Modal */}
+      <Modal show={showModal} onHide={closeReservationModal} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Réserver une chambre</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {selectedRoom && (
+            <>
+              <div className="mb-4">
+                <h5>{selectedRoom.hotel_name}</h5>
+                <p>
+                  <strong>Chambre:</strong> {selectedRoom.capacite}
+                  <br />
+                  <strong>Prix:</strong> ${selectedRoom.prix} par nuit
+                  <br />
+                  <strong>Vue:</strong> {selectedRoom.vue}
+                </p>
+              </div>
+              <Form>
+                <Form.Group className="mb-3">
+                  <Form.Label>Début_date</Form.Label>
+                  <Form.Control
+                    type="date"
+                    name="debut_date"
+                    value={reservationData.debut_date}
+                    onChange={handleReservationInputChange}
+                    min={today}
+                    required
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>Fin_date</Form.Label>
+                  <Form.Control
+                    type="date"
+                    name="fin_date"
+                    value={reservationData.fin_date}
+                    onChange={handleReservationInputChange}
+                    min={reservationData.debut_date || today}
+                    required
+                  />
+                </Form.Group>
+              </Form>
+              {reservationData.debut_date && reservationData.fin_date && (
+                <div className="price-calculation mt-3 p-3 bg-light rounded">
+                  <h6>Récapitulatif</h6>
+                  <div className="d-flex justify-content-between">
+                    <span>Prix par nuit:</span>
+                    <span>${selectedRoom.prix}</span>
+                  </div>
+                  <div className="d-flex justify-content-between">
+                    <span>Nombre de nuits:</span>
+                    <span>
+                      {Math.ceil(
+                        (new Date(reservationData.fin_date) - new Date(reservationData.debut_date)) / 
+                        (1000 * 60 * 60 * 24)
+                      )}
+                    </span>
+                  </div>
+                  <div className="d-flex justify-content-between fw-bold mt-2">
+                    <span>Total:</span>
+                    <span>
+                      ${selectedRoom.prix * 
+                        Math.ceil(
+                          (new Date(reservationData.fin_date) - new Date(reservationData.debut_date)) / 
+                          (1000 * 60 * 60 * 24)
+                        )}
+                    </span>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="info" onClick={closeReservationModal}>
+            Annuler
+          </Button>
+          <Button variant="primary" onClick={submitReservation}>
+            Confirmer la réservation
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Success Modal */}
+      <Modal show={showSuccessModal} onHide={closeSuccessModal} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Réservation Confirmée</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="text-center mb-4">
+            <span className="text-success" style={{ fontSize: "4rem" }}>
+              <i className="bi bi-check-circle-fill"></i>
+            </span>
+          </div>
+          <h5 className="text-center mb-4">Merci de réserver une chambre</h5>
+          <div className="alert alert-info">
+            <p className="mb-0">
+              Présentez votre identifiant de réservation <strong>{reservationId}</strong> à l'hôtel pour transformer votre réservation en une location.
+            </p>
+          </div>
+          <div className="reservation-details mt-4">
+            <h6>Détails de la réservation:</h6>
+            {selectedRoom && (
+              <p>
+                <strong>Hôtel:</strong> {selectedRoom.hotel_name}<br />
+                <strong>Chambre:</strong> {selectedRoom.capacite}<br />
+                <strong>Check-in:</strong> {reservationData.debut_date}<br />
+                <strong>Check-out:</strong> {reservationData.fin_date}
+              </p>
+            )}
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={closeSuccessModal}>
+            Fermer
+          </Button>
+          <Button 
+            variant="outline-primary" 
+            as={Link} 
+            to="/booking"
+          >
+            Voir mes réservations
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
