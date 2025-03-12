@@ -40,3 +40,20 @@ CREATE TABLE chambre (
 	PRIMARY KEY (chambre_ID),
 	FOREIGN KEY(hotel_ID) REFERENCES hotel(hotel_ID)
 );
+
+-- creation table: employe
+CREATE TABLE employe (
+    NAS_employe INTEGER,
+    nom_employe VARCHAR(255),
+    prenom_employe VARCHAR(255),
+    rue VARCHAR(255),
+    ville VARCHAR(255),
+    code_postal VARCHAR(6),
+    role VARCHAR(255),
+	courriel_employee VARCHAR(255),
+	motpasse_employee VARCHAR(255),
+    hotel_ID INTEGER,
+    PRIMARY KEY (NAS_employe),
+    FOREIGN KEY (hotel_ID) REFERENCES Hotel(hotel_ID)
+);
+
