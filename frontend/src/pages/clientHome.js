@@ -1,11 +1,10 @@
 import {Button,Card,CardText,Col,Container,Form,Nav,Navbar,Row,Badge,Modal,} from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios"; // Import axios
 import logo from "../assets/logo.png";
 import "./clientHome.css";
 import image from "../assets/chambre.jpg";
-
-//To do -remove the mock data and replace with actual data from the backend (API)
 
 const ClientHome = () => {
   const [price, setPrice] = useState(0); // State to store the price
@@ -27,9 +26,12 @@ const ClientHome = () => {
     fridge: false,
     price: 0,
   });
-  // New states for success modal
+  // States for success modal
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [reservationId, setReservationId] = useState("");
+  // Optional: Add loading and error states for better UX
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   // Handle change of price slider
   const handleChange = (e) => {
@@ -121,8 +123,8 @@ const ClientHome = () => {
     return "1" + Math.floor(Math.random() * 900 + 100);
   };
 
-  // Function to submit reservation
-  const submitReservation = () => {
+  // Function to submit reservation using axios
+  const submitReservation = async () => {
     // Validation
     if (!reservationData.debut_date || !reservationData.fin_date) {
       alert("Veuillez sélectionner les dates de début et de fin.");
@@ -141,162 +143,166 @@ const ClientHome = () => {
     // For demo purposes, using a hardcoded value
     const userNASClient = "123456789"; // This would come from auth context in a real app
 
-    /* 
-    // This would be the actual API call to backend
-    fetch('/api/reservations', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
+    // Set loading state
+    setLoading(true);
+    setError(null);
+
+    try {
+      // This would be the actual API call to backend using axios
+      /* 
+      const response = await axios.post('/api/reservations', {
         NAS_client: userNASClient,
         chambre_ID: selectedRoom.chambre_ID,
         debut_date_reservation: reservationData.debut_date,
         fin_date_reservation: reservationData.fin_date
-      }),
-    })
-    .then(response => {
-      if (response.ok) {
-        return response.json();
-      }
-      throw new Error('Échec de la réservation');
-    })
-    .then(data => {
-      // Success handling
-      const newReservationId = data.reservation_ID; // Get ID from response
+      });
+      
+      // Use the actual reservation ID from the response
+      const newReservationId = response.data.reservation_ID;
+      */
+      
+      // For demo - generate a reservation ID and show success modal
+      const newReservationId = generateReservationId();
+      
+      console.log("Réservation soumise:", {
+        reservation_ID: newReservationId,
+        NAS_client: userNASClient,
+        chambre_ID: selectedRoom.chambre_ID,
+        debut_date_reservation: reservationData.debut_date,
+        fin_date_reservation: reservationData.fin_date
+      });
+      
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
       setReservationId(newReservationId);
       closeReservationModal();
       setShowSuccessModal(true);
-    })
-    .catch(error => {
-      console.error('Erreur lors de la réservation:', error);
-      alert("Erreur lors de la réservation. Veuillez réessayer.");
-    });
-    */
-
-    // For demo - generate a reservation ID and show success modal
-    const newReservationId = generateReservationId();
-    
-    console.log("Réservation soumise:", {
-      reservation_ID: newReservationId,
-      NAS_client: userNASClient,
-      chambre_ID: selectedRoom.chambre_ID,
-      debut_date_reservation: reservationData.debut_date,
-      fin_date_reservation: reservationData.fin_date
-    });
-    
-    setReservationId(newReservationId);
-    closeReservationModal();
-    setShowSuccessModal(true);
+    } catch (err) {
+      // Handle errors
+      console.error("Erreur lors de la réservation:", err);
+      setError(err.response?.data?.message || "Erreur lors de la réservation. Veuillez réessayer.");
+      alert(err.response?.data?.message || "Erreur lors de la réservation. Veuillez réessayer.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // Mock function to fetch hotel data (replace with actual API calls later)
-  const fetchHotelData = (mode) => {
-    // This would be replaced with actual API calls to your backend
-    // For now, using mock data
+  // Function to fetch hotel data using axios
+  const fetchHotelData = async (mode) => {
+    // Set loading state
+    setLoading(true);
+    setError(null);
     
-    /* 
-    // Actual API call would look something like this:
-    let endpoint = '';
-    if (mode === 'zone') {
-      endpoint = '/api/hotels/by-zone';
-    } else if (mode === 'capacity') {
-      endpoint = '/api/hotels/by-capacity';
+    try {
+      // This would be replaced with actual API calls using axios
+      /* 
+      let endpoint = '';
+      if (mode === 'zone') {
+        endpoint = '/api/hotels/by-zone';
+      } else if (mode === 'capacity') {
+        endpoint = '/api/hotels/by-capacity';
+      }
+
+      const response = await axios.get(endpoint);
+      const data = response.data;
+      setHotelData(data);
+      groupHotels(data, mode);
+      */
+
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      // Mock data for demonstration
+      const mockData = [
+        {
+          hotel_ID: "0001",
+          hotel_name: "Hôtel du Centre",
+          rue: "123 Rue Principale",
+          ville: "Ottawa",
+          code_postal: "K1P 1J1",
+          vue: "Montagne",
+          extensible: true,
+          commodite: ["TV", "Sofa", "Fridge"],
+          prix: 150,
+          capacite: "Simple",
+          chambre_ID: "101"
+        },
+        {
+          hotel_ID: "0002",
+          hotel_name: "Hôtel Riverside",
+          rue: "456 Rue du Pont",
+          ville: "Ottawa",
+          code_postal: "K1P 2K2",
+          vue: "Mer",
+          extensible: true,
+          commodite: ["TV", "Fridge"],
+          prix: 200,
+          capacite: "Double",
+          chambre_ID: "102"
+        },
+        {
+          hotel_ID: "0003",
+          hotel_name: "Hôtel Central",
+          rue: "789 Rue Saint-Paul",
+          ville: "Toronto",
+          code_postal: "M5V 2L6",
+          vue: "Mer",
+          extensible: false,
+          commodite: ["TV", "Sofa"],
+          prix: 180,
+          capacite: "Simple",
+          chambre_ID: "103"
+        },
+        {
+          hotel_ID: "0004",
+          hotel_name: "Hôtel Familial",
+          rue: "101 Avenue des Pins",
+          ville: "Toronto",
+          code_postal: "M5V 3L7",
+          vue: "Montagne",
+          extensible: true,
+          commodite: ["TV", "Sofa", "Fridge"],
+          prix: 250,
+          capacite: "Famille",
+          chambre_ID: "104"
+        },
+        {
+          hotel_ID: "0005",
+          hotel_name: "Hôtel Economique",
+          rue: "202 Boulevard Est",
+          ville: "Montreal",
+          code_postal: "H2X 1Y6",
+          vue: "Montagne",
+          extensible: false,
+          commodite: ["TV"],
+          prix: 120,
+          capacite: "Simple",
+          chambre_ID: "105"
+        },
+        {
+          hotel_ID: "0006",
+          hotel_name: "Hôtel Luxe",
+          rue: "303 Avenue de Luxe",
+          ville: "Montreal",
+          code_postal: "H2X 2Z7",
+          vue: "Mer",
+          extensible: true,
+          commodite: ["TV", "Sofa", "Fridge"],
+          prix: 350,
+          capacite: "Double",
+          chambre_ID: "106"
+        },
+      ];
+
+      setHotelData(mockData);
+      groupHotels(mockData, mode);
+    } catch (err) {
+      console.error("Error fetching hotel data:", err);
+      setError(err.response?.data?.message || "Erreur lors du chargement des données. Veuillez réessayer.");
+    } finally {
+      setLoading(false);
     }
-
-    fetch(endpoint)
-      .then(response => response.json())
-      .then(data => {
-        setHotelData(data);
-        groupHotels(data, mode);
-      })
-      .catch(error => console.error('Error fetching hotel data:', error));
-    */
-
-    // Mock data for demonstration
-    const mockData = [
-      {
-        hotel_ID: "0001",
-        hotel_name: "Hôtel du Centre",
-        rue: "123 Rue Principale",
-        ville: "Ottawa",
-        code_postal: "K1P 1J1",
-        vue: "Montagne",
-        extensible: true,
-        commodite: ["TV", "Sofa", "Fridge"],
-        prix: 150,
-        capacite: "Simple",
-        chambre_ID: "101"
-      },
-      {
-        hotel_ID: "0002",
-        hotel_name: "Hôtel Riverside",
-        rue: "456 Rue du Pont",
-        ville: "Ottawa",
-        code_postal: "K1P 2K2",
-        vue: "Mer",
-        extensible: true,
-        commodite: ["TV", "Fridge"],
-        prix: 200,
-        capacite: "Double",
-        chambre_ID: "102"
-      },
-      {
-        hotel_ID: "0003",
-        hotel_name: "Hôtel Central",
-        rue: "789 Rue Saint-Paul",
-        ville: "Toronto",
-        code_postal: "M5V 2L6",
-        vue: "Mer",
-        extensible: false,
-        commodite: ["TV", "Sofa"],
-        prix: 180,
-        capacite: "Simple",
-        chambre_ID: "103"
-      },
-      {
-        hotel_ID: "0004",
-        hotel_name: "Hôtel Familial",
-        rue: "101 Avenue des Pins",
-        ville: "Toronto",
-        code_postal: "M5V 3L7",
-        vue: "Montagne",
-        extensible: true,
-        commodite: ["TV", "Sofa", "Fridge"],
-        prix: 250,
-        capacite: "Famille",
-        chambre_ID: "104"
-      },
-      {
-        hotel_ID: "0005",
-        hotel_name: "Hôtel Economique",
-        rue: "202 Boulevard Est",
-        ville: "Montreal",
-        code_postal: "H2X 1Y6",
-        vue: "Montagne",
-        extensible: false,
-        commodite: ["TV"],
-        prix: 120,
-        capacite: "Simple",
-        chambre_ID: "105"
-      },
-      {
-        hotel_ID: "0006",
-        hotel_name: "Hôtel Luxe",
-        rue: "303 Avenue de Luxe",
-        ville: "Montreal",
-        code_postal: "H2X 2Z7",
-        vue: "Mer",
-        extensible: true,
-        commodite: ["TV", "Sofa", "Fridge"],
-        prix: 350,
-        capacite: "Double",
-        chambre_ID: "106"
-      },
-    ];
-
-    setHotelData(mockData);
-    groupHotels(mockData, mode);
   };
 
   // Function to group hotels based on the selected view mode
@@ -607,7 +613,20 @@ const ClientHome = () => {
 
         {/* Hotel Display Section */}
         <div className="hotel-results mt-4 mb-5">
-          {Object.keys(groupedHotels).length > 0 ? (
+          {loading ? (
+            <div className="text-center py-5">
+              <div className="spinner-border" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+              <p className="mt-2">Chargement des hôtels...</p>
+            </div>
+          ) : error ? (
+            <div className="text-center py-5">
+              <div className="alert alert-danger" role="alert">
+                {error}
+              </div>
+            </div>
+          ) : Object.keys(groupedHotels).length > 0 ? (
             Object.keys(groupedHotels).map((group, index) => (
               <div key={index} className="group-section mb-5">
                 <h2 className="group-heading mb-4">{group}</h2>
@@ -741,8 +760,19 @@ const ClientHome = () => {
           <Button variant="info" onClick={closeReservationModal}>
             Annuler
           </Button>
-          <Button variant="primary" onClick={submitReservation}>
-            Confirmer la réservation
+          <Button 
+            variant="primary" 
+            onClick={submitReservation}
+            disabled={loading}
+          >
+            {loading ? (
+              <>
+                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                Traitement...
+              </>
+            ) : (
+              "Confirmer la réservation"
+            )}
           </Button>
         </Modal.Footer>
       </Modal>
