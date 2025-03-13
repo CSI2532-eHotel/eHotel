@@ -1,6 +1,6 @@
--- table creation: chaineHotel
-CREATE TABLE chaineHotel (
-	chaine_ID INTEGER,  
+-- creation table: ChaineHotel
+CREATE TABLE ChaineHotel (
+	chaine_ID INTEGER NOT NULL UNIQUE CHECK,  
     nom_chaine VARCHAR(255),
 	rue VARCHAR(255),
 	ville VARCHAR(255),
@@ -10,10 +10,10 @@ CREATE TABLE chaineHotel (
 	numero_telephone_chaine VARCHAR(10),
 	PRIMARY KEY (chaine_ID)
 );
-	
--- table creation: hotel
-CREATE TABLE hotel (
-	hotel_ID INTEGER,  
+
+-- creation table: Hotel
+CREATE TABLE Hotel (
+	hotel_ID INTEGER NOT NULL UNIQUE CHECK,  
     nom_hotel VARCHAR(255),
 	rue VARCHAR(255),
 	ville VARCHAR(255),
@@ -24,12 +24,12 @@ CREATE TABLE hotel (
 	etoile INTEGER,
 	chaine_ID INTEGER,
 	PRIMARY KEY (hotel_ID),
-	FOREIGN KEY(chaine_ID) REFERENCES chaineHotel(chaine_ID)
+	FOREIGN KEY(chaine_ID) REFERENCES chaineHotel(chaine_ID) ON UPDATE CASCADE
 );
 
--- table creation: chambre
-CREATE TABLE chambre (
-	chambre_ID INTEGER,
+-- creation table: Chambre
+CREATE TABLE Chambre (
+	chambre_ID INTEGER NOT NULL UNIQUE CHECK,
 	prix INTEGER,
     commodite VARCHAR(255),
 	capacite VARCHAR(255),
@@ -38,12 +38,12 @@ CREATE TABLE chambre (
 	vue VARCHAR(255),
 	hotel_ID INTEGER,
 	PRIMARY KEY (chambre_ID),
-	FOREIGN KEY(hotel_ID) REFERENCES hotel(hotel_ID)
+	FOREIGN KEY(hotel_ID) REFERENCES hotel(hotel_ID) ON UPDATE CASCADE
 );
 
--- creation table: employe
-CREATE TABLE employe (
-    NAS_employe INTEGER,
+-- creation table: Employe
+CREATE TABLE Employe (
+    NAS_employe INTEGER NOT NULL UNIQUE CHECK,
     nom_employe VARCHAR(255),
     prenom_employe VARCHAR(255),
     rue VARCHAR(255),
@@ -54,6 +54,59 @@ CREATE TABLE employe (
 	motpasse_employee VARCHAR(255),
     hotel_ID INTEGER,
     PRIMARY KEY (NAS_employe),
-    FOREIGN KEY (hotel_ID) REFERENCES Hotel(hotel_ID)
+    FOREIGN KEY (hotel_ID) REFERENCES Hotel(hotel_ID) ON UPDATE CASCADE
+);
+
+-- creation table: Gestionnaire
+CREATE TABLE Gestionnaire (
+    NAS_employe INTEGER NOT NULL UNIQUE,
+    hotel_ID INTEGER,
+    PRIMARY KEY (NAS_employe, hotel_ID),
+    FOREIGN KEY (NAS_employe) REFERENCES Employe(NAS_employe) ON UPDATE CASCADE,
+    FOREIGN KEY (hotel_ID) REFERENCES Hotel(hotel_ID) ON UPDATE CASCADE
+);
+
+-- creation table: Client
+CREATE TABLE Client (
+    NAS_client INTEGER NOT NULL UNIQUE,
+    nom_client VARCHAR(255),
+    prenom_client VARCHAR(255),
+    rue VARCHAR(255),
+    ville VARCHAR(255),
+    code_postal VARCHAR(6),
+    courriel_client VARCHAR(255),
+    motpasse_client VARCHAR(255),
+    date_enregistrement DATE,
+    PRIMARY KEY (NAS_client)
+);
+
+-- creation table: Reservation
+CREATE TABLE Reservation (
+    reservation_ID INTEGER NOT NULL UNIQUE CHECK,
+    debut_date_reservation DATE,
+    fin_date_reservation DATE,
+    NAS_client INTEGER,
+    chambre_ID INTEGER,
+    PRIMARY KEY (reservation_ID),
+    FOREIGN KEY (NAS_client) REFERENCES Client(NAS_client) ON UPDATE CASCADE,
+    FOREIGN KEY (chambre_ID) REFERENCES Chambre(chambre_ID) ON UPDATE CASCADE,
+);
+
+-- creation table: Location
+CREATE TABLE Location (
+    location_ID INTEGER NOT NULL UNIQUE CHECK,
+    debut_date_location DATE,
+    fin_date_location DATE,
+    montant INTEGER,
+    transaction_date DATE,
+    NAS_employe INTEGER,
+    NAS_client INTEGER,
+    chambre_ID INTEGER,
+    reservation_ID INTEGER,
+    PRIMARY KEY (location_ID),
+    FOREIGN KEY (NAS_employe) REFERENCES Employe(NAS_employe) ON UPDATE CASCADE,
+    FOREIGN KEY (NAS_client) REFERENCES Client(NAS_client) ON UPDATE CASCADE,
+    FOREIGN KEY (chambre_ID) REFERENCES Chambre(chambre_ID) ON UPDATE CASCADE,
+    FOREIGN KEY (reservation_ID) REFERENCES Reservation(reservation_ID) ON UPDATE CASCADE,
 );
 
