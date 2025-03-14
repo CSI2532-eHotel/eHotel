@@ -24,7 +24,7 @@ CREATE TABLE Hotel (
 	etoile INTEGER,
 	chaine_ID INTEGER,
 	PRIMARY KEY (hotel_ID),
-	FOREIGN KEY(chaine_ID) REFERENCES chaineHotel(chaine_ID) ON UPDATE CASCADE
+	FOREIGN KEY(chaine_ID) REFERENCES chaineHotel(chaine_ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 -- creation table: Chambre
@@ -38,7 +38,7 @@ CREATE TABLE Chambre (
 	vue VARCHAR(255),
 	hotel_ID INTEGER,
 	PRIMARY KEY (chambre_ID),
-	FOREIGN KEY(hotel_ID) REFERENCES hotel(hotel_ID) ON UPDATE CASCADE
+	FOREIGN KEY(hotel_ID) REFERENCES hotel(hotel_ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 -- creation table: Employe
@@ -54,7 +54,7 @@ CREATE TABLE Employe (
 	motpasse_employee VARCHAR(255),
     hotel_ID INTEGER,
     PRIMARY KEY (NAS_employe),
-    FOREIGN KEY (hotel_ID) REFERENCES Hotel(hotel_ID) ON UPDATE CASCADE
+    FOREIGN KEY (hotel_ID) REFERENCES Hotel(hotel_ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 -- creation table: Gestionnaire
@@ -62,8 +62,8 @@ CREATE TABLE Gestionnaire (
     NAS_employe INTEGER NOT NULL UNIQUE,
     hotel_ID INTEGER,
     PRIMARY KEY (NAS_employe, hotel_ID),
-    FOREIGN KEY (NAS_employe) REFERENCES Employe(NAS_employe) ON UPDATE CASCADE,
-    FOREIGN KEY (hotel_ID) REFERENCES Hotel(hotel_ID) ON UPDATE CASCADE
+    FOREIGN KEY (NAS_employe) REFERENCES Employe(NAS_employe) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (hotel_ID) REFERENCES Hotel(hotel_ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 -- creation table: Client
@@ -88,7 +88,7 @@ CREATE TABLE Reservation (
     NAS_client INTEGER,
     chambre_ID INTEGER,
     PRIMARY KEY (reservation_ID),
-    FOREIGN KEY (NAS_client) REFERENCES Client(NAS_client) ON UPDATE CASCADE,
+    FOREIGN KEY (NAS_client) REFERENCES Client(NAS_client) ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (chambre_ID) REFERENCES Chambre(chambre_ID) ON UPDATE CASCADE,
 );
 
@@ -105,8 +105,8 @@ CREATE TABLE Location (
     reservation_ID INTEGER,
     PRIMARY KEY (location_ID),
     FOREIGN KEY (NAS_employe) REFERENCES Employe(NAS_employe) ON UPDATE CASCADE,
-    FOREIGN KEY (NAS_client) REFERENCES Client(NAS_client) ON UPDATE CASCADE,
-    FOREIGN KEY (chambre_ID) REFERENCES Chambre(chambre_ID) ON UPDATE CASCADE,
-    FOREIGN KEY (reservation_ID) REFERENCES Reservation(reservation_ID) ON UPDATE CASCADE,
+    FOREIGN KEY (NAS_client) REFERENCES Client(NAS_client) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (chambre_ID) REFERENCES Chambre(chambre_ID) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (reservation_ID) REFERENCES Reservation(reservation_ID) ON UPDATE CASCADE ON DELETE CASCADE,
 );
 
