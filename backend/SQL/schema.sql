@@ -1,5 +1,5 @@
 -- creation table: ChaineHotel
-CREATE TABLE ChaineHotel (
+CREATE TABLE IF NOT EXISTS ChaineHotel (
 	chaine_ID INTEGER NOT NULL UNIQUE,  
     nom_chaine VARCHAR(255),
 	rue VARCHAR(255),
@@ -12,7 +12,7 @@ CREATE TABLE ChaineHotel (
 );
 
 -- creation table: Hotel
-CREATE TABLE Hotel (
+CREATE TABLE IF NOT EXISTS Hotel (
 	hotel_ID INTEGER NOT NULL UNIQUE,  
     nom_hotel VARCHAR(255),
 	rue VARCHAR(255),
@@ -28,7 +28,7 @@ CREATE TABLE Hotel (
 );
 
 -- creation table: Chambre
-CREATE TABLE Chambre (
+CREATE TABLE IF NOT EXISTS Chambre (
 	chambre_ID INTEGER NOT NULL UNIQUE,
 	prix INTEGER,
     commodite VARCHAR(255),
@@ -42,7 +42,7 @@ CREATE TABLE Chambre (
 );
 
 -- creation table: Employe
-CREATE TABLE Employe (
+CREATE TABLE IF NOT EXISTS Employe (
     NAS_employe INTEGER NOT NULL UNIQUE,
     nom_employe VARCHAR(255),
     prenom_employe VARCHAR(255),
@@ -58,7 +58,7 @@ CREATE TABLE Employe (
 );
 
 -- creation table: Gestionnaire
-CREATE TABLE Gestionnaire (
+CREATE TABLE IF NOT EXISTS Gestionnaire (
     NAS_employe INTEGER NOT NULL UNIQUE,
     hotel_ID INTEGER,
     PRIMARY KEY (NAS_employe, hotel_ID),
@@ -67,7 +67,7 @@ CREATE TABLE Gestionnaire (
 );
 
 -- creation table: Client
-CREATE TABLE Client (
+CREATE TABLE IF NOT EXISTS Client (
     NAS_client INTEGER NOT NULL UNIQUE,
     nom_client VARCHAR(255),
     prenom_client VARCHAR(255),
@@ -81,7 +81,7 @@ CREATE TABLE Client (
 );
 
 -- creation table: Reservation
-CREATE TABLE Reservation (
+CREATE TABLE IF NOT EXISTS Reservation (
     reservation_ID INTEGER NOT NULL UNIQUE,
     debut_date_reservation DATE,
     fin_date_reservation DATE,
@@ -93,7 +93,7 @@ CREATE TABLE Reservation (
 );
 
 -- creation table: Location
-CREATE TABLE Location (
+CREATE TABLE IF NOT EXISTS Location (
     location_ID INTEGER NOT NULL UNIQUE,
     debut_date_location DATE,
     fin_date_location DATE,
