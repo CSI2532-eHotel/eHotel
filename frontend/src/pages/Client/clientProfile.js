@@ -254,7 +254,7 @@ const ClientProfile = () => {
       <Navbar expand="lg" className="navbar bg-body-tertiary sticky-top pb-3">
         <Container fluid className="custom-container">
           {/* Logo on the left */}
-          <Link to="/">
+          <Link to="/clientHome">
             <img
               src={logo}
               style={{ width: "50px", marginRight: "10px" }}
@@ -271,7 +271,7 @@ const ClientProfile = () => {
             <Nav className="ms-auto py-0 pe-3">
               <Nav.Link
                 as={Link}
-                to="/"
+                to="/clientHome"
                 className="capitalize"
                 id="HomeLink"
                 style={{ marginRight: "8px" }}
@@ -280,7 +280,7 @@ const ClientProfile = () => {
               </Nav.Link>
               <Nav.Link
                 as={Link}
-                to="/ClientProfile"
+                to="/clientProfile"
                 className="capitalize"
                 id="ProfileLink"
                 style={{ marginRight: "8px" }}

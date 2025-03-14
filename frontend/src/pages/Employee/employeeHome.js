@@ -16,6 +16,10 @@ const EmployeeHome = () => {
   const [validated, setValidated] = useState(false);
   const [error, setError] = useState("");
 
+  // State for cancellation modal
+  const [showCancellationModal, setShowCancellationModal] = useState(false);
+  const [reservationToCancel, setReservationToCancel] = useState(null);
+
   // Fetch reservations
   const fetchReservations = async () => {
     try {
@@ -118,6 +122,35 @@ const EmployeeHome = () => {
     setValidated(true);
   };
 
+  // Handle opening cancellation modal
+  const openCancellationModal = (reservation) => {
+    setReservationToCancel(reservation);
+    setShowCancellationModal(true);
+  };
+
+  // Handle reservation cancellation
+  const handleCancelReservation = async () => {
+    try {
+      // This would be replaced with an actual API call
+      /*
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/reservations/${reservationToCancel.reservation_ID}`);
+      */
+      
+      // For demo purposes, remove the reservation from local state
+      setReservations(reservations.filter(
+        res => res.reservation_ID !== reservationToCancel.reservation_ID
+      ));
+      
+      // Close modal and show success message
+      setShowCancellationModal(false);
+      alert("La réservation a été annulée avec succès !");
+      
+    } catch (err) {
+      console.error("Error cancelling reservation:", err.response?.data || err.message);
+      setError(err.response?.data?.error || "Une erreur s'est produite lors de l'annulation");
+    }
+  };
+
   return (
     <div>
       <Navbar expand="lg" className="navbar bg-body-tertiary sticky-top pb-3">
@@ -149,12 +182,12 @@ const EmployeeHome = () => {
               </Nav.Link>
               <Nav.Link
                 as={Link}
-                to="/employee/locations"
+                to="/employeelocation"
                 className="capitalize"
                 id="LocationsLink"
                 style={{ marginRight: "8px" }}
               >
-                Locations
+                 Créer une location
               </Nav.Link>
             </Nav>
             {/* Log Out Button */}
@@ -199,6 +232,13 @@ const EmployeeHome = () => {
                         </p>
                       </Col>
                       <Col md={4} className="d-flex align-items-end justify-content-end">
+                        <Button 
+                          variant="danger"
+                          onClick={() => openCancellationModal(reservation)}
+                          className="me-3"
+                        >
+                          Annulez
+                        </Button>
                         <Button 
                           variant="primary"
                           onClick={() => openPaymentModal(reservation)}
@@ -245,14 +285,38 @@ const EmployeeHome = () => {
             </Form.Group>
 
             <div className="d-flex justify-content-end mt-4">
-              <Button variant="danger" className="me-3" onClick={() => setShowPaymentModal(false)}>
-                Annuler
-              </Button>
               <Button type="submit" variant="primary">
                 Confirmer
               </Button>
             </div>
           </Form>
+        </Modal.Body>
+      </Modal>
+
+      {/* Cancellation Modal */}
+      <Modal show={showCancellationModal} onHide={() => setShowCancellationModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Annuler la Réservation</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {error && <div className="alert alert-danger">{error}</div>}
+          
+          <p>Êtes-vous sûr de vouloir annuler cette réservation ?</p>
+          <p>
+            <strong>Client:</strong> {reservationToCancel?.prenom_client} {reservationToCancel?.nom_client}
+          </p>
+          <p>
+            <strong>Dates:</strong> Du {reservationToCancel?.debut_date_reservation} au {reservationToCancel?.fin_date_reservation}
+          </p>
+          <p>
+            <strong>Chambre:</strong> {reservationToCancel?.chambre_ID}
+          </p>
+
+          <div className="d-flex justify-content-end mt-4">
+            <Button variant="danger" onClick={handleCancelReservation}>
+              Confirmer l'annulation
+            </Button>
+          </div>
         </Modal.Body>
       </Modal>
     </div>

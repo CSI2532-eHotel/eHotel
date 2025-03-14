@@ -8,6 +8,7 @@ import Footer from "./components/footer";
 import ClientHome from "./pages/Client/clientHome";
 import ClientProfile from "./pages/Client/clientProfile";
 import EmployeeHome from "./pages/Employee/employeeHome";
+import EmployeeLocation from "./pages/Employee/employeeLocation";
 
 function App() {
   return (
@@ -19,8 +20,8 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/clientHome" element={<ClientHome />} />
             <Route path="/clientProfile" element={<ClientProfile />} />
-            <Route path="/" element={<EmployeeHome />} /> 
-            {/* <Route path="/employeeLocation" element={<EmployeeLocation />} />  */}
+            <Route path="/employeeHome" element={<EmployeeHome />} /> 
+            <Route path="/employeeLocation" element={<EmployeeLocation />} /> 
             {/* <Route path="/managerEmployee" element={<managerEmployee />} />  */}
             {/* <Route path="/managerCleint" element={<managerClient />} />  */}
             {/* <Route path="/managerChambre" element={<managerChambre />} />  */}
