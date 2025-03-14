@@ -82,7 +82,7 @@ CREATE TABLE IF NOT EXISTS Client (
 
 -- creation table: Reservation
 CREATE TABLE IF NOT EXISTS Reservation (
-    reservation_ID INTEGER NOT NULL UNIQUE,
+    reservation_ID SERIAL NOT NULL UNIQUE,
     debut_date_reservation DATE,
     fin_date_reservation DATE,
     NAS_client INTEGER,
@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS Reservation (
 
 -- creation table: Location
 CREATE TABLE IF NOT EXISTS Location (
-    location_ID INTEGER NOT NULL UNIQUE,
+    location_ID SERIAL NOT NULL UNIQUE,
     debut_date_location DATE,
     fin_date_location DATE,
     montant INTEGER,
@@ -109,4 +109,3 @@ CREATE TABLE IF NOT EXISTS Location (
     FOREIGN KEY (chambre_ID) REFERENCES Chambre(chambre_ID) ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (reservation_ID) REFERENCES Reservation(reservation_ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
-
