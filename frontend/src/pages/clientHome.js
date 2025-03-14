@@ -419,7 +419,7 @@ const ClientHome = () => {
                 id="ProfileLink"
                 style={{ marginRight: "8px" }}
               >
-                Profile
+                Profil
               </Nav.Link>
             </Nav>
             {/* Log Out Button */}
@@ -757,7 +757,7 @@ const ClientHome = () => {
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="info" onClick={closeReservationModal}>
+          <Button variant="danger" style={{marginRight:"10px"}} onClick={closeReservationModal}>
             Annuler
           </Button>
           <Button 
