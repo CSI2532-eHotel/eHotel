@@ -2,9 +2,9 @@ import {Button,Card,CardText,Col,Container,Form,Nav,Navbar,Row,Badge,Modal,} fro
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios"; // Import axios
-import logo from "../assets/logo.png";
+import logo from "../../assets/logo.png";
 import "./clientHome.css";
-import image from "../assets/chambre.jpg";
+import image from "../../assets/chambre.jpg";
 
 const ClientHome = () => {
   const [price, setPrice] = useState(0); // State to store the price

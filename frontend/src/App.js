@@ -5,25 +5,31 @@ import "./App.scss";
 import Login from "./pages/login";
 import Register from "./pages/register";
 import Footer from "./components/footer";
-import ClientHome from "./pages/clientHome";
-import ClientProfile from "./pages/clientProfile";
+import ClientHome from "./pages/Client/clientHome";
+import ClientProfile from "./pages/Client/clientProfile";
+import EmployeeHome from "./pages/Employee/employeeHome";
 
 function App() {
   return (
-   <Router>
+    <Router>
       <div className="app-container">
-      <div className="content">
+        <div className="content">
           <Routes>
             {/* <Route path="/" element={<Login />} /> */}
             <Route path="/register" element={<Register />} />
-            <Route path="/" element={<ClientHome />} />          
-            {/* <Route path="/employee-home" element={<EmployeeHome />} />  */}
+            <Route path="/clientHome" element={<ClientHome />} />
             <Route path="/clientProfile" element={<ClientProfile />} />
+            <Route path="/" element={<EmployeeHome />} /> 
+            {/* <Route path="/employeeLocation" element={<EmployeeLocation />} />  */}
+            {/* <Route path="/managerEmployee" element={<managerEmployee />} />  */}
+            {/* <Route path="/managerCleint" element={<managerClient />} />  */}
+            {/* <Route path="/managerChambre" element={<managerChambre />} />  */}
+             {/* <Route path="/managerHotel" element={<managerHotel />} />  */}
           </Routes>
         </div>
         <Footer />
       </div>
-   </Router>
+    </Router>
   );
 }
 

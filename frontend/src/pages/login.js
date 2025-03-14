@@ -14,7 +14,7 @@ function Login() {
       <Navbar expand="lg" className="bg-body-tertiary px-3 shadow-sm">
         <Navbar.Brand as={Link} to="/" className="d-flex align-items-center">
           <img src={logo} style={{ width: "50px", marginRight: "10px" }} alt="Logo" />
-          eHotel
+          E-HOTEL
         </Navbar.Brand>
       </Navbar>
 
