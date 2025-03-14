@@ -89,7 +89,7 @@ CREATE TABLE Reservation (
     chambre_ID INTEGER,
     PRIMARY KEY (reservation_ID),
     FOREIGN KEY (NAS_client) REFERENCES Client(NAS_client) ON UPDATE CASCADE ON DELETE CASCADE,
-    FOREIGN KEY (chambre_ID) REFERENCES Chambre(chambre_ID) ON UPDATE CASCADE,
+    FOREIGN KEY (chambre_ID) REFERENCES Chambre(chambre_ID) ON UPDATE CASCADE
 );
 
 -- creation table: Location
@@ -104,7 +104,7 @@ CREATE TABLE Location (
     chambre_ID INTEGER,
     reservation_ID INTEGER,
     PRIMARY KEY (location_ID),
-    FOREIGN KEY (NAS_employe) REFERENCES Employe(NAS_employe) ON UPDATE CASCADE,
+    FOREIGN KEY (NAS_employe) REFERENCES Employe(NAS_employe) ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (NAS_client) REFERENCES Client(NAS_client) ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (chambre_ID) REFERENCES Chambre(chambre_ID) ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (reservation_ID) REFERENCES Reservation(reservation_ID) ON UPDATE CASCADE ON DELETE CASCADE,
