@@ -45,6 +45,9 @@ export const validateClientLogin = async (req, res) => {
 };
 
 // fonction pour update client profile / personal info
+// no NAS_client => this info doesn't change
+// no password hashing for now - client can just change password directly
+// email can alsp be changed easily
 export const updateClientProfile = async (req, res) => {
     try {
         const { NAS_client, nom_client, prenom_client, rue, ville, code_postal, courriel_client, motpasse_client } = req.body;
