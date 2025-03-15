@@ -87,22 +87,8 @@ export const updateClientProfile = async (req, res) => {
 // fonction - client annule reservation
 export const deleteClientReservation = async (req, res) => {
     try {
-        const { reservation_ID, NAS_client } = req.params;
-        
-        // verification - reservation appartient au client
-        const verifyQuery = `
-            SELECT * FROM Reservation 
-            WHERE reservation_ID = $1 AND NAS_client = $2
-        `;
-        
-        const reservationExists = await pool.query(verifyQuery, [reservation_ID, NAS_client]);
-        
-        if (reservationExists.rows.length === 0) {
-            return res.status(404).json({ 
-                error: "Réservation introuvable ou n'appartient pas à ce client." 
-            });
-        }
-        
+        const { reservation_ID } = req.params;  // Just use reservation_ID (no need to verify NAS_client)
+
         // annulation
         const deleteQuery = `
             DELETE FROM Reservation
@@ -111,10 +97,17 @@ export const deleteClientReservation = async (req, res) => {
         `;
         
         const deletedReservation = await pool.query(deleteQuery, [reservation_ID]);
+
+        // confirmer de l'annulation
+        if (deletedReservation.rows.length === 0) {
+            return res.status(404).json({
+                error: "Réservation introuvable."
+            });
+        }
         
-        res.status(200).json({ 
-            message: "Reservation annulé.", 
-            id: deletedReservation.rows[0].reservation_ID 
+        res.status(200).json({
+            message: "Réservation annulée.",
+            id: deletedReservation.rows[0].reservation_ID
         });
     } catch (err) {
         console.error('Erreur lors de la suppression de la réservation:', err.message);
