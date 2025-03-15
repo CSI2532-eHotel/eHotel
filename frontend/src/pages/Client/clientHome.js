@@ -2,9 +2,9 @@ import {Button,Card,CardText,Col,Container,Form,Nav,Navbar,Row,Badge,Modal,} fro
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios"; // Import axios
-import logo from "../assets/logo.png";
 import "./clientHome.css";
-import image from "../assets/chambre.jpg";
+import image from "../../assets/chambre.jpg";
+import ClientNavbar from "../../components/clientNavbar";
 
 const ClientHome = () => {
   const [price, setPrice] = useState(0); // State to store the price
@@ -385,56 +385,7 @@ const ClientHome = () => {
 
   return (
     <div>
-      <Navbar expand="lg" className="navbar bg-body-tertiary sticky-top pb-3">
-        <Container fluid className="custom-container">
-          {/* Logo on the left */}
-          <Link to="/">
-            <img
-              src={logo}
-              style={{ width: "50px", marginRight: "10px" }}
-              id="logo"
-              alt="Logo"
-            />
-          </Link>
-          <Navbar.Brand as={Link} to="/" className="capitalize" id="name">
-            e-Hotel
-          </Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            {/* Navigation Links */}
-            <Nav className="ms-auto py-0 pe-3">
-              <Nav.Link
-                as={Link}
-                to="/"
-                className="capitalize"
-                id="HomeLink"
-                style={{ marginRight: "8px" }}
-              >
-                Accueil
-              </Nav.Link>
-              <Nav.Link
-                as={Link}
-                to="/ClientProfile"
-                className="capitalize"
-                id="ProfileLink"
-                style={{ marginRight: "8px" }}
-              >
-                Profile
-              </Nav.Link>
-            </Nav>
-            {/* Log Out Button */}
-            <Button
-              as={Link}
-              to="/"
-              variant="primary"
-              className="text-white py-1 px-1 capitalize rounded-2"
-              id="loginOutbtn"
-            >
-              Deconnectez
-            </Button>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
+     <ClientNavbar/>
       <Container>
         <Row>
           <Col md={5} className="mt-4 mb-5">
@@ -757,7 +708,7 @@ const ClientHome = () => {
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="info" onClick={closeReservationModal}>
+          <Button variant="danger" style={{marginRight:"10px"}} onClick={closeReservationModal}>
             Annuler
           </Button>
           <Button 

@@ -1,6 +1,6 @@
 /*** Navbar ***/
 .custom-container {
-    margin-top: 10px;
+    margin-top: 5px !important;
     margin-left: 30px !important;
     margin-right: 50px !important;
   }
