@@ -9,6 +9,7 @@ import ClientHome from "./pages/Client/clientHome";
 import ClientProfile from "./pages/Client/clientProfile";
 import EmployeeHome from "./pages/Employee/employeeHome";
 import EmployeeLocation from "./pages/Employee/employeeLocation";
+import ManageEmployee from "./pages/Manager/manageEmployee";
 
 function App() {
   return (
@@ -22,10 +23,10 @@ function App() {
             <Route path="/clientProfile" element={<ClientProfile />} />
             <Route path="/employeeHome" element={<EmployeeHome />} /> 
             <Route path="/employeeLocation" element={<EmployeeLocation />} /> 
-            {/* <Route path="/managerEmployee" element={<managerEmployee />} />  */}
-            {/* <Route path="/managerCleint" element={<managerClient />} />  */}
-            {/* <Route path="/managerChambre" element={<managerChambre />} />  */}
-             {/* <Route path="/managerHotel" element={<managerHotel />} />  */}
+            <Route path="/" element={<ManageEmployee />} /> 
+            {/* <Route path="/manageClient" element={<manageClient />} />  */}
+            {/* <Route path="/manageChambre" element={<manageChambre />} />  */}
+             {/* <Route path="/manageHotel" element={<manageHotel />} />  */}
           </Routes>
         </div>
         <Footer />

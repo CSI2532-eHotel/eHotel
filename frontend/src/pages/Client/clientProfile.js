@@ -263,7 +263,7 @@ const ClientProfile = () => {
             />
           </Link>
           <Navbar.Brand as={Link} to="/" className="capitalize" id="name">
-            e-Hotel
+            e-Hôtel
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
