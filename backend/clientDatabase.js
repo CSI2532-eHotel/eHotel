@@ -98,7 +98,7 @@ export const deleteClientReservation = async (req, res) => {
         
         const deletedReservation = await pool.query(deleteQuery, [reservation_ID]);
 
-        // confirmer de l'annulation
+        // confirmer l'annulation
         if (deletedReservation.rows.length === 0) {
             return res.status(404).json({
                 error: "Réservation introuvable."
