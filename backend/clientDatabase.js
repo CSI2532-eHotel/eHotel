@@ -52,19 +52,17 @@ export const updateClientProfile = async (req, res) => {
         const updateQuery = `
             UPDATE Client
             SET 
-                nas_client = $1,
-                nom_client = $2,
-                prenom_client = $3,
-                rue = $4,
-                ville = $5,
-                code_postal = $6,
-                motpasse_client = $7
-            WHERE courriel_client = $8
+                nom_client = $1,
+                prenom_client = $2,
+                rue = $3,
+                ville = $4,
+                code_postal = $5,
+                motpasse_client = $6
+            WHERE courriel_client = $7
             RETURNING *;
         `;
 
         const values = [
-            NAS_client, 
             nom_client, 
             prenom_client, 
             rue, 
