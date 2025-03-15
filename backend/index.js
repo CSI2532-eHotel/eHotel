@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
-import { insertClient } from './database.js';
+import { insertClient, validateClientLogin } from './clientDatabase.js';
+import { validateEmployeeLogin } from './employeeDatabase.js';
 import env from 'dotenv';
 env.config(); 
 const app = express();
@@ -11,16 +12,15 @@ app.use(express.json());
 // on doit donc autoriser les requêtes cross-origin
 app.use(cors());
 
-// =================================route pour insertion (post)===========================
-//route pour inserer un client
-app.post('/api/client', insertClient); 
+// =================================route pour client===========================
+app.post('/api/insertClient', insertClient); 
+app.post('/api/login/client', validateClientLogin);
+// =================================route pour employee===========================
+app.post('/api/login/employee', validateEmployeeLogin);
 
-// =================================route pour selection (get)===========================
+// =================================route pour manager===========================
 
 
-// =================================route pour mis à jour (put)===========================
-
-// =================================route pour suppression (delete)===========================
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

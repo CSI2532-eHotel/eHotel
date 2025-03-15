@@ -1,0 +1,38 @@
+/*** Navbar ***/
+.custom-container {
+    margin-top: 5px !important;
+    margin-left: 30px !important;
+    margin-right: 50px !important;
+  }
+  /* change the text in navbar to lowecase */
+  .capitalize {
+    text-transform: capitalize !important;
+  }
+  #basic-nav-dropdown {
+    text-transform: capitalize !important;
+  }
+  
+  /* Navbar brand */
+  .navbar-brand {
+    color: #D1A062!important;
+    position: relative;
+    margin-left: 10px;
+    font-size: 27px !important;
+    text-transform: uppercase;
+    font-weight: 500 !important;
+  }
+  /* Navbar links */
+  .nav-link {
+    color: #D1A062 !important;
+    position: relative;
+    margin-left: 5px;
+    font-size: 18px !important;
+    text-transform: uppercase;
+    font-weight: 500 !important;
+  }
+  .nav-link:hover {
+    color: #6c757d !important;
+  }
+  #loginOutbtn {
+      width: 120px !important;
+  }
