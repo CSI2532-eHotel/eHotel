@@ -1,0 +1,11 @@
+/* Profile card styling */
+.profile-card {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+  border: none !important;
+}
+
+.profile-value {
+  font-weight: normal !important;
+  margin-left: 8px !important;
+  color: black !important;
+}

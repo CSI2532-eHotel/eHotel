@@ -63,7 +63,7 @@ function Register() {
 
     try {
       // Add current date for registration date
-      const currentDate = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
+      const currentDate = new Date().toLocaleDateString('en-CA'); // Format: YYYY-MM-DD, give the current date in canada
       
       // Prepare data for API
       const clientData = {
@@ -79,7 +79,7 @@ function Register() {
       };
 
       // Send data to backend
-      const response = await axios.post('http://localhost:5000/api/client', clientData);
+      const response = await axios.post("http://localhost:5000/api/insertClient", clientData);
       
       console.log("Registration successful:", response.data);
       
@@ -98,7 +98,7 @@ function Register() {
   return (
     <Container fluid className="d-flex flex-column mb-4">
       {/* Navbar */}
-      <Navbar expand="lg" className="bg-body-tertiary px-3 shadow-sm">
+      <Navbar expand="lg" className="bg-body-tertiary px-3 shadow-sm pb-3">
         <Navbar.Brand href="#" className="d-flex align-items-center">
           <img src={logo} style={{ width: "50px", marginRight: "10px" }} alt="Logo" />
           eHotel
@@ -110,9 +110,6 @@ function Register() {
         <Col>
           <Card className="p-4 mx-auto registerCard">
             <h4 className="text-primary mb-1">Inscription</h4>
-
-            {error && <div className="alert alert-danger">{error}</div>}
-
             <Form noValidate validated={validated} onSubmit={handleSubmit}>
               <h5 className="mt-3 mb-3">Information Personnelle</h5>
               
@@ -197,11 +194,11 @@ function Register() {
                     required
                     type="text"
                     placeholder="Code Postal"
-                    pattern="[A-Z][0-9][A-Z] [0-9][A-Z][0-9]"
+                    pattern="[A-Z][0-9][A-Z][0-9][A-Z][0-9]"
                     onChange={handleChange}
                   />
                   <Form.Control.Feedback type="invalid">
-                    Svp entrez un code postal valide (ex: K1A 0B1).
+                    Svp entrez un code postal valide (ex: K1A0B1).
                   </Form.Control.Feedback>
                 </Form.Group>
               </Row>

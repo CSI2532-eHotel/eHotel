@@ -1,3 +1,4 @@
+
 -- creation table: ChaineHotel
 CREATE TABLE IF NOT EXISTS ChaineHotel (
 	chaine_ID INTEGER NOT NULL UNIQUE,  
