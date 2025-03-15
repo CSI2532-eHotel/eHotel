@@ -17,14 +17,13 @@ function App() {
       <div className="app-container">
         <div className="content">
           <Routes>
-            {/* <Route path="/" element={<Login />} /> */}
+            <Route path="/" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/clientHome" element={<ClientHome />} />
             <Route path="/clientProfile" element={<ClientProfile />} />
             <Route path="/employeeHome" element={<EmployeeHome />} /> 
             <Route path="/employeeLocation" element={<EmployeeLocation />} /> 
-            <Route path="/" element={<ManageEmployee />} /> 
-            {/* <Route path="/manageClient" element={<manageClient />} />  */}
+            <Route path="/manageEmployee" element={<ManageEmployee />} /> 
             {/* <Route path="/manageChambre" element={<manageChambre />} />  */}
              {/* <Route path="/manageHotel" element={<manageHotel />} />  */}
           </Routes>
