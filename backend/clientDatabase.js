@@ -85,9 +85,10 @@ export const updateClientProfile = async (req, res) => {
 };
 
 // fonction - client annule reservation
+// supposer que la réservation appartient au client
 export const deleteClientReservation = async (req, res) => {
     try {
-        const { reservation_ID } = req.params;  // Just use reservation_ID (no need to verify NAS_client)
+        const { reservation_ID } = req.params; 
 
         // annulation
         const deleteQuery = `
