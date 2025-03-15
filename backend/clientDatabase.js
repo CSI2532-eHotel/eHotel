@@ -44,3 +44,42 @@ export const validateClientLogin = async (req, res) => {
     }
 };
 
+// fonction pour update client profile / personal info
+export const updateClientProfile = async (req, res) => {
+    try {
+        const { NAS_client, nom_client, prenom_client, rue, ville, code_postal, courriel_client, motpasse_client } = req.body;
+        
+        const updateQuery = `
+            UPDATE Client
+            SET 
+                nas_client = $1,
+                nom_client = $2,
+                prenom_client = $3,
+                rue = $4,
+                ville = $5,
+                code_postal = $6,
+                motpasse_client = $7
+            WHERE courriel_client = $8
+            RETURNING *;
+        `;
+
+        const values = [
+            NAS_client, 
+            nom_client, 
+            prenom_client, 
+            rue, 
+            ville, 
+            code_postal, 
+            motpasse_client, 
+            courriel_client
+        ];
+
+        const updatedClient = await pool.query(updateQuery, values);
+
+        res.status(200).json(updatedClient.rows[0]);
+    } catch (err) {
+        console.error('Error updating client profile:', err.message);
+        res.status(500).json({ error: err.message });
+    }
+};
+
