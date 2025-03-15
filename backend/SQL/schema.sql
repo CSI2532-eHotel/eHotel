@@ -57,15 +57,6 @@ CREATE TABLE IF NOT EXISTS Employe (
     FOREIGN KEY (hotel_ID) REFERENCES Hotel(hotel_ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
--- creation table: Gestionnaire
-CREATE TABLE IF NOT EXISTS Gestionnaire (
-    NAS_employe INTEGER NOT NULL UNIQUE,
-    hotel_ID INTEGER,
-    PRIMARY KEY (NAS_employe, hotel_ID),
-    FOREIGN KEY (NAS_employe) REFERENCES Employe(NAS_employe) ON UPDATE CASCADE ON DELETE CASCADE,
-    FOREIGN KEY (hotel_ID) REFERENCES Hotel(hotel_ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
 -- creation table: Client
 CREATE TABLE IF NOT EXISTS Client (
     NAS_client INTEGER NOT NULL UNIQUE,
