@@ -44,3 +44,34 @@ export const validateClientLogin = async (req, res) => {
     }
 };
 
+// fonction - client annule reservation
+export const deleteClientReservation = async (req, res) => {
+    try {
+        const { reservation_ID } = req.params;  // Just use reservation_ID (no need to verify NAS_client)
+
+        // annulation
+        const deleteQuery = `
+            DELETE FROM Reservation
+            WHERE reservation_ID = $1
+            RETURNING reservation_ID;
+        `;
+        
+        const deletedReservation = await pool.query(deleteQuery, [reservation_ID]);
+
+        // Ensure the reservation was deleted
+        if (deletedReservation.rows.length === 0) {
+            return res.status(404).json({
+                error: "Réservation introuvable."
+            });
+        }
+        
+        res.status(200).json({
+            message: "Réservation annulée.",
+            id: deletedReservation.rows[0].reservation_ID
+        });
+    } catch (err) {
+        console.error('Erreur lors de la suppression de la réservation:', err.message);
+        res.status(500).json({ error: err.message });
+    }
+};
+
