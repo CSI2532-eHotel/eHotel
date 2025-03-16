@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Navbar, Container, Nav, Button } from "react-bootstrap";
 import logo from "../assets/logo.png";
-import "./clientNavbar.css";
+import "./navbar.css";
 const ClientNavbar = () => {
   return (
     <Navbar expand="lg" className="navbar bg-body-tertiary sticky-top">
