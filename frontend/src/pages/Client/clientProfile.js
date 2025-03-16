@@ -24,6 +24,7 @@ const ClientProfile = () => {
   // State for edit modal
   const [showEditModal, setShowEditModal] = useState(false);
   const [editFormData, setEditFormData] = useState({
+    NAS_client: "",
     prenom_client: "",
     nom_client: "",
     rue: "",
@@ -31,7 +32,7 @@ const ClientProfile = () => {
     code_postal: "",
     courriel_client: "",
     motpasse_client: "",
-    confirmation_password: ""
+    confirmation_password: "",
   });
   const [validated, setValidated] = useState(false);
   const [error, setError] = useState("");
@@ -39,25 +40,26 @@ const ClientProfile = () => {
   // Fetch client profile data
   const fetchClientProfile = async () => {
     try {
-      // For now, using a hardcoded NAS as if it were retrieved from authentication context
-      const userNASClient = "123456789";
-      
-      // This would be replaced with an actual API call
-      /* 
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/client/${userNASClient}`);
-      setClientData(response.data);
-      */
-      
-      // Mock data for demonstration
-      setClientData({
-        NAS_client: "123456789",
-        prenom_client: "Jean",
-        nom_client: "Dupont",
-        rue: "123 Rue Principale",
-        ville: "Ottawa",
-        code_postal: "K1P 1J1",
-        courriel_client: "jean.dupont@email.com",
-      });
+      // Get client data from localStorage that was stored during login
+      const userData = JSON.parse(localStorage.getItem("userData"));
+
+      if (!userData || !userData.courriel_client) {
+        console.error("User data not found in local storage");
+        // Redirect to login page if user data is not found
+        window.location.href = "/";
+        return;
+      }
+
+      // Use the email to fetch the latest client data as the client can update their profile
+      const response = await axios.get(
+        `http://localhost:5000/api/client/${userData.courriel_client}`
+      );
+      //need to convert the nas_client which in integer to string for display
+      const modifiedData = {
+        ...response.data,
+        NAS_client: String(response.data.nas_client),
+      };
+      setClientData(modifiedData);
     } catch (error) {
       console.error("Erreur lors de la récupération du profil:", error);
     }
@@ -68,13 +70,13 @@ const ClientProfile = () => {
     try {
       // For now, using a hardcoded NAS as if it were retrieved from authentication context
       const userNASClient = "123456789";
-      
+
       // This would be replaced with an actual API call
       /* 
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/client/${userNASClient}/reservations`);
       setReservations(response.data);
       */
-      
+
       // Mock data for demonstration
       setReservations([
         {
@@ -91,7 +93,7 @@ const ClientProfile = () => {
           extensible: true,
           commodite: ["TV", "Sofa", "Fridge"],
           prix: 150,
-          capacite: "Simple"
+          capacite: "Simple",
         },
         {
           reservation_ID: "1235",
@@ -107,8 +109,8 @@ const ClientProfile = () => {
           extensible: true,
           commodite: ["TV", "Sofa", "Fridge"],
           prix: 350,
-          capacite: "Double"
-        }
+          capacite: "Double",
+        },
       ]);
     } catch (error) {
       console.error("Erreur lors de la récupération des réservations:", error);
@@ -131,7 +133,7 @@ const ClientProfile = () => {
       code_postal: clientData.code_postal,
       courriel_client: clientData.courriel_client,
       motpasse_client: "",
-      confirmation_password: ""
+      confirmation_password: "",
     });
     setShowEditModal(true);
   };
@@ -148,12 +150,12 @@ const ClientProfile = () => {
       validationPostal: "code_postal",
       validationEmail: "courriel_client",
       validationPassword: "motpasse_client",
-      validationConfirmPassword: "confirmation_password"
+      validationConfirmPassword: "confirmation_password",
     };
 
     setEditFormData({
       ...editFormData,
-      [fieldMap[id]]: value
+      [fieldMap[id]]: value,
     });
   };
 
@@ -161,7 +163,7 @@ const ClientProfile = () => {
   const handleEditSubmit = async (event) => {
     event.preventDefault();
     const form = event.currentTarget;
-    
+
     // Form validation
     if (form.checkValidity() === false) {
       event.stopPropagation();
@@ -185,7 +187,7 @@ const ClientProfile = () => {
         ville: editFormData.ville,
         code_postal: editFormData.code_postal,
         courriel_client: editFormData.courriel_client,
-        motpasse_client: editFormData.motpasse_client
+        motpasse_client: editFormData.motpasse_client,
       };
 
       // Send data to backend
@@ -193,20 +195,22 @@ const ClientProfile = () => {
       const response = await axios.put(`${process.env.REACT_APP_API_URL}/api/client/${clientData.NAS_client}`, updatedClientData);
       console.log("Update successful:", response.data);
       */
-      
+
       // For demo purposes, update local state
       setClientData({
         ...clientData,
-        ...updatedClientData
+        ...updatedClientData,
       });
-      
+
       // Close modal and show success message
       setShowEditModal(false);
       alert("Profil mis à jour avec succès !");
-      
     } catch (err) {
       console.error("Error during update:", err.response?.data || err.message);
-      setError(err.response?.data?.error || "Une erreur s'est produite lors de la mise à jour");
+      setError(
+        err.response?.data?.error ||
+          "Une erreur s'est produite lors de la mise à jour"
+      );
     }
 
     setValidated(true);
@@ -219,7 +223,7 @@ const ClientProfile = () => {
       /* 
       await axios.delete(`${process.env.REACT_APP_API_URL}/api/client/${clientData.NAS_client}`);
       */
-      
+
       // Show success message and redirect to login page
       alert("Votre compte a été supprimé avec succès !");
       window.location.href = "/"; // Redirect to login page
@@ -236,17 +240,21 @@ const ClientProfile = () => {
       /* 
       await axios.delete(`${process.env.REACT_APP_API_URL}/api/reservations/${reservation.reservation_ID}`);
       */
-      
+
       // Remove the cancelled reservation from local state
-      setReservations(reservations.filter(
-        res => res.reservation_ID !== reservation.reservation_ID
-      ));
-      
+      setReservations(
+        reservations.filter(
+          (res) => res.reservation_ID !== reservation.reservation_ID
+        )
+      );
+
       // Show success message
       alert("Réservation annulée avec succès !");
     } catch (error) {
       console.error("Erreur lors de l'annulation de la réservation:", error);
-      alert("Une erreur s'est produite lors de l'annulation de la réservation.");
+      alert(
+        "Une erreur s'est produite lors de l'annulation de la réservation."
+      );
     }
   };
 
@@ -262,22 +270,19 @@ const ClientProfile = () => {
                 <div className="d-flex justify-content-between align-items-center mb-4">
                   <h3 className="m-0 text-primary">Mon Profil</h3>
                   <div>
-                    <Button 
-                      variant="primary" 
+                    <Button
+                      variant="primary"
                       className="me-4"
                       onClick={openEditModal}
                     >
                       Modifiez mon Profil
                     </Button>
-                    <Button 
-                     variant="danger"
-                      onClick={handleDeleteProfile}
-                    >
+                    <Button variant="danger" onClick={handleDeleteProfile}>
                       Supprimer Profil
                     </Button>
                   </div>
                 </div>
-                
+
                 <div>
                   <Row className="mb-3">
                     <Col md={6}>
@@ -287,19 +292,19 @@ const ClientProfile = () => {
                       <h5 className="text-black">Nom: <span className="profile-value">{clientData.nom_client}</span></h5>
                     </Col>
                   </Row>
-                  
+
                   <Row className="mb-3">
                     <Col md={12}>
                       <h5 className="text-black">NAS: <span className="profile-value">{clientData.NAS_client}</span></h5>
                     </Col>
                   </Row>
-                  
+
                   <Row className="mb-3">
                     <Col md={12}>
                       <h5 className="text-black">Adresse: <span className="profile-value">{clientData.rue}, {clientData.ville}, {clientData.code_postal}</span></h5>
                     </Col>
                   </Row>
-                  
+
                   <Row>
                     <Col md={12}>
                       <h5 className="text-black">Courriel: <span className="profile-value">{clientData.courriel_client}</span></h5>
@@ -342,7 +347,7 @@ const ClientProfile = () => {
                         </p>
                       </Col>
                       <Col md={4} className="d-flex align-items-center justify-content-end" style={{marginTop: "160px"}}>
-                        <Button 
+                        <Button
                           variant="danger"
                           onClick={() => handleCancelReservation(reservation)}
                         >
@@ -372,10 +377,10 @@ const ClientProfile = () => {
         </Modal.Header>
         <Modal.Body>
           {error && <div className="alert alert-danger">{error}</div>}
-          
+
           <Form noValidate validated={validated} onSubmit={handleEditSubmit}>
             <h5 className="mb-3">Information Personnelle</h5>
-            
+
             <Row className="mb-3">
               <Form.Group as={Col} md="6" controlId="validationFirstName">
                 <Form.Label>Prénom</Form.Label>
@@ -390,7 +395,7 @@ const ClientProfile = () => {
                   Svp entrez votre prénom.
                 </Form.Control.Feedback>
               </Form.Group>
-              
+
               <Form.Group as={Col} md="6" controlId="validationLastName">
                 <Form.Label>Nom</Form.Label>
                 <Form.Control
@@ -436,7 +441,7 @@ const ClientProfile = () => {
                   Svp entrez votre ville.
                 </Form.Control.Feedback>
               </Form.Group>
-              
+
               <Form.Group as={Col} md="6" controlId="validationPostal">
                 <Form.Label>Code Postal</Form.Label>
                 <Form.Control
@@ -482,7 +487,7 @@ const ClientProfile = () => {
                   Svp entrez votre mot de passe.
                 </Form.Control.Feedback>
               </Form.Group>
-              
+
               <Form.Group as={Col} md="6" controlId="validationConfirmPassword">
                 <Form.Label>Confirmer mot de passe</Form.Label>
                 <Form.Control
@@ -498,9 +503,6 @@ const ClientProfile = () => {
             </Row>
 
             <div className="d-flex justify-content-end mt-4">
-              <Button variant="danger" className="me-2" onClick={() => setShowEditModal(false)}>
-                Annuler
-              </Button>
               <Button type="submit" variant="primary">
                 Sauvegarder
               </Button>
