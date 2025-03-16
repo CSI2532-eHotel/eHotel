@@ -75,16 +75,12 @@ export const deleteClientReservation = async (req, res) => {
     }
 };
 
-import pool from './configDatabase.js'; // Ensure this imports the correct database connection
-
+// fonction pour modifier le profil / personal info
+// pas de NAS - peut pas changer
 export const updateClientProfile = async (req, res) => {
     try {
         const { NAS_client, nom_client, prenom_client, rue, ville, code_postal, motpasse_client } = req.body;
-        const courriel_client = req.user?.email; // Retrieve authenticated user's email
-
-        if (!courriel_client) {
-            return res.status(401).json({ message: 'Unauthorized: No email found' });
-        }
+        const courriel_client = req.user?.email; 
 
         const updateQuery = `
             UPDATE Client
@@ -111,9 +107,9 @@ export const updateClientProfile = async (req, res) => {
 
         const updatedClient = await pool.query(updateQuery, values);
 
-        res.status(200).json(updatedClient.rows[0]); // Always returns a client profile
+        res.status(200).json(updatedClient.rows[0]); 
     } catch (err) {
-        console.error('Error updating client profile:', err.message);
+        console.error('Erreur lors de la mise à jour du profil client:', err.message);
         res.status(500).json({ error: err.message });
     }
 };
