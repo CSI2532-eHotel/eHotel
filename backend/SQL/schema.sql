@@ -2,7 +2,7 @@
 -- creation table: ChaineHotel
 CREATE TABLE IF NOT EXISTS ChaineHotel (
 	chaine_ID INTEGER NOT NULL UNIQUE,  
-    nom_chaine VARCHAR(255),
+    	nom_chaine VARCHAR(255),
 	rue VARCHAR(255),
 	ville VARCHAR(255),
 	code_postal VARCHAR(6),
@@ -15,12 +15,12 @@ CREATE TABLE IF NOT EXISTS ChaineHotel (
 -- creation table: Hotel
 CREATE TABLE IF NOT EXISTS Hotel (
 	hotel_ID INTEGER NOT NULL UNIQUE,  
-    nom_hotel VARCHAR(255),
+   	nom_hotel VARCHAR(255),
 	rue VARCHAR(255),
 	ville VARCHAR(255),
 	code_postal VARCHAR(6),
 	nombre_hotel INTEGER,
-	courriel_chaine VARCHAR(255),
+	courriel_hotel VARCHAR(255),
 	numero_telephone_hotel VARCHAR(10),
 	etoile INTEGER,
 	chaine_ID INTEGER,
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS Hotel (
 CREATE TABLE IF NOT EXISTS Chambre (
 	chambre_ID INTEGER NOT NULL UNIQUE,
 	prix INTEGER,
-    commodite VARCHAR(255),
+    	commodite VARCHAR(255),
 	capacite VARCHAR(255),
 	extensible VARCHAR(255),
 	dommage VARCHAR(255),
