@@ -49,7 +49,7 @@ const ClientProfile = () => {
 
       // Use the email to fetch the latest client data as the client can update their profile
       const response = await axios.get(
-        `http://localhost:5000/api/client/${userData.courriel_client}`
+        `${process.env.REACT_APP_API_URL}/api/client/${userData.courriel_client}`
       );
       //need to convert the nas_client which in integer to string for display
       const modifiedData = {
