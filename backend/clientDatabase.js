@@ -47,7 +47,7 @@ export const validateClientLogin = async (req, res) => {
 // fonction - client annule reservation
 export const deleteClientReservation = async (req, res) => {
     try {
-        const { reservation_ID } = req.params;  // Just use reservation_ID (no need to verify NAS_client)
+        const { reservation_ID } = req.params; 
 
         // annulation
         const deleteQuery = `
