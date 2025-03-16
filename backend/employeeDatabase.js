@@ -59,7 +59,7 @@ export const insertLocation = async (req, res) => {
   }
 };
 
-export const confirmReservation = async (req, res) => {
+export const confirmClientReservation = async (req, res) => {
   try {
       const { reservation_ID, transaction_date, NAS_employe } = req.body;
 
