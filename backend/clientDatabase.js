@@ -75,3 +75,48 @@ export const deleteClientReservation = async (req, res) => {
     }
 };
 
+import pool from './configDatabase.js'; // Ensure this imports the correct database connection
+
+export const updateClientProfile = async (req, res) => {
+    try {
+        const { NAS_client, nom_client, prenom_client, rue, ville, code_postal, motpasse_client } = req.body;
+        const courriel_client = req.user?.email; // Retrieve authenticated user's email
+
+        if (!courriel_client) {
+            return res.status(401).json({ message: 'Unauthorized: No email found' });
+        }
+
+        const updateQuery = `
+            UPDATE Client
+            SET 
+                nom_client = $1,
+                prenom_client = $2,
+                rue = $3,
+                ville = $4,
+                code_postal = $5,
+                motpasse_client = $6
+            WHERE courriel_client = $7
+            RETURNING *;
+        `;
+
+        const values = [ 
+            nom_client, 
+            prenom_client, 
+            rue, 
+            ville, 
+            code_postal, 
+            motpasse_client, 
+            courriel_client
+        ];
+
+        const updatedClient = await pool.query(updateQuery, values);
+
+        res.status(200).json(updatedClient.rows[0]); // Always returns a client profile
+    } catch (err) {
+        console.error('Error updating client profile:', err.message);
+        res.status(500).json({ error: err.message });
+    }
+};
+
+
+
