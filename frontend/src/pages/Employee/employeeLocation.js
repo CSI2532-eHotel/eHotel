@@ -2,19 +2,18 @@ import React, { useState, useEffect } from "react";
 import { Button, Card, Col, Container, Form, Nav, Navbar, Row, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import logo from "../../assets/logo.png";
-import "./employeeLocation.css";
+import EmployeeNavbar from "../../components/employeeNavbar";
 
 const EmployeeLocation = () => {
   // State for available rooms
   const [availableRooms, setAvailableRooms] = useState([]);
-  
+
   // State for location modal
   const [showLocationModal, setShowLocationModal] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [validated, setValidated] = useState(false);
   const [error, setError] = useState("");
-  
+
   // State for form data
   const [formData, setFormData] = useState({
     NAS_client: "",
@@ -35,7 +34,7 @@ const EmployeeLocation = () => {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/chambres/disponibles`);
       setAvailableRooms(response.data);
       */
-      
+
       // Mock data for demonstration
       setAvailableRooms([
         {
@@ -86,12 +85,12 @@ const EmployeeLocation = () => {
   // Handle input change
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    
+
     // Pour NAS_client, ne permettre que des chiffres et limiter à 9 caractères
     if (name === "NAS_client" && !/^\d*$/.test(value)) {
       return;
     }
-    
+
     setFormData({
       ...formData,
       [name]: value
@@ -107,14 +106,14 @@ const EmployeeLocation = () => {
   const handleLocationSubmit = async (event) => {
     event.preventDefault();
     const form = event.currentTarget;
-    
+
     // NAS validation
     if (!validateNAS(formData.NAS_client)) {
       setError("Le NAS doit contenir exactement 9 chiffres.");
       setValidated(true);
       return;
     }
-    
+
     // Form validation
     if (form.checkValidity() === false) {
       event.stopPropagation();
@@ -139,15 +138,15 @@ const EmployeeLocation = () => {
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/locations`, locationData);
       console.log("Location created successfully:", response.data);
       */
-      
+
       // For demo purposes, remove the room from local state
       setAvailableRooms(availableRooms.filter(
         room => room.chambre_ID !== selectedRoom.chambre_ID
       ));
-      
+
       // Close location modal
       setShowLocationModal(false);
-      
+
       // Set success data and open success modal
       setSuccessData({
         chambre_ID: selectedRoom.chambre_ID,
@@ -156,7 +155,7 @@ const EmployeeLocation = () => {
         montant: formData.montant
       });
       setShowSuccessModal(true);
-      
+
     } catch (err) {
       console.error("Error creating location:", err.response?.data || err.message);
       setError(err.response?.data?.error || "Une erreur s'est produite lors du traitement");
@@ -176,56 +175,7 @@ const EmployeeLocation = () => {
 
   return (
     <div>
-      <Navbar expand="lg" className="navbar bg-body-tertiary sticky-top pb-3">
-        <Container fluid className="custom-container">
-          {/* Logo on the left */}
-          <Link to="/employeeHome">
-            <img
-              src={logo}
-              style={{ width: "50px", marginRight: "10px" }}
-              id="logo"
-              alt="Logo"
-            />
-          </Link>
-          <Navbar.Brand as={Link} to="/employeeHome" className="capitalize" id="name">
-            e-Hôtel
-          </Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            {/* Navigation Links */}
-            <Nav className="ms-auto py-0 pe-3">
-              <Nav.Link
-                as={Link}
-                to="/employeeHome"
-                className="capitalize"
-                id="HomeLink"
-                style={{ marginRight: "8px" }}
-              >
-                Accueil
-              </Nav.Link>
-              <Nav.Link
-                as={Link}
-                to="/employeeLocation"
-                className="capitalize"
-                id="LocationsLink"
-                style={{ marginRight: "8px" }}
-              >
-                 Créer une location
-              </Nav.Link>
-            </Nav>
-            {/* Log Out Button */}
-            <Button
-              as={Link}
-              to="/"
-              variant="primary"
-              className="text-white py-1 px-1 capitalize rounded-2"
-              id="loginOutbtn"
-            >
-              Deconnectez
-            </Button>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
+      <EmployeeNavbar />
 
       <Container className="py-4">
         {/* Available Rooms Section */}
@@ -255,7 +205,7 @@ const EmployeeLocation = () => {
                         </p>
                       </Col>
                       <Col md={4} className="d-flex align-items-end justify-content-end">
-                        <Button 
+                        <Button
                           variant="primary"
                           onClick={() => openLocationModal(room)}
                         >
@@ -344,7 +294,7 @@ const EmployeeLocation = () => {
               <Form.Text className="text-muted">
                 {formData.debut_date_location && formData.fin_date_location && (
                   <>
-                    Prix suggéré: ${(selectedRoom.prix * calculateDays(formData.debut_date_location, formData.fin_date_location)).toFixed(2)} 
+                    Prix suggéré: ${(selectedRoom.prix * calculateDays(formData.debut_date_location, formData.fin_date_location)).toFixed(2)}
                     ({calculateDays(formData.debut_date_location, formData.fin_date_location)} jours à ${selectedRoom.prix}/nuit)
                   </>
                 )}
@@ -364,8 +314,8 @@ const EmployeeLocation = () => {
       </Modal>
 
       {/* Success Modal */}
-      <Modal 
-        show={showSuccessModal} 
+      <Modal
+        show={showSuccessModal}
         onHide={() => setShowSuccessModal(false)}
         centered
       >
@@ -380,7 +330,7 @@ const EmployeeLocation = () => {
             <i className="bi bi-check-circle-fill text-success" style={{ fontSize: '3rem' }}></i>
             <h4 className="mt-3">Votre location a été créée</h4>
           </div>
-          
+
           {successData && (
             <div className="p-3 border rounded">
               <p className="mb-2"><strong>Chambre:</strong> {successData.chambre_ID}</p>

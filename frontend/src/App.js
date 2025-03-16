@@ -10,6 +10,9 @@ import ClientProfile from "./pages/Client/clientProfile";
 import EmployeeHome from "./pages/Employee/employeeHome";
 import EmployeeLocation from "./pages/Employee/employeeLocation";
 import ManageEmployee from "./pages/Manager/manageEmployee";
+import ManageClient from "./pages/Manager/manageClient";
+import ManageChambre from "./pages/Manager/manageChambre";
+import ManageHotel from "./pages/Manager/manageHotel";
 
 function App() {
   return (
@@ -21,11 +24,12 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/clientHome" element={<ClientHome />} />
             <Route path="/clientProfile" element={<ClientProfile />} />
-            <Route path="/employeeHome" element={<EmployeeHome />} /> 
-            <Route path="/employeeLocation" element={<EmployeeLocation />} /> 
-            <Route path="/manageEmployee" element={<ManageEmployee />} /> 
-            {/* <Route path="/manageChambre" element={<manageChambre />} />  */}
-             {/* <Route path="/manageHotel" element={<manageHotel />} />  */}
+            <Route path="/employeeHome" element={<EmployeeHome />} />
+            <Route path="/employeeLocation" element={<EmployeeLocation />} />
+            <Route path="/manageEmployee" element={<ManageEmployee />} />
+            <Route path="/manageClient" element={<ManageClient />} />
+            <Route path="/manageChambre" element={<ManageChambre />} />
+            <Route path="/manageHotel" element={<ManageHotel />} />
           </Routes>
         </div>
         <Footer />

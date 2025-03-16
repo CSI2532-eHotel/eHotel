@@ -9,7 +9,6 @@ export const validateEmployeeLogin = async (req, res) => {
   try {
     const { courriel, motpasse } = req.body;
 
-    // Modified query - removing the subquery that checked the Gestionnaire table
     const result = await pool.query(
       "SELECT e.nas_employe, e.nom_employe, e.prenom_employe, e.courriel_employee, e.role, e.hotel_id " +
         "FROM Employe e WHERE e.courriel_employee = $1 AND e.motpasse_employee = $2",
@@ -25,7 +24,7 @@ export const validateEmployeeLogin = async (req, res) => {
       });
     }
 
-    // Add a boolean flag based on role directly
+    //verifier si l'employé est gestionnaire
     const userData = {
       ...result.rows[0],
       est_gestionnaire: result.rows[0].role === "gestionnaire",
