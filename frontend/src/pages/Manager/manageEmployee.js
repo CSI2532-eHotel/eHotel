@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import {Button,Card,Col,Container,Form,Nav,Navbar,Row,Modal,Table,} from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import logo from "../../assets/logo.png";
+import ManagerNavbar from "../../components/managerNavbar";
 
 const ManageEmployee = () => {
   // Mock employees data
@@ -151,75 +151,7 @@ const ManageEmployee = () => {
 
   return (
     <div>
-      <Navbar expand="lg" className="navbar bg-body-tertiary sticky-top pb-3">
-        <Container fluid className="custom-container">
-          {/* Logo on the left */}
-          <Link to="/">
-            <img
-              src={logo}
-              style={{ width: "50px", marginRight: "10px" }}
-              id="logo"
-              alt="Logo"
-            />
-          </Link>
-          <Navbar.Brand as={Link} to="/" className="capitalize" id="name">
-            e-Hôtel
-          </Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            {/* Navigation Links */}
-            <Nav className="ms-auto py-0 pe-3">
-              <Nav.Link
-                as={Link}
-                to="/manageEmployee"
-                className="capitalize active"
-                id="EmployeeLink"
-                style={{ marginRight: "8px" }}
-              >
-                Employée
-              </Nav.Link>
-              <Nav.Link
-                as={Link}
-                to="/manageClient"
-                className="capitalize"
-                id="ClientLink"
-                style={{ marginRight: "8px" }}
-              >
-                Client
-              </Nav.Link>
-              <Nav.Link
-                as={Link}
-                to="/manageChambre"
-                className="capitalize"
-                id="ChambreLink"
-                style={{ marginRight: "8px" }}
-              >
-                Chambre
-              </Nav.Link>
-              <Nav.Link
-                as={Link}
-                to="/manageHotel"
-                className="capitalize"
-                id="HotelLink"
-                style={{ marginRight: "8px" }}
-              >
-                Hôtel
-              </Nav.Link>
-            </Nav>
-            {/* Log Out Button */}
-            <Button
-              as={Link}
-              to="/"
-              variant="primary"
-              className="text-white py-1 px-1 capitalize rounded-2"
-              id="loginOutbtn"
-            >
-              Déconnectez
-            </Button>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-
+      <ManagerNavbar />
       <Container className="py-4">
         {/* Employees Section */}
         <Row className="mb-4">
