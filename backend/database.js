@@ -35,7 +35,22 @@ export const insertClient = async (req, res) => {
     }
 };
 
+//fonction pour inserer une location
+export const insertLocation = async (req, res) => {
+    try {
+        const { location_ID, debut_date_location, fin_date_location, montant, transaction_date, NAS_employe, NAS_client, chambre_ID, reservation_ID } = req.body;
+        
+        const newLocation = await pool.query(
+            "INSERT INTO Location (location_ID, debut_date_location, fin_date_location, montant, transaction_date, NAS_employe, NAS_client, chambre_ID, reservation_ID) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *",
+            [location_ID, debut_date_location, fin_date_location, montant, transaction_date, NAS_employe, NAS_client, chambre_ID, reservation_ID]
+        );
 
+        res.status(201).json(newLocation.rows[0]); // Retourne l’entrée ajoutée
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ error: err.message });
+    }
+};
 
 
 
