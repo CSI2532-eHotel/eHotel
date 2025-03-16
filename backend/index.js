@@ -3,7 +3,7 @@ import cors from 'cors';
 import { insertClient, validateClientLogin } from './clientDatabase.js';
 import { validateEmployeeLogin } from './employeeDatabase.js';
 import env from 'dotenv';
-import { insertReservation } from './clientDatabase.js';
+import { insertClientReservation } from './clientDatabase.js';
 import { confirmClientReservation } from './employeeDatabase.js';
 env.config(); 
 const app = express();
@@ -17,7 +17,7 @@ app.use(cors());
 // =================================route pour client===========================
 app.post('/api/insertClient', insertClient); 
 app.post('/api/login/client', validateClientLogin);
-app.post('/api/reservations', insertReservation);
+app.post('/api/reservations', insertClientReservation);
 // =================================route pour employee===========================
 app.post('/api/login/employee', validateEmployeeLogin);
 app.post('/api/confirmClientReservation', confirmClientReservation);
