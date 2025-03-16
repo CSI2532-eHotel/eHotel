@@ -44,3 +44,28 @@ export const validateClientLogin = async (req, res) => {
     }
 };
 
+//fontion pour creer une reservation
+export const insertClientReservation = async (req, res) => {
+    try {
+        const { debut_date_reservation, fin_date_reservation, NAS_client, chambre_ID } = req.body;
+
+        // Validate input
+        if (!debut_date_reservation || !fin_date_reservation || !NAS_client || !chambre_ID) {
+            return res.status(400).json({ error: "Remplissez tous les cases." });
+        }
+
+        // Insert into reservation table
+        const newReservation = await pool.query(
+            "INSERT INTO reservation (debut_date_reservation, fin_date_reservation, NAS_client, chambre_ID) VALUES ($1, $2, $3, $4) RETURNING *",
+            [debut_date_reservation, fin_date_reservation, NAS_client, chambre_ID]
+        );
+
+        res.status(201).json({
+            message: "Reservation complete",
+            reservation: newReservation.rows[0]
+        });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ error: err.message });
+    }
+};
