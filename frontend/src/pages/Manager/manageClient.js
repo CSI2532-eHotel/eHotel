@@ -1,72 +1,77 @@
 import React, { useState, useEffect } from "react";
-import { Button, Card, Col, Container, Form, Nav, Navbar, Row, Modal, Table, } from "react-bootstrap";
+import {
+  Button,
+  Card,
+  Col,
+  Container,
+  Form,
+  Nav,
+  Navbar,
+  Row,
+  Modal,
+  Table,
+} from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import ManagerNavbar from "../../components/managerNavbar";
 
-const ManageEmployee = () => {
-  // Mock employees data
-  const [employees] = useState([
+const ManageClient = () => {
+  // Mock clients data based on the correct schema
+  const [clients] = useState([
     {
-      NAS_employe: "123456789",
-      hotel_ID: "H001",
-      prenom_employe: "Jean",
-      nom_employe: "Tremblay",
-      rue: "123 Rue Principale",
+      NAS_client: "123456789",
+      nom_client: "Martin",
+      prenom_client: "Sophie",
+      rue: "456 Rue Notre-Dame",
       ville: "Montréal",
-      code_postal: "H2X 1Y6",
-      role: "Réceptionniste",
-      courriel_employee: "jean.tremblay@ehotel.com",
+      code_postal: "H2Y1B6",
+      courriel_client: "sophie.martin@example.com",
+      date_enregistrement: "2024-01-15"
     },
     {
-      NAS_employe: "987654321",
-      hotel_ID: "H001",
-      prenom_employe: "Marie",
-      nom_employe: "Dubois",
-      rue: "456 Boulevard St-Laurent",
+      NAS_client: "987654321",
+      nom_client: "Bouchard",
+      prenom_client: "Michel",
+      rue: "789 Avenue du Mont-Royal",
+      ville: "Montréal",
+      code_postal: "H2J1Z7",
+      courriel_client: "michel.bouchard@example.com",
+      date_enregistrement: "2024-02-10"
+    },
+    {
+      NAS_client: "456789123",
+      nom_client: "Tremblay",
+      prenom_client: "Claire",
+      rue: "123 Boulevard René-Lévesque",
       ville: "Québec",
-      code_postal: "G1R 4P3",
-      role: "Gestionnaire",
-      courriel_employee: "marie.dubois@ehotel.com",
-    },
-    {
-      NAS_employe: "456789123",
-      hotel_ID: "H001",
-      prenom_employe: "Pierre",
-      nom_employe: "Lavoie",
-      rue: "789 Avenue du Parc",
-      ville: "Laval",
-      code_postal: "H7N 2S3",
-      role: "Entretien",
-      courriel_employee: "pierre.lavoie@ehotel.com",
+      code_postal: "G1R5T8",
+      courriel_client: "claire.tremblay@example.com",
+      date_enregistrement: "2024-03-05"
     },
   ]);
 
-  const hotelId = "H001";
   const [error, setError] = useState("");
 
-  // State for employee form
-  const [showEmployeeModal, setShowEmployeeModal] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
+  // State for client form
+  const [showClientModal, setShowClientModal] = useState(false);
   const [validated, setValidated] = useState(false);
 
-  // Employee form data
+  // Client form data
   const [formData, setFormData] = useState({
-    NAS_employe: "",
-    hotel_ID: hotelId,
-    nom_employe: "",
-    prenom_employe: "",
+    NAS_client: "",
+    nom_client: "",
+    prenom_client: "",
     rue: "",
     ville: "",
     code_postal: "",
-    role: "",
-    courriel_employee: "",
-    motpasse_employee: "",
+    courriel_client: "",
+    motpasse_client: "", // Only for password reset, not displayed in table
+    date_enregistrement: ""
   });
 
   // State for delete confirmation modal
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [employeeToDelete, setEmployeeToDelete] = useState(null);
+  const [clientToDelete, setClientToDelete] = useState(null);
 
   // Handle form input changes
   const handleChange = (e) => {
@@ -77,51 +82,30 @@ const ManageEmployee = () => {
     });
   };
 
-  // Open modal for adding a new employee
-  const openAddEmployeeModal = () => {
+  // Open modal for editing an existing client
+  const openEditClientModal = (client) => {
     setFormData({
-      NAS_employe: "",
-      hotel_ID: hotelId,
-      nom_employe: "",
-      prenom_employe: "",
-      rue: "",
-      ville: "",
-      code_postal: "",
-      role: "",
-      courriel_employee: "",
-      motpasse_employee: "",
+      NAS_client: client.NAS_client,
+      nom_client: client.nom_client,
+      prenom_client: client.prenom_client,
+      rue: client.rue,
+      ville: client.ville,
+      code_postal: client.code_postal,
+      courriel_client: client.courriel_client,
+      motpasse_client: "", // Password field is empty for editing
+      date_enregistrement: client.date_enregistrement
     });
-    setIsEditing(false);
     setValidated(false);
-    setShowEmployeeModal(true);
-  };
-
-  // Open modal for editing an existing employee
-  const openEditEmployeeModal = (employee) => {
-    setFormData({
-      NAS_employe: employee.NAS_employe,
-      hotel_ID: employee.hotel_ID,
-      nom_employe: employee.nom_employe,
-      prenom_employe: employee.prenom_employe,
-      rue: employee.rue,
-      ville: employee.ville,
-      code_postal: employee.code_postal,
-      role: employee.role,
-      courriel_employee: employee.courriel_employee,
-      motpasse_employee: "", // Password field is empty for editing
-    });
-    setIsEditing(true);
-    setValidated(false);
-    setShowEmployeeModal(true);
+    setShowClientModal(true);
   };
 
   // Open delete confirmation modal
-  const openDeleteModal = (employee) => {
-    setEmployeeToDelete(employee);
+  const openDeleteModal = (client) => {
+    setClientToDelete(client);
     setShowDeleteModal(true);
   };
 
-  // Handle form submission (create/update employee)
+  // Handle form submission (update client)
   const handleSubmit = (event) => {
     event.preventDefault();
     const form = event.currentTarget;
@@ -133,19 +117,15 @@ const ManageEmployee = () => {
       return;
     }
 
-    // In a real app, this is where you would save the data
-    alert(
-      isEditing
-        ? "Employé mis à jour avec succès!"
-        : "Employé ajouté avec succès!"
-    );
-    setShowEmployeeModal(false);
+    // In a real app, this is where you would update the client data
+    alert("Client mis à jour avec succès!");
+    setShowClientModal(false);
   };
 
-  // Handle employee deletion
-  const handleDeleteEmployee = () => {
-    // In a real app, this is where you would delete the employee
-    alert("Employé supprimé avec succès!");
+  // Handle client deletion
+  const handleDeleteClient = () => {
+    // In a real app, this is where you would delete the client
+    alert("Client supprimé avec succès!");
     setShowDeleteModal(false);
   };
 
@@ -153,17 +133,13 @@ const ManageEmployee = () => {
     <div>
       <ManagerNavbar />
       <Container className="py-4">
-        {/* Employees Section */}
+        {/* Clients Section */}
         <Row className="mb-4">
           <Col>
-            <h3 className="text-primary">Liste des Employées</h3>
-          </Col>
-          <Col className="text-end">
-            <Button variant="primary" onClick={openAddEmployeeModal}>
-              Ajouter un Employée
-            </Button>
+            <h3 className="text-primary">Liste des Clients</h3>
           </Col>
         </Row>
+
         {error && (
           <Row>
             <Col>
@@ -171,6 +147,7 @@ const ManageEmployee = () => {
             </Col>
           </Row>
         )}
+
         <Row>
           <Col>
             <Card>
@@ -181,34 +158,34 @@ const ManageEmployee = () => {
                       <th>NAS</th>
                       <th>Prénom</th>
                       <th>Nom</th>
-                      <th>Rôle</th>
                       <th>Adresse</th>
                       <th>Courriel</th>
+                      <th>Date d'enregistrement</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {employees.map((employee) => (
-                      <tr key={employee.NAS_employe}>
-                        <td>{employee.NAS_employe}</td>
-                        <td>{employee.prenom_employe}</td>
-                        <td>{employee.nom_employe}</td>
-                        <td>{employee.role}</td>
-                        <td>{`${employee.rue}, ${employee.ville}, ${employee.code_postal}`}</td>
-                        <td>{employee.courriel_employee}</td>
+                    {clients.map((client) => (
+                      <tr key={client.NAS_client}>
+                        <td>{client.NAS_client}</td>
+                        <td>{client.prenom_client}</td>
+                        <td>{client.nom_client}</td>
+                        <td>{`${client.rue}, ${client.ville}, ${client.code_postal}`}</td>
+                        <td>{client.courriel_client}</td>
+                        <td>{new Date(client.date_enregistrement).toLocaleDateString('fr-CA')}</td>
                         <td>
                           <Button
                             variant="primary"
                             size="sm"
                             className="me-3"
-                            onClick={() => openEditEmployeeModal(employee)}
+                            onClick={() => openEditClientModal(client)}
                           >
                             Modifier
                           </Button>
                           <Button
                             variant="danger"
                             size="sm"
-                            onClick={() => openDeleteModal(employee)}
+                            onClick={() => openDeleteModal(client)}
                           >
                             Supprimer
                           </Button>
@@ -223,15 +200,15 @@ const ManageEmployee = () => {
         </Row>
       </Container>
 
-      {/* Employee Form Modal */}
+      {/* Client Form Modal */}
       <Modal
-        show={showEmployeeModal}
-        onHide={() => setShowEmployeeModal(false)}
+        show={showClientModal}
+        onHide={() => setShowClientModal(false)}
         size="lg"
       >
         <Modal.Header closeButton>
           <Modal.Title className="text-primary">
-            {isEditing ? "Modifier un Employée" : "Ajouter un Employée"}
+            Modifier un Client
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -239,37 +216,15 @@ const ManageEmployee = () => {
 
           <Form noValidate validated={validated} onSubmit={handleSubmit}>
             <Row className="mb-3">
-              <Form.Group as={Col} md="6" controlId="validationNAS">
-                <Form.Label>NAS Employé</Form.Label>
+              <Form.Group as={Col} md="12" controlId="validationNAS">
+                <Form.Label>NAS Client</Form.Label>
                 <Form.Control
-                  required
                   type="text"
                   placeholder="NAS"
-                  pattern="[0-9]{9}"
-                  name="NAS_employe"
-                  value={formData.NAS_employe}
-                  onChange={handleChange}
-                  readOnly={isEditing}
+                  name="NAS_client"
+                  value={formData.NAS_client}
+                  readOnly={true}
                 />
-                <Form.Control.Feedback type="invalid">
-                  Svp entrez un NAS valide (9 chiffres).
-                </Form.Control.Feedback>
-              </Form.Group>
-
-              <Form.Group as={Col} md="6" controlId="validationHotelID">
-                <Form.Label>ID Hôtel</Form.Label>
-                <Form.Control
-                  required
-                  type="text"
-                  placeholder="ID Hôtel"
-                  name="hotel_ID"
-                  value={formData.hotel_ID}
-                  onChange={handleChange}
-                  readOnly={true} // Manager can only add employees to their hotel
-                />
-                <Form.Control.Feedback type="invalid">
-                  Svp entrez l'ID de l'hôtel.
-                </Form.Control.Feedback>
               </Form.Group>
             </Row>
 
@@ -280,8 +235,8 @@ const ManageEmployee = () => {
                   required
                   type="text"
                   placeholder="Prénom"
-                  name="prenom_employe"
-                  value={formData.prenom_employe}
+                  name="prenom_client"
+                  value={formData.prenom_client}
                   onChange={handleChange}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -295,8 +250,8 @@ const ManageEmployee = () => {
                   required
                   type="text"
                   placeholder="Nom"
-                  name="nom_employe"
-                  value={formData.nom_employe}
+                  name="nom_client"
+                  value={formData.nom_client}
                   onChange={handleChange}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -345,97 +300,89 @@ const ManageEmployee = () => {
                   type="text"
                   placeholder="Code Postal"
                   name="code_postal"
-                  pattern="[A-Za-z][0-9][A-Za-z] [0-9][A-Za-z][0-9]"
+                  pattern="[A-Za-z][0-9][A-Za-z][0-9][A-Za-z][0-9]"
                   value={formData.code_postal}
                   onChange={handleChange}
                 />
                 <Form.Control.Feedback type="invalid">
-                  Svp entrez un code postal valide (A1A 1A1).
+                  Svp entrez un code postal valide (6 caractères sans espace).
                 </Form.Control.Feedback>
               </Form.Group>
             </Row>
 
             <Row className="mb-3">
-              <Form.Group as={Col} md="6" controlId="validationRole">
-                <Form.Label>Rôle</Form.Label>
-                <Form.Select
-                  required
-                  name="role"
-                  value={formData.role}
-                  onChange={handleChange}
-                >
-                  <option value="">Sélectionner un rôle</option>
-                  <option value="Réceptionniste">Réceptionniste</option>
-                  <option value="Gestionnaire">Gestionnaire</option>
-                </Form.Select>
-                <Form.Control.Feedback type="invalid">
-                  Svp sélectionnez un rôle.
-                </Form.Control.Feedback>
-              </Form.Group>
-
               <Form.Group as={Col} md="6" controlId="validationEmail">
                 <Form.Label>Courriel</Form.Label>
                 <Form.Control
                   required
                   type="email"
                   placeholder="Courriel"
-                  name="courriel_employee"
-                  value={formData.courriel_employee}
+                  name="courriel_client"
+                  value={formData.courriel_client}
                   onChange={handleChange}
                 />
                 <Form.Control.Feedback type="invalid">
                   Svp entrez un courriel valide.
                 </Form.Control.Feedback>
               </Form.Group>
+
+              <Form.Group as={Col} md="6" controlId="validationDate">
+                <Form.Label>Date d'enregistrement</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="date_enregistrement"
+                  value={new Date(formData.date_enregistrement).toLocaleDateString('fr-CA')}
+                  readOnly={true}
+                  disabled={true}
+                />
+                <Form.Text className="text-muted">
+                  La date d'enregistrement ne peut pas être modifiée.
+                </Form.Text>
+              </Form.Group>
             </Row>
 
             <Row className="mb-3">
               <Form.Group as={Col} md="12" controlId="validationPassword">
                 <Form.Label>
-                  {isEditing
-                    ? "Nouveau Mot de Passe (laisser vide pour garder l'actuel)"
-                    : "Mot de Passe"}
+                  Nouveau Mot de Passe (laisser vide pour garder l'actuel)
                 </Form.Label>
                 <Form.Control
-                  required={!isEditing}
                   type="password"
                   placeholder="Mot de Passe"
-                  name="motpasse_employee"
-                  value={formData.motpasse_employee}
+                  name="motpasse_client"
+                  value={formData.motpasse_client}
                   onChange={handleChange}
                 />
-                <Form.Control.Feedback type="invalid">
-                  Svp entrez un mot de passe.
-                </Form.Control.Feedback>
               </Form.Group>
             </Row>
 
             <div className="d-flex justify-content-end">
               <Button type="submit" variant="primary">
-                Sauvegarde
+                Mettre à jour
               </Button>
             </div>
           </Form>
         </Modal.Body>
       </Modal>
+
       {/* Delete Confirmation Modal */}
       <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title className="text-danger">Confirmer la suppression</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {employeeToDelete && (
+          {clientToDelete && (
             <p>
-              Êtes-vous sûr de vouloir supprimer l'employee{" "}
+              Êtes-vous sûr de vouloir supprimer le client{" "}
               <strong>
-                {employeeToDelete.prenom_employe} {employeeToDelete.nom_employe}
+                {clientToDelete.prenom_client} {clientToDelete.nom_client}
               </strong>
               ? Cette action ne peut pas être annulée.
             </p>
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="danger" onClick={handleDeleteEmployee}>
+          <Button variant="danger" onClick={handleDeleteClient}>
             Supprimer
           </Button>
         </Modal.Footer>
@@ -444,4 +391,5 @@ const ManageEmployee = () => {
   );
 };
 
-export default ManageEmployee;
+
+export default ManageClient;

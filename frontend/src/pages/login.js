@@ -37,8 +37,8 @@ function Login() {
       // Choose endpoint based on user type
       const endpoint =
         userType === "client"
-          ? "http://localhost:5000/api/login/client"
-          : "http://localhost:5000/api/login/employee";
+          ? `${process.env.REACT_APP_API_URL}/api/login/client`
+          : `${process.env.REACT_APP_API_URL}/api/login/employee`;
 
       const response = await axios.post(endpoint, {
         courriel: email,
@@ -71,7 +71,7 @@ function Login() {
       // Determine which field might be incorrect
       if (err.response?.status === 401) {
         setError("Courriel ou mot de passe incorrect");
-        setErrorField("credentials"); // Both could be wrong
+        setErrorField("credentials"); 
       } else {
         setError(
           err.response?.data?.message ||

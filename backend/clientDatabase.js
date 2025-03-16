@@ -69,3 +69,24 @@ export const insertClientReservation = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
+ //fonction pour obtenir les informations d'un client par son courriel 
+export const getClientProfileByEmail = async (req, res) => {
+    try {
+      const { email } = req.params;
+      
+      const result = await pool.query(
+        "SELECT NAS_client, nom_client, prenom_client, rue, ville, code_postal, courriel_client, date_enregistrement FROM Client WHERE courriel_client = $1",
+        [email]
+      );
+      
+      if (result.rows.length === 0) {
+        return res.status(404).json({ error: "Client not found" });
+      }
+      
+      res.json(result.rows[0]);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).json({ error: err.message });
+    }
+  };

@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 import { Navbar, Container, Nav, Button } from "react-bootstrap";
 import logo from "../assets/logo.png";
 import "./navbar.css";
-const ClientNavbar = () => {
+const managerNavbar = () => {
   return (
     <Navbar expand="lg" className="navbar bg-body-tertiary sticky-top">
       <Container fluid className="custom-container">
-        <Navbar.Brand as={Link} to="/clientHome" className="d-flex align-items-center">
+        <Navbar.Brand as={Link} to="/manageEmployee" className="d-flex align-items-center">
           <img
             src={logo}
             style={{ width: "60px", marginRight: "10px" }}
@@ -21,21 +21,39 @@ const ClientNavbar = () => {
           <Nav className="ms-auto py-0 pe-3">
             <Nav.Link
               as={Link}
-              to="/clientHome"
-              className="capitalize"
-              id="HomeLink"
+              to="/manageEmployee"
+              className="capitalize active"
+              id="EmployeeLink"
               style={{ marginRight: "8px" }}
             >
-              Accueil
+              Employée
             </Nav.Link>
             <Nav.Link
               as={Link}
-              to="/clientProfile"
+              to="/manageClient"
               className="capitalize"
-              id="ProfileLink"
+              id="ClientLink"
               style={{ marginRight: "8px" }}
             >
-              Profil
+              Client
+            </Nav.Link>
+            <Nav.Link
+              as={Link}
+              to="/manageChambre"
+              className="capitalize"
+              id="ChambreLink"
+              style={{ marginRight: "8px" }}
+            >
+              Chambre
+            </Nav.Link>
+            <Nav.Link
+              as={Link}
+              to="/manageHotel"
+              className="capitalize"
+              id="HotelLink"
+              style={{ marginRight: "8px" }}
+            >
+              Hôtel
             </Nav.Link>
           </Nav>
           {/* Log Out Button */}
@@ -53,4 +71,4 @@ const ClientNavbar = () => {
     </Navbar>
   );
 };
-export default ClientNavbar;
+export default managerNavbar;

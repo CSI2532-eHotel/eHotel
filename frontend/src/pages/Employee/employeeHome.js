@@ -2,13 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Button, Card, Col, Container, Form, Nav, Navbar, Row, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import logo from "../../assets/logo.png";
-import "./employeeHome.css";
+import EmployeeNavbar from "../../components/employeeNavbar";
 
 const EmployeeHome = () => {
   // State for reservations
   const [reservations, setReservations] = useState([]);
-  
+
   // State for payment modal
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [selectedReservation, setSelectedReservation] = useState(null);
@@ -28,7 +27,7 @@ const EmployeeHome = () => {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/reservations`);
       setReservations(response.data);
       */
-      
+
       // Mock data for demonstration
       setReservations([
         {
@@ -39,7 +38,7 @@ const EmployeeHome = () => {
           fin_date_reservation: "2025-03-25",
           nom_client: "Dupont",
           prenom_client: "Jean",
-          montant: 750, 
+          montant: 750,
         },
         {
           reservation_ID: "1235",
@@ -49,7 +48,7 @@ const EmployeeHome = () => {
           fin_date_reservation: "2025-04-15",
           nom_client: "Martin",
           prenom_client: "Sophie",
-          montant: 1750, 
+          montant: 1750,
         }
       ]);
     } catch (error) {
@@ -78,7 +77,7 @@ const EmployeeHome = () => {
   const handlePaymentSubmit = async (event) => {
     event.preventDefault();
     const form = event.currentTarget;
-    
+
     // Form validation
     if (form.checkValidity() === false) {
       event.stopPropagation();
@@ -104,16 +103,16 @@ const EmployeeHome = () => {
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/locations`, locationData);
       console.log("Location created successfully:", response.data);
       */
-      
+
       // For demo purposes, remove the reservation from local state
       setReservations(reservations.filter(
         res => res.reservation_ID !== selectedReservation.reservation_ID
       ));
-      
+
       // Close modal and show success message
       setShowPaymentModal(false);
       alert("Paiement confirmé et réservation transformée en location !");
-      
+
     } catch (err) {
       console.error("Error creating location:", err.response?.data || err.message);
       setError(err.response?.data?.error || "Une erreur s'est produite lors du traitement");
@@ -135,16 +134,16 @@ const EmployeeHome = () => {
       /*
       await axios.delete(`${process.env.REACT_APP_API_URL}/api/reservations/${reservationToCancel.reservation_ID}`);
       */
-      
+
       // For demo purposes, remove the reservation from local state
       setReservations(reservations.filter(
         res => res.reservation_ID !== reservationToCancel.reservation_ID
       ));
-      
+
       // Close modal and show success message
       setShowCancellationModal(false);
       alert("La réservation a été annulée avec succès !");
-      
+
     } catch (err) {
       console.error("Error cancelling reservation:", err.response?.data || err.message);
       setError(err.response?.data?.error || "Une erreur s'est produite lors de l'annulation");
@@ -153,57 +152,7 @@ const EmployeeHome = () => {
 
   return (
     <div>
-      <Navbar expand="lg" className="navbar bg-body-tertiary sticky-top pb-3">
-        <Container fluid className="custom-container">
-          {/* Logo on the left */}
-          <Link to="/employee">
-            <img
-              src={logo}
-              style={{ width: "50px", marginRight: "10px" }}
-              id="logo"
-              alt="Logo"
-            />
-          </Link>
-          <Navbar.Brand as={Link} to="/employeeHome" className="capitalize" id="name">
-            e-Hôtel
-          </Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            {/* Navigation Links */}
-            <Nav className="ms-auto py-0 pe-3">
-              <Nav.Link
-                as={Link}
-                to="/employeeHome"
-                className="capitalize"
-                id="HomeLink"
-                style={{ marginRight: "8px" }}
-              >
-                Accueil
-              </Nav.Link>
-              <Nav.Link
-                as={Link}
-                to="/employeelocation"
-                className="capitalize"
-                id="LocationsLink"
-                style={{ marginRight: "8px" }}
-              >
-                 Créer une location
-              </Nav.Link>
-            </Nav>
-            {/* Log Out Button */}
-            <Button
-              as={Link}
-              to="/"
-              variant="primary"
-              className="text-white py-1 px-1 capitalize rounded-2"
-              id="loginOutbtn"
-            >
-              Deconnectez
-            </Button>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-
+      <EmployeeNavbar />
       <Container className="py-4">
         {/* Reservations Section */}
         <Row>
@@ -232,14 +181,14 @@ const EmployeeHome = () => {
                         </p>
                       </Col>
                       <Col md={4} className="d-flex align-items-end justify-content-end">
-                        <Button 
+                        <Button
                           variant="danger"
                           onClick={() => openCancellationModal(reservation)}
                           className="me-3"
                         >
                           Annulez
                         </Button>
-                        <Button 
+                        <Button
                           variant="primary"
                           onClick={() => openPaymentModal(reservation)}
                         >
@@ -266,7 +215,7 @@ const EmployeeHome = () => {
         </Modal.Header>
         <Modal.Body>
           {error && <div className="alert alert-danger">{error}</div>}
-          
+
           <Form noValidate validated={validated} onSubmit={handlePaymentSubmit}>
             <Form.Group className="mb-3" controlId="validationPaymentAmount">
               <Form.Label>Montant</Form.Label>
@@ -300,7 +249,7 @@ const EmployeeHome = () => {
         </Modal.Header>
         <Modal.Body>
           {error && <div className="alert alert-danger">{error}</div>}
-          
+
           <p>Êtes-vous sûr de vouloir annuler cette réservation ?</p>
           <p>
             <strong>Client:</strong> {reservationToCancel?.prenom_client} {reservationToCancel?.nom_client}
