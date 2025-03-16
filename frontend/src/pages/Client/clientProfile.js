@@ -50,7 +50,7 @@ const ClientProfile = () => {
         return;
       }
 
-      // Use the email to fetch the latest client data
+      // Use the email to fetch the latest client data as the client can update their profile
       const response = await axios.get(
         `http://localhost:5000/api/client/${userData.courriel_client}`
       );
