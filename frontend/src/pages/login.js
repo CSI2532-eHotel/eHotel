@@ -71,7 +71,7 @@ function Login() {
       // Determine which field might be incorrect
       if (err.response?.status === 401) {
         setError("Courriel ou mot de passe incorrect");
-        setErrorField("credentials"); // Both could be wrong
+        setErrorField("credentials"); 
       } else {
         setError(
           err.response?.data?.message ||
