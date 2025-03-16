@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import "./clientProfile.css";
 import ClientNavbar from "../../components/clientNavbar";
-import ClientReservation from "./clientrReservation";
+import ClientReservation from "./clientReservation";
 
 const ClientProfile = () => {
   // State for client data
