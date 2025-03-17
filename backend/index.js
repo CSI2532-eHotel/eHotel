@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import { insertClient, validateClientLogin,getClientProfileByEmail, deleteClientByNAS, updateClientByNAS} from './clientDatabase.js';
 import { validateEmployeeLogin } from './employeeDatabase.js';
+import { getEmployeesByHotelId, insertEmployee, updateEmployee, deleteEmployee } from './managerDatabase.js';
 import env from 'dotenv';
 env.config(); 
 const app = express();
@@ -22,8 +23,10 @@ app.put('/api/client/:nas', updateClientByNAS);
 app.post('/api/login/employee', validateEmployeeLogin);
 
 // =================================route pour manager===========================
-
-
+app.get('/api/employees/:hotelId', getEmployeesByHotelId);
+app.post('/api/employee', insertEmployee);
+app.put('/api/employee/:nas', updateEmployee);
+app.delete('/api/employee/:nas', deleteEmployee);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

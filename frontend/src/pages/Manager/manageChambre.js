@@ -72,7 +72,7 @@ const ManageChambre = () => {
                 commodite: "WiFi, TV, Baignoire",
                 capacite: "2",
                 extensible: "Non",
-                dommage: "Nom",
+                dommage: "Noon",
                 vue: "Montagne",
                 hotel_ID: hotelId,
                 status: "réservé"
@@ -230,10 +230,10 @@ const ManageChambre = () => {
                     <Col>
                         <Card>
                             <Card.Body>
-                                <Table responsive striped hover>
+                                <Table responsive striped>
                                     <thead>
                                         <tr>
-                                            <th>N° Chambre</th>
+                                            <th>chambre_ID</th>
                                             <th>Prix</th>
                                             <th>Capacité</th>
                                             <th>Extensible</th>
@@ -248,12 +248,12 @@ const ManageChambre = () => {
                                         {chambres.map((chambre) => (
                                             <tr key={chambre.chambre_ID}>
                                                 <td>{chambre.chambre_ID}</td>
-                                                <td>{chambre.prix}€/nuit</td>
-                                                <td>{chambre.capacite} personne(s)</td>
+                                                <td>{chambre.prix}$/nuit</td>
+                                                <td>{chambre.capacite}</td>
                                                 <td>{chambre.extensible}</td>
                                                 <td>{chambre.vue}</td>
                                                 <td>{chambre.commodite}</td>
-                                                <td>{chambre.dommage || "Aucun"}</td>
+                                                <td>{chambre.dommage}</td>
                                                 <td>{renderStatusBadge(chambre.status)}</td>
                                                 <td>
                                                     <Button

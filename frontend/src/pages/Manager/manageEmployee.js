@@ -5,52 +5,20 @@ import axios from "axios";
 import ManagerNavbar from "../../components/managerNavbar";
 
 const ManageEmployee = () => {
-  // Mock employees data
-  const [employees] = useState([
-    {
-      NAS_employe: "123456789",
-      hotel_ID: "H001",
-      prenom_employe: "Jean",
-      nom_employe: "Tremblay",
-      rue: "123 Rue Principale",
-      ville: "Montréal",
-      code_postal: "H2X 1Y6",
-      role: "Réceptionniste",
-      courriel_employee: "jean.tremblay@ehotel.com",
-    },
-    {
-      NAS_employe: "987654321",
-      hotel_ID: "H001",
-      prenom_employe: "Marie",
-      nom_employe: "Dubois",
-      rue: "456 Boulevard St-Laurent",
-      ville: "Québec",
-      code_postal: "G1R 4P3",
-      role: "Gestionnaire",
-      courriel_employee: "marie.dubois@ehotel.com",
-    },
-    {
-      NAS_employe: "456789123",
-      hotel_ID: "H001",
-      prenom_employe: "Pierre",
-      nom_employe: "Lavoie",
-      rue: "789 Avenue du Parc",
-      ville: "Laval",
-      code_postal: "H7N 2S3",
-      role: "Entretien",
-      courriel_employee: "pierre.lavoie@ehotel.com",
-    },
-  ]);
-
-  const hotelId = "H001";
+  const [employees, setEmployees] = useState([]);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
 
-  // State for employee form
+  // Récupérer les données du gestionnaire connecté depuis localStorage
+  const employeeData = JSON.parse(localStorage.getItem("userData"));
+  const hotelId = employeeData ? employeeData.hotel_id : null;
+
+  // State pour le modal de formulaire d'employé
   const [showEmployeeModal, setShowEmployeeModal] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [validated, setValidated] = useState(false);
 
-  // Employee form data
+  // Données du formulaire employé
   const [formData, setFormData] = useState({
     NAS_employe: "",
     hotel_ID: hotelId,
@@ -64,11 +32,39 @@ const ManageEmployee = () => {
     motpasse_employee: "",
   });
 
-  // State for delete confirmation modal
+  // State pour le modal de confirmation de suppression
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [employeeToDelete, setEmployeeToDelete] = useState(null);
 
-  // Handle form input changes
+  // Charger les employés depuis le backend
+  useEffect(() => {
+    const fetchEmployees = async () => {
+      if (!hotelId) {
+        setLoading(false);
+        setError("L'ID de l'hôtel n'est pas disponible. Veuillez vous reconnecter.");
+        return;
+      }
+
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/employees/${hotelId}`);
+        const modifiedData = response.data.map((employee) => ({
+          ...employee,
+          NAS_employe: String(employee.nas_employe),
+        }));
+        setEmployees(modifiedData);
+        setError("");
+      } catch (err) {
+        console.error("Error fetching employees:", err);
+        setError("Erreur lors du chargement des employés: " + (err.response?.data?.error || err.message));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEmployees();
+  }, [hotelId]);
+
+  // Gérer les changements d'entrée de formulaire
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -77,7 +73,7 @@ const ManageEmployee = () => {
     });
   };
 
-  // Open modal for adding a new employee
+  // Ouvrir le modal pour ajouter un nouvel employé
   const openAddEmployeeModal = () => {
     setFormData({
       NAS_employe: "",
@@ -96,7 +92,7 @@ const ManageEmployee = () => {
     setShowEmployeeModal(true);
   };
 
-  // Open modal for editing an existing employee
+  // Ouvrir le modal pour modifier un employé existant
   const openEditEmployeeModal = (employee) => {
     setFormData({
       NAS_employe: employee.NAS_employe,
@@ -108,52 +104,83 @@ const ManageEmployee = () => {
       code_postal: employee.code_postal,
       role: employee.role,
       courriel_employee: employee.courriel_employee,
-      motpasse_employee: "", // Password field is empty for editing
+      motpasse_employee: "", // Le champ mot de passe est vide pour l'édition
     });
     setIsEditing(true);
     setValidated(false);
     setShowEmployeeModal(true);
   };
 
-  // Open delete confirmation modal
+  // Ouvrir le modal de confirmation de suppression
   const openDeleteModal = (employee) => {
     setEmployeeToDelete(employee);
     setShowDeleteModal(true);
   };
 
-  // Handle form submission (create/update employee)
-  const handleSubmit = (event) => {
+  // Gérer la soumission du formulaire (créer/mettre à jour l'employé)
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const form = event.currentTarget;
 
-    // Form validation
+    // Validation du formulaire
     if (form.checkValidity() === false) {
       event.stopPropagation();
       setValidated(true);
       return;
     }
 
-    // In a real app, this is where you would save the data
-    alert(
-      isEditing
-        ? "Employé mis à jour avec succès!"
-        : "Employé ajouté avec succès!"
-    );
-    setShowEmployeeModal(false);
-  };
+    try {
+      if (isEditing) {
+        // Mise à jour d'un employé existant
+        await axios.put(`${process.env.REACT_APP_API_URL}/api/employee/${formData.NAS_employe}`, formData);
+        // Mettre à jour l'employé dans la liste locale
+        setEmployees(employees.map(emp =>
+          emp.NAS_employe === formData.NAS_employe ? { ...formData } : emp
+        ));
 
-  // Handle employee deletion
-  const handleDeleteEmployee = () => {
-    // In a real app, this is where you would delete the employee
-    alert("Employé supprimé avec succès!");
-    setShowDeleteModal(false);
-  };
+        alert("Employé mis à jour avec succès!");
+      } else {
+        // Création d'un nouvel employé
+        const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/employee`, formData);
+        // convertir le NAS_employe qui est un nombre en string
+        const newEmployee = {
+          ...response.data,
+          NAS_employe: String(response.data.nas_employe || response.data.NAS_employe)
+        };
+        // Ajouter le nouvel employé à la liste locale
+        setEmployees([...employees, newEmployee]);
 
+        alert("Employé ajouté avec succès!");
+      }
+
+      setShowEmployeeModal(false);
+    } catch (err) {
+      setError("Erreur lors de l'enregistrement: " + (err.response?.data?.error || err.message));
+    }
+  };
+  // Gérer la suppression d'un employé
+  const handleDeleteEmployee = async () => {
+    if (!employeeToDelete) return;
+
+    try {
+      // Suppression d'un employé
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/employee/${employeeToDelete.NAS_employe}`);
+
+      // Supprimer l'employé de la liste locale
+      setEmployees(employees.filter(emp => emp.NAS_employe !== employeeToDelete.NAS_employe));
+
+      alert("Employé supprimé avec succès!");
+      setShowDeleteModal(false);
+    } catch (err) {
+      setError("Erreur lors de la suppression: " + (err.response?.data?.error || err.message));
+      setShowDeleteModal(false);
+    }
+  };
   return (
     <div>
       <ManagerNavbar />
       <Container className="py-4">
-        {/* Employees Section */}
+        {/* Section des employés */}
         <Row className="mb-4">
           <Col>
             <h3 className="text-primary">Liste des Employées</h3>
@@ -175,55 +202,67 @@ const ManageEmployee = () => {
           <Col>
             <Card>
               <Card.Body>
-                <Table responsive striped hover>
-                  <thead>
-                    <tr>
-                      <th>NAS</th>
-                      <th>Prénom</th>
-                      <th>Nom</th>
-                      <th>Rôle</th>
-                      <th>Adresse</th>
-                      <th>Courriel</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {employees.map((employee) => (
-                      <tr key={employee.NAS_employe}>
-                        <td>{employee.NAS_employe}</td>
-                        <td>{employee.prenom_employe}</td>
-                        <td>{employee.nom_employe}</td>
-                        <td>{employee.role}</td>
-                        <td>{`${employee.rue}, ${employee.ville}, ${employee.code_postal}`}</td>
-                        <td>{employee.courriel_employee}</td>
-                        <td>
-                          <Button
-                            variant="primary"
-                            size="sm"
-                            className="me-3"
-                            onClick={() => openEditEmployeeModal(employee)}
-                          >
-                            Modifier
-                          </Button>
-                          <Button
-                            variant="danger"
-                            size="sm"
-                            onClick={() => openDeleteModal(employee)}
-                          >
-                            Supprimer
-                          </Button>
-                        </td>
+                {loading ? (
+                  <p>Chargement des données...</p>
+                ) : (
+                  <Table responsive striped hover>
+                    <thead>
+                      <tr>
+                        <th>NAS</th>
+                        <th>Prénom</th>
+                        <th>Nom</th>
+                        <th>Rôle</th>
+                        <th>Adresse</th>
+                        <th>Courriel</th>
+                        <th>Actions</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </Table>
+                    </thead>
+                    <tbody>
+                      {employees.length > 0 ? (
+                        employees.map((employee) => (
+                          <tr key={employee.NAS_employe}>
+                            <td>{employee.NAS_employe}</td>
+                            <td>{employee.prenom_employe}</td>
+                            <td>{employee.nom_employe}</td>
+                            <td>{employee.role}</td>
+                            <td>{`${employee.rue}, ${employee.ville}, ${employee.code_postal}`}</td>
+                            <td>{employee.courriel_employee}</td>
+                            <td>
+                              <Button
+                                variant="primary"
+                                size="sm"
+                                className="me-3"
+                                onClick={() => openEditEmployeeModal(employee)}
+                              >
+                                Modifier
+                              </Button>
+                              <Button
+                                variant="danger"
+                                size="sm"
+                                onClick={() => openDeleteModal(employee)}
+                              >
+                                Supprimer
+                              </Button>
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="7" className="text-center">
+                            Aucun employé trouvé pour cet hôtel
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </Table>
+                )}
               </Card.Body>
             </Card>
           </Col>
         </Row>
       </Container>
 
-      {/* Employee Form Modal */}
+      {/* Modal du formulaire employé */}
       <Modal
         show={showEmployeeModal}
         onHide={() => setShowEmployeeModal(false)}
@@ -261,11 +300,11 @@ const ManageEmployee = () => {
                 <Form.Control
                   required
                   type="text"
-                  placeholder="ID Hôtel"
+                  placeholder={hotelId}
                   name="hotel_ID"
                   value={formData.hotel_ID}
                   onChange={handleChange}
-                  readOnly={true} // Manager can only add employees to their hotel
+                  readOnly={true} // Le gestionnaire ne peut ajouter des employés qu'à son hôtel
                 />
                 <Form.Control.Feedback type="invalid">
                   Svp entrez l'ID de l'hôtel.
@@ -345,12 +384,12 @@ const ManageEmployee = () => {
                   type="text"
                   placeholder="Code Postal"
                   name="code_postal"
-                  pattern="[A-Za-z][0-9][A-Za-z] [0-9][A-Za-z][0-9]"
+                  pattern="[A-Za-z][0-9][A-Za-z][0-9][A-Za-z][0-9]"
                   value={formData.code_postal}
                   onChange={handleChange}
                 />
                 <Form.Control.Feedback type="invalid">
-                  Svp entrez un code postal valide (A1A 1A1).
+                  Svp entrez un code postal valide (A1A1A1).
                 </Form.Control.Feedback>
               </Form.Group>
             </Row>
@@ -391,15 +430,11 @@ const ManageEmployee = () => {
 
             <Row className="mb-3">
               <Form.Group as={Col} md="12" controlId="validationPassword">
-                <Form.Label>
-                  {isEditing
-                    ? "Nouveau Mot de Passe (laisser vide pour garder l'actuel)"
-                    : "Mot de Passe"}
-                </Form.Label>
+                <Form.Label>Mot de passe</Form.Label>
                 <Form.Control
                   required={!isEditing}
                   type="password"
-                  placeholder="Mot de Passe"
+                  placeholder={isEditing ? "Laisser vide pour conserver le mot de passe actuel" : "Mot de passe"}
                   name="motpasse_employee"
                   value={formData.motpasse_employee}
                   onChange={handleChange}
@@ -409,30 +444,22 @@ const ManageEmployee = () => {
                 </Form.Control.Feedback>
               </Form.Group>
             </Row>
-
-            <div className="d-flex justify-content-end">
+            <div className="d-flex justify-content-end mt-4">
               <Button type="submit" variant="primary">
-                Sauvegarde
+                {isEditing ? "Mettre à jour" : "Ajouter"}
               </Button>
             </div>
           </Form>
         </Modal.Body>
       </Modal>
-      {/* Delete Confirmation Modal */}
+      {/* Modal de confirmation de suppression */}
       <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title className="text-danger">Confirmer la suppression</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {employeeToDelete && (
-            <p>
-              Êtes-vous sûr de vouloir supprimer l'employee{" "}
-              <strong>
-                {employeeToDelete.prenom_employe} {employeeToDelete.nom_employe}
-              </strong>
-              ? Cette action ne peut pas être annulée.
-            </p>
-          )}
+          Êtes-vous sûr de vouloir supprimer l'employé {employeeToDelete?.prenom_employe} {employeeToDelete?.nom_employe}?
+          Cette action est irréversible.
         </Modal.Body>
         <Modal.Footer>
           <Button variant="danger" onClick={handleDeleteEmployee}>
