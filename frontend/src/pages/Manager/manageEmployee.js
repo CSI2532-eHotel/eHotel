@@ -30,6 +30,7 @@ const ManageEmployee = () => {
     role: "",
     courriel_employee: "",
     motpasse_employee: "",
+    confirm_password: "",
   });
 
   // State pour le modal de confirmation de suppression
@@ -86,6 +87,7 @@ const ManageEmployee = () => {
       role: "",
       courriel_employee: "",
       motpasse_employee: "",
+      confirm_password: "",
     });
     setIsEditing(false);
     setValidated(false);
@@ -104,7 +106,8 @@ const ManageEmployee = () => {
       code_postal: employee.code_postal,
       role: employee.role,
       courriel_employee: employee.courriel_employee,
-      motpasse_employee: "", // Le champ mot de passe est vide pour l'édition
+      motpasse_employee: "",
+      confirm_password: "",
     });
     setIsEditing(true);
     setValidated(false);
@@ -126,6 +129,12 @@ const ManageEmployee = () => {
     if (form.checkValidity() === false) {
       event.stopPropagation();
       setValidated(true);
+      return;
+    }
+
+    // Validation des mots de passe
+    if (formData.motpasse_employee !== formData.confirm_password) {
+      setError("Les mots de passe ne correspondent pas.");
       return;
     }
 
@@ -158,6 +167,7 @@ const ManageEmployee = () => {
       setError("Erreur lors de l'enregistrement: " + (err.response?.data?.error || err.message));
     }
   };
+
   // Gérer la suppression d'un employé
   const handleDeleteEmployee = async () => {
     if (!employeeToDelete) return;
@@ -176,6 +186,7 @@ const ManageEmployee = () => {
       setShowDeleteModal(false);
     }
   };
+
   return (
     <div>
       <ManagerNavbar />
@@ -404,14 +415,13 @@ const ManageEmployee = () => {
                   onChange={handleChange}
                 >
                   <option value="">Sélectionner un rôle</option>
-                  <option value="Réceptionniste">Réceptionniste</option>
-                  <option value="Gestionnaire">Gestionnaire</option>
+                  <option value="receptioniste">receptioniste</option>
+                  <option value="gestionnaire">gestionnaire</option>
                 </Form.Select>
                 <Form.Control.Feedback type="invalid">
                   Svp sélectionnez un rôle.
                 </Form.Control.Feedback>
               </Form.Group>
-
               <Form.Group as={Col} md="6" controlId="validationEmail">
                 <Form.Label>Courriel</Form.Label>
                 <Form.Control
@@ -429,12 +439,12 @@ const ManageEmployee = () => {
             </Row>
 
             <Row className="mb-3">
-              <Form.Group as={Col} md="12" controlId="validationPassword">
+              <Form.Group as={Col} md="6" controlId="validationPassword">
                 <Form.Label>Mot de passe</Form.Label>
                 <Form.Control
                   required={!isEditing}
                   type="password"
-                  placeholder={isEditing ? "Laisser vide pour conserver le mot de passe actuel" : "Mot de passe"}
+                  placeholder="Mot de passe"
                   name="motpasse_employee"
                   value={formData.motpasse_employee}
                   onChange={handleChange}
@@ -443,8 +453,24 @@ const ManageEmployee = () => {
                   Svp entrez un mot de passe.
                 </Form.Control.Feedback>
               </Form.Group>
+
+              <Form.Group as={Col} md="6" controlId="validationConfirmPassword">
+                <Form.Label>Confirmer le mot de passe</Form.Label>
+                <Form.Control
+                  required={!isEditing}
+                  type="password"
+                  placeholder="Confirmer le mot de passe"
+                  name="confirm_password"
+                  value={formData.confirm_password}
+                  onChange={handleChange}
+                />
+                <Form.Control.Feedback type="invalid">
+                  Svp confirmez le mot de passe.
+                </Form.Control.Feedback>
+              </Form.Group>
             </Row>
-            <div className="d-flex justify-content-end mt-4">
+
+            <div className="d-flex justify-content-end">
               <Button type="submit" variant="primary">
                 {isEditing ? "Mettre à jour" : "Ajouter"}
               </Button>
@@ -452,14 +478,14 @@ const ManageEmployee = () => {
           </Form>
         </Modal.Body>
       </Modal>
+
       {/* Modal de confirmation de suppression */}
       <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title className="text-danger">Confirmer la suppression</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Êtes-vous sûr de vouloir supprimer l'employé {employeeToDelete?.prenom_employe} {employeeToDelete?.nom_employe}?
-          Cette action est irréversible.
+          Êtes-vous sûr de vouloir supprimer cet employé {formData.NAS_employe}? Cette action ne peut pas être annulée.
         </Modal.Body>
         <Modal.Footer>
           <Button variant="danger" onClick={handleDeleteEmployee}>
@@ -467,7 +493,7 @@ const ManageEmployee = () => {
           </Button>
         </Modal.Footer>
       </Modal>
-    </div>
+    </div >
   );
 };
 
