@@ -57,11 +57,14 @@ function Login() {
         if (response.data.userType === "client") {
           navigate("/clientHome");
         } else if (response.data.userType === "employee") {
-          // Check if employee is a manager
+          // Check if employee is a manager or receptionist
           if (response.data.userData.est_gestionnaire) {
             navigate("/manageEmployee");
-          } else {
+          } else if (response.data.userData.est_receptioniste) {
             navigate("/employeeHome");
+          } else {
+            setError("Accès non autorisé pour ce type d'employé");
+            return;
           }
         }
       }
@@ -71,11 +74,13 @@ function Login() {
       // Determine which field might be incorrect
       if (err.response?.status === 401) {
         setError("Courriel ou mot de passe incorrect");
-        setErrorField("credentials"); 
+        setErrorField("credentials");
+      } else if (err.response?.status === 403) {
+        setError(err.response.data.message || "Accès non autorisé");
       } else {
         setError(
           err.response?.data?.message ||
-            "Erreur de connexion. Veuillez réessayer."
+          "Erreur de connexion. Veuillez réessayer."
         );
       }
     } finally {
