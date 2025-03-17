@@ -83,3 +83,24 @@ export const deleteClientByNAS = async (req, res) => {
         res.status(500).json({ error: "Erreur lors de la suppression du compte" });
     }
 };
+//fonction pour mettre à jour les informations d'un client par son NAS
+export const updateClientByNAS = async (req, res) => {
+    const { nas } = req.params;
+    const { nom_client, prenom_client, rue, ville, code_postal, courriel_client, motpasse_client } = req.body;
+
+    try {
+        const result = await pool.query(
+            "UPDATE Client SET nom_client = $1, prenom_client = $2, rue = $3, ville = $4, code_postal = $5, courriel_client = $6, motpasse_client = $7 WHERE NAS_client = $8 RETURNING *",
+            [nom_client, prenom_client, rue, ville, code_postal, courriel_client, motpasse_client, nas]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: "Client non trouvé" });
+        }
+
+        res.json(result.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ error: err.message });
+    }
+};
