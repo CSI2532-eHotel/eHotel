@@ -44,26 +44,133 @@ export const validateClientLogin = async (req, res) => {
     }
 };
 
+//fonction pour obtenir les informations d'un client par son courriel 
+export const getClientProfileByEmail = async (req, res) => {
+    try {
+        const { email } = req.params;
+
+        const result = await pool.query(
+            "SELECT NAS_client, nom_client, prenom_client, rue, ville, code_postal, courriel_client, date_enregistrement FROM Client WHERE courriel_client = $1",
+            [email]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: "Client not found" });
+        }
+
+        res.json(result.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ error: err.message });
+    }
+};
+
+// fonction pour supprimer un client par son NAS
+export const deleteClientByNAS = async (req, res) => {
+    const { nas } = req.params;
+
+    try {
+        //Pas besoin de supprimer les réservations du client, car elles seront automatiquement supprimées en utilisant la contrainte ON DELETE CASCADE quand on a créé la table Réservation
+        const result = await pool.query('DELETE FROM Client WHERE NAS_client = $1', [nas]);
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({ error: "Client non trouvé" });
+        }
+
+        res.status(200).json({ message: "Compte supprimé avec succès" });
+    } catch (error) {
+        console.error("Erreur lors de la suppression du compte:", error);
+        res.status(500).json({ error: "Erreur lors de la suppression du compte" });
+    }
+};
+//fonction pour mettre à jour les informations d'un client par son NAS
+export const updateClientByNAS = async (req, res) => {
+    const { nas } = req.params;
+    const { nom_client, prenom_client, rue, ville, code_postal, courriel_client, motpasse_client } = req.body;
+
+    try {
+        const result = await pool.query(
+            "UPDATE Client SET nom_client = $1, prenom_client = $2, rue = $3, ville = $4, code_postal = $5, courriel_client = $6, motpasse_client = $7 WHERE NAS_client = $8 RETURNING *",
+            [nom_client, prenom_client, rue, ville, code_postal, courriel_client, motpasse_client, nas]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: "Client non trouvé" });
+        }
+
+        res.json(result.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ error: err.message });
+    }
+};
+
 // fonction - client annule reservation
 export const deleteClientReservation = async (req, res) => {
     try {
-      const { email } = req.params;
-      
-      const result = await pool.query(
-        "SELECT NAS_client, nom_client, prenom_client, rue, ville, code_postal, courriel_client, date_enregistrement FROM Client WHERE courriel_client = $1",
-        [email]
-      );
-      
-      if (result.rows.length === 0) {
-        return res.status(404).json({ error: "Client not found" });
-      }
-      
-      res.json(result.rows[0]);
+        const { reservation_ID } = req.params; 
+
+        // annulation
+        const deleteQuery = `
+            DELETE FROM Reservation
+            WHERE reservation_ID = $1
+            RETURNING reservation_ID;
+        `;
+        
+        const deletedReservation = await pool.query(deleteQuery, [reservation_ID]);
+
+        // Ensure the reservation was deleted
+        if (deletedReservation.rows.length === 0) {
+            return res.status(404).json({
+                error: "Réservation introuvable."
+            });
+        }
+        
+        res.status(200).json({
+            message: "Réservation annulée.",
+            id: deletedReservation.rows[0].reservation_ID
+        });
+    } catch (err) {
+        console.error('Erreur lors de la suppression de la réservation:', err.message);
+        res.status(500).json({ error: err.message });
+    }
+};
+
+// fonction pour modifier le profil / personal info
+// pas de NAS - peut pas changer
+export const updateClientProfile = async (req, res) => {
+    try {
+        const { NAS_client, nom_client, prenom_client, rue, ville, code_postal, motpasse_client } = req.body;
+        const courriel_client = req.user?.email; 
+
+        const updateQuery = `
+            UPDATE Client
+            SET 
+                nom_client = $1,
+                prenom_client = $2,
+                rue = $3,
+                ville = $4,
+                code_postal = $5,
+                motpasse_client = $6
+            WHERE courriel_client = $7
+            RETURNING *;
+        `;
+
+        const values = [ 
+            nom_client, 
+            prenom_client, 
+            rue, 
+            ville, 
+            code_postal, 
+            motpasse_client, 
+            courriel_client
+        ];
+
+        const updatedClient = await pool.query(updateQuery, values);
+
+        res.status(200).json(updatedClient.rows[0]); 
     } catch (err) {
         console.error('Erreur lors de la mise à jour du profil client:', err.message);
         res.status(500).json({ error: err.message });
     }
 };
-
-
-
