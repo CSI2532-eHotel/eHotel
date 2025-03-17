@@ -10,7 +10,7 @@ VALUES
 ---------------------------------------------------------------------------------------------------------------
 
 -- insertion: hotel 1 - Marriott International
-INSERT INTO Hotel (hotel_ID, nom_hotel, rue, ville, code_postal, nombre_hotel, courriel_chaine, numero_telephone_hotel, etoile, chaine_ID) 
+INSERT INTO Hotel (hotel_ID, nom_hotel, rue, ville, code_postal, nombre_chambre, courriel_chaine, numero_telephone_hotel, etoile, chaine_ID) 
 VALUES 
     (11, 'Marriott Downtown NYC', '85 West Street at Albany Street', 'New York', 'A1A1A1', 5, 'nyc@marriott-hotels.com', '1111111111', 5, 1),
     (12, 'Marriott Los Angeles', '333 South Figueroa Street', 'Los Angeles', 'A1A1A2', 5, 'la@marriott-hotels.com', '1111111112', 4, 1),
@@ -22,7 +22,7 @@ VALUES
     (18, 'Marriott Quebec City', '850 Place d Youville', 'Quebec City', 'A1A1A8', 5, 'qc@marriott-hotels.com', '1111111118', 1, 1);
 
 -- insertion: Hotel 2 - Hyatt Hotels Corporation
-INSERT INTO Hotel (hotel_ID, nom_hotel, rue, ville, code_postal, nombre_hotel, courriel_chaine, numero_telephone_hotel, etoile, chaine_ID) 
+INSERT INTO Hotel (hotel_ID, nom_hotel, rue, ville, code_postal, nombre_chambre, courriel_chaine, numero_telephone_hotel, etoile, chaine_ID) 
 VALUES 
     (21, 'Hyatt Regency NYC', '109 East 42nd Street', 'New York', 'B2B2B1', 5, 'nyc@hyatt-hotels.com', '2222222221', 5, 2),
     (22, 'Hyatt Miami Beach', '1601 Collins Avenue', 'Miami', 'B2B2B2', 5, 'miami@hyatt-hotels.com', '2222222222', 4, 2),
@@ -34,7 +34,7 @@ VALUES
     (28, 'Hyatt Vancouver', '655 Burrard Street', 'Vancouver', 'B2B2B8', 5, 'vancouver@hyatt-hotels.com', '2222222228', 1, 2);
 
 -- insertion: hotel 3 - Hilton Hotels & Resorts
-INSERT INTO Hotel (hotel_ID, nom_hotel, rue, ville, code_postal, nombre_hotel, courriel_chaine, numero_telephone_hotel, etoile, chaine_ID) 
+INSERT INTO Hotel (hotel_ID, nom_hotel, rue, ville, code_postal, nombre_chambre, courriel_chaine, numero_telephone_hotel, etoile, chaine_ID) 
 VALUES 
     (31, 'Hilton NYC Central', '1335 Avenue of the Americas', 'New York', 'C3C3C1', 5, 'nyc@hilton-hotels.com', '3333333331', 5, 3),
     (32, 'Hilton Miami South Beach', '1601 Collins Avenue', 'Miami', 'C3C3C2', 5, 'miami@hilton-hotels.com', '3333333332', 3, 3),
@@ -46,7 +46,7 @@ VALUES
     (38, 'Hilton Vancouver', '433 Robson Street', 'Vancouver', 'C3C3C8', 5, 'vancouver@hilton-hotels.com', '3333333338', 3, 3);
 
 -- insertion: hotel 4 - InterContinental Hotels Group (IHG)
-INSERT INTO Hotel (hotel_ID, nom_hotel, rue, ville, code_postal, nombre_hotel, courriel_chaine, numero_telephone_hotel, etoile, chaine_ID) 
+INSERT INTO Hotel (hotel_ID, nom_hotel, rue, ville, code_postal, nombre_chambre, courriel_chaine, numero_telephone_hotel, etoile, chaine_ID) 
 VALUES 
     (41, 'InterContinental New York', '111 East 48th Street', 'New York', 'D4D4D1', 5, 'nyc@intercontinental-hotels.com', '4444444441', 5, 4),
     (42, 'InterContinental Miami', '100 Chopin Plaza', 'Miami', 'D4D4D2', 5, 'miami@intercontinental-hotels.com', '4444444442', 5, 4),
@@ -58,7 +58,7 @@ VALUES
     (48, 'InterContinental Vancouver', '1028 Canada Place', 'Vancouver', 'D4D4D8', 5, 'vancouver@intercontinental-hotels.com', '4444444448', 5, 4);
 
 -- insertion: hotel 5 - Wyndham Hotels & Resorts
-INSERT INTO Hotel (hotel_ID, nom_hotel, rue, ville, code_postal, nombre_hotel, courriel_chaine, numero_telephone_hotel, etoile, chaine_ID) 
+INSERT INTO Hotel (hotel_ID, nom_hotel, rue, ville, code_postal, nombre_chambre, courriel_chaine, numero_telephone_hotel, etoile, chaine_ID) 
 VALUES 
     (51, 'Wyndham Grand New York', '109 East 42nd Street', 'New York', 'E5E5E1', 5, 'nyc@wyndham-hotels.com', '5555555551', 5, 5),
     (52, 'Wyndham Miami Beach', '4833 Collins Avenue', 'Miami', 'E5E5E2', 5, 'miami@wyndham-hotels.com', '5555555552', 1, 5),
@@ -445,172 +445,172 @@ VALUES
 
 INSERT INTO Employe (NAS_employe, nom_employe, prenom_employe, rue, ville, code_postal, role, courriel_employee, motpasse_employee, hotel_ID) 
 VALUES
--- 1 - Marriott International
+-- 1 - Marriott International 00000
     -- 11 - Marriott Downtown NYC
-    (1101, 'Cherry', 'Keith', '111 West Street at Albany Street', 'New York', 'A1A0A1', 'gestionnaire', 'admin-nyc@marriott-hotels.com', 'Password@1101', 11),
-    (1102, 'Mayer', 'Aamir', '112 West Street at Albany Street', 'New York', 'A1A0A2', 'receptioniste', 'reception-nyc@marriott-hotels.com', 'Password@1102', 11),
-    (1103, 'Ball', 'Sasha', '113 West Street at Albany Street', 'New York', 'A1A0A3', 'nettoyeur', 'nettoyage-nyc@marriott-hotels.com', 'Password@1103', 11),
+    (110000001, 'Cherry', 'Keith', '111 West Street at Albany Street', 'New York', 'A1A0A1', 'gestionnaire', 'admin-nyc@marriott-hotels.com', 'Password@1101', 11),
+    (110000002, 'Mayer', 'Aamir', '112 West Street at Albany Street', 'New York', 'A1A0A2', 'receptioniste', 'reception-nyc@marriott-hotels.com', 'Password@1102', 11),
+    (110000003, 'Ball', 'Sasha', '113 West Street at Albany Street', 'New York', 'A1A0A3', 'nettoyeur', 'nettoyage-nyc@marriott-hotels.com', 'Password@1103', 11),
     -- 12 - Marriott Los Angeles
-    (1201, 'Moreno', 'Michael', '121 South Figueroa Street', 'Los Angeles', 'A2A0A1', 'gestionnaire', 'admin-la@marriott-hotels.com', 'Password@1201', 12),
-    (1202, 'Gillespie', 'Erica', '122 South Figueroa Street', 'Los Angeles', 'A2A0A2', 'receptioniste', 'reception-la@marriott-hotels.com', 'Password@1202', 12),
-    (1203, 'Franco', 'Franciszek', '123 South Figueroa Street', 'Los Angeles', 'A2A0A3', 'nettoyeur', 'nettoyage-la@marriott-hotels.com', 'Password@1203', 12),
+    (120000001, 'Moreno', 'Michael', '121 South Figueroa Street', 'Los Angeles', 'A2A0A1', 'gestionnaire', 'admin-la@marriott-hotels.com', 'Password@1201', 12),
+    (120000002, 'Gillespie', 'Erica', '122 South Figueroa Street', 'Los Angeles', 'A2A0A2', 'receptioniste', 'reception-la@marriott-hotels.com', 'Password@1202', 12),
+    (120000003, 'Franco', 'Franciszek', '123 South Figueroa Street', 'Los Angeles', 'A2A0A3', 'nettoyeur', 'nettoyage-la@marriott-hotels.com', 'Password@1203', 12),
     -- 13 - Marriott Miami
-    (1301, 'Hampton', 'Owen', '131 Collins Avenue', 'Miami', 'A3A0A1', 'gestionnaire', 'admin-miami@marriott-hotels.com', 'Password@1301', 13),
-    (1302, 'Conway', 'Isabelle', '132 Collins Avenue', 'Miami', 'A3A0A2', 'receptioniste', 'reception-miami@marriott-hotels.com', 'Password@1302', 13),
-    (1303, 'Tanner', 'Julian', '133 Collins Avenue', 'Miami', 'A3A0A3', 'nettoyeur', 'nettoyage-miami@marriott-hotels.com', 'Password@1303', 13),
+    (130000001, 'Hampton', 'Owen', '131 Collins Avenue', 'Miami', 'A3A0A1', 'gestionnaire', 'admin-miami@marriott-hotels.com', 'Password@1301', 13),
+    (130000002, 'Conway', 'Isabelle', '132 Collins Avenue', 'Miami', 'A3A0A2', 'receptioniste', 'reception-miami@marriott-hotels.com', 'Password@1302', 13),
+    (130000003, 'Tanner', 'Julian', '133 Collins Avenue', 'Miami', 'A3A0A3', 'nettoyeur', 'nettoyage-miami@marriott-hotels.com', 'Password@1303', 13),
     -- 14 - Marriott Chicago
-    (1401, 'Hendrix', 'Sophia', '141 North Michigan Avenue', 'Chicago', 'A4A0A1', 'gestionnaire', 'admin-chicago@marriott-hotels.com', 'Password@1401', 14),
-    (1402, 'Bridges', 'Liam', '142 North Michigan Avenue', 'Chicago', 'A4A0A2', 'receptioniste', 'reception-chicago@marriott-hotels.com', 'Password@1402', 14),
-    (1403, 'Jefferson', 'Ella', '143 North Michigan Avenue', 'Chicago', 'A4A0A3', 'nettoyeur', 'nettoyage-chicago@marriott-hotels.com', 'Password@1403', 14),
+    (140000001, 'Hendrix', 'Sophia', '141 North Michigan Avenue', 'Chicago', 'A4A0A1', 'gestionnaire', 'admin-chicago@marriott-hotels.com', 'Password@1401', 14),
+    (140000002, 'Bridges', 'Liam', '142 North Michigan Avenue', 'Chicago', 'A4A0A2', 'receptioniste', 'reception-chicago@marriott-hotels.com', 'Password@1402', 14),
+    (140000003, 'Jefferson', 'Ella', '143 North Michigan Avenue', 'Chicago', 'A4A0A3', 'nettoyeur', 'nettoyage-chicago@marriott-hotels.com', 'Password@1403', 14),
     -- 15 - Marriott Toronto
-    (1501, 'Rivers', 'Mason', '151 Bay Street', 'Toronto', 'A5A0A1', 'gestionnaire', 'admin-toronto@marriott-hotels.com', 'Password@1501', 15),
-    (1502, 'Barton', 'Charlotte', '152 Bay Street', 'Toronto', 'A5A0A2', 'receptioniste', 'reception-toronto@marriott-hotels.com', 'Password@1502', 15),
-    (1503, 'Maddox', 'Ethan', '153 Bay Street', 'Toronto', 'A5A0A3', 'nettoyeur', 'nettoyage-toronto@marriott-hotels.com', 'Password@1503', 15),
+    (150000001, 'Rivers', 'Mason', '151 Bay Street', 'Toronto', 'A5A0A1', 'gestionnaire', 'admin-toronto@marriott-hotels.com', 'Password@1501', 15),
+    (150000002, 'Barton', 'Charlotte', '152 Bay Street', 'Toronto', 'A5A0A2', 'receptioniste', 'reception-toronto@marriott-hotels.com', 'Password@1502', 15),
+    (150000003, 'Maddox', 'Ethan', '153 Bay Street', 'Toronto', 'A5A0A3', 'nettoyeur', 'nettoyage-toronto@marriott-hotels.com', 'Password@1503', 15),
     -- 16 - Marriott Vancouver
-    (1601, 'Preston', 'Lucas', '161 West Hastings Street', 'Vancouver', 'A6A0A1', 'gestionnaire', 'admin-vancouver@marriott-hotels.com', 'Password@1601', 16),
-    (1602, 'Caldwell', 'Amelia', '162 West Hastings Street', 'Vancouver', 'A6A0A2', 'receptioniste', 'reception-vancouver@marriott-hotels.com', 'Password@1602', 16),
-    (1603, 'McKenzie', 'Daniel', '163 West Hastings Street', 'Vancouver', 'A6A0A3', 'nettoyeur', 'nettoyage-vancouver@marriott-hotels.com', 'Password@1603', 16),
+    (160000001, 'Preston', 'Lucas', '161 West Hastings Street', 'Vancouver', 'A6A0A1', 'gestionnaire', 'admin-vancouver@marriott-hotels.com', 'Password@1601', 16),
+    (160000002, 'Caldwell', 'Amelia', '162 West Hastings Street', 'Vancouver', 'A6A0A2', 'receptioniste', 'reception-vancouver@marriott-hotels.com', 'Password@1602', 16),
+    (160000003, 'McKenzie', 'Daniel', '163 West Hastings Street', 'Vancouver', 'A6A0A3', 'nettoyeur', 'nettoyage-vancouver@marriott-hotels.com', 'Password@1603', 16),
     -- 17 - Marriott Montreal
-    (1701, 'Hayes', 'Benjamin', '171 de la Gauchetiere West', 'Montreal', 'A7A0A1', 'gestionnaire', 'admin-montreal@marriott-hotels.com', 'Password@1701', 17),
-    (1702, 'Whitaker', 'Olivia', '172 de la Gauchetiere West', 'Montreal', 'A7A0A2', 'receptioniste', 'reception-montreal@marriott-hotels.com', 'Password@1702', 17),
-    (1703, 'Carrington', 'James', '173 de la Gauchetiere West', 'Montreal', 'A7A0A3', 'nettoyeur', 'nettoyage-montreal@marriott-hotels.com', 'Password@1703', 17),
+    (170000001, 'Hayes', 'Benjamin', '171 de la Gauchetiere West', 'Montreal', 'A7A0A1', 'gestionnaire', 'admin-montreal@marriott-hotels.com', 'Password@1701', 17),
+    (170000002, 'Whitaker', 'Olivia', '172 de la Gauchetiere West', 'Montreal', 'A7A0A2', 'receptioniste', 'reception-montreal@marriott-hotels.com', 'Password@1702', 17),
+    (170000003, 'Carrington', 'James', '173 de la Gauchetiere West', 'Montreal', 'A7A0A3', 'nettoyeur', 'nettoyage-montreal@marriott-hotels.com', 'Password@1703', 17),
     -- 18 - Marriott Quebec City
-    (1801, 'Fischer', 'Henry', '181 Place d Youville', 'Quebec City', 'A8A0A1', 'gestionnaire', 'admin-qc@marriott-hotels.com', 'Password@1801', 18),
-    (1802, 'Reeves', 'Emily', '182 Place d Youville', 'Quebec City', 'A8A0A2', 'receptioniste', 'reception-qc@marriott-hotels.com', 'Password@1802', 18),
-    (1803, 'Pope', 'William', '183 Place d Youville', 'Quebec City', 'A8A0A3', 'nettoyeur', 'nettoyage-qc@marriott-hotels.com', 'Password@1803', 18),
+    (180000001, 'Fischer', 'Henry', '181 Place d Youville', 'Quebec City', 'A8A0A1', 'gestionnaire', 'admin-qc@marriott-hotels.com', 'Password@1801', 18),
+    (180000002, 'Reeves', 'Emily', '182 Place d Youville', 'Quebec City', 'A8A0A2', 'receptioniste', 'reception-qc@marriott-hotels.com', 'Password@1802', 18),
+    (180000003, 'Pope', 'William', '183 Place d Youville', 'Quebec City', 'A8A0A3', 'nettoyeur', 'nettoyage-qc@marriott-hotels.com', 'Password@1803', 18),
 
 -- 2 - Hyatt Hotels Corporation
 	-- 21 - Hyatt Regency NYC
-    (2101, 'Smith', 'John', '211 East 42nd Street', 'New York', 'B1B0B1', 'gestionnaire', 'admin-nyc@hyatt-hotels.com', 'Password@2101', 21),
-    (2102, 'Johnson', 'Emma', '212 East 42nd Street', 'New York', 'B1B0B2', 'receptioniste', 'reception-nyc@hyatt-hotels.com', 'Password@2102', 21),
-    (2103, 'Williams', 'Noah', '213 East 42nd Street', 'New York', 'B1B0B3', 'nettoyeur', 'nettoyage-nyc@hyatt-hotels.com', 'Password@2103', 21),
+    (210000001, 'Smith', 'John', '211 East 42nd Street', 'New York', 'B1B0B1', 'gestionnaire', 'admin-nyc@hyatt-hotels.com', 'Password@2101', 21),
+    (210000002, 'Johnson', 'Emma', '212 East 42nd Street', 'New York', 'B1B0B2', 'receptioniste', 'reception-nyc@hyatt-hotels.com', 'Password@2102', 21),
+    (210000003, 'Williams', 'Noah', '213 East 42nd Street', 'New York', 'B1B0B3', 'nettoyeur', 'nettoyage-nyc@hyatt-hotels.com', 'Password@2103', 21),
     -- 22 - Hyatt Miami Beach
-    (2201, 'Brown', 'Sophia', '221 Collins Avenue', 'Miami', 'B2B0B1', 'gestionnaire', 'admin-miami@hyatt-hotels.com', 'Password@2201', 22),
-    (2202, 'Davis', 'James', '222 Collins Avenue', 'Miami', 'B2B0B2', 'receptioniste', 'reception-miami@hyatt-hotels.com', 'Password@2202', 22),
-    (2203, 'Miller', 'Olivia', '223 Collins Avenue', 'Miami', 'B2B0B3', 'nettoyeur', 'nettoyage-miami@hyatt-hotels.com', 'Password@2203', 22),
+    (220000001, 'Brown', 'Sophia', '221 Collins Avenue', 'Miami', 'B2B0B1', 'gestionnaire', 'admin-miami@hyatt-hotels.com', 'Password@2201', 22),
+    (220000002, 'Davis', 'James', '222 Collins Avenue', 'Miami', 'B2B0B2', 'receptioniste', 'reception-miami@hyatt-hotels.com', 'Password@2202', 22),
+    (220000003, 'Miller', 'Olivia', '223 Collins Avenue', 'Miami', 'B2B0B3', 'nettoyeur', 'nettoyage-miami@hyatt-hotels.com', 'Password@2203', 22),
     -- 23 - Hyatt Place Chicago
-    (2301, 'Wilson', 'Lucas', '231 North Franklin Street', 'Chicago', 'B3B0B1', 'gestionnaire', 'admin-chicago@hyatt-hotels.com', 'Password@2301', 23),
-    (2302, 'Moore', 'Ava', '232 North Franklin Street', 'Chicago', 'B3B0B2', 'receptioniste', 'reception-chicago@hyatt-hotels.com', 'Password@2302', 23),
-    (2303, 'Taylor', 'Mason', '233 North Franklin Street', 'Chicago', 'B3B0B3', 'nettoyeur', 'nettoyage-chicago@hyatt-hotels.com', 'Password@2303', 23),
+    (230000001, 'Wilson', 'Lucas', '231 North Franklin Street', 'Chicago', 'B3B0B1', 'gestionnaire', 'admin-chicago@hyatt-hotels.com', 'Password@2301', 23),
+    (230000002, 'Moore', 'Ava', '232 North Franklin Street', 'Chicago', 'B3B0B2', 'receptioniste', 'reception-chicago@hyatt-hotels.com', 'Password@2302', 23),
+    (230000003, 'Taylor', 'Mason', '233 North Franklin Street', 'Chicago', 'B3B0B3', 'nettoyeur', 'nettoyage-chicago@hyatt-hotels.com', 'Password@2303', 23),
     -- 24 - Hyatt Dallas Downtown
-    (2401, 'Anderson', 'Ella', '241 Reunion Boulevard', 'Dallas', 'B4B0B1', 'gestionnaire', 'admin-dallas@hyatt-hotels.com', 'Password@2401', 24),
-    (2402, 'Thomas', 'Benjamin', '242 Reunion Boulevard', 'Dallas', 'B4B0B2', 'receptioniste', 'reception-dallas@hyatt-hotels.com', 'Password@2402', 24),
-    (2403, 'Jackson', 'Harper', '243 Reunion Boulevard', 'Dallas', 'B4B0B3', 'nettoyeur', 'nettoyage-dallas@hyatt-hotels.com', 'Password@2403', 24),
+    (240000001, 'Anderson', 'Ella', '241 Reunion Boulevard', 'Dallas', 'B4B0B1', 'gestionnaire', 'admin-dallas@hyatt-hotels.com', 'Password@2401', 24),
+    (240000002, 'Thomas', 'Benjamin', '242 Reunion Boulevard', 'Dallas', 'B4B0B2', 'receptioniste', 'reception-dallas@hyatt-hotels.com', 'Password@2402', 24),
+    (240000003, 'Jackson', 'Harper', '243 Reunion Boulevard', 'Dallas', 'B4B0B3', 'nettoyeur', 'nettoyage-dallas@hyatt-hotels.com', 'Password@2403', 24),
     -- 25 - Hyatt Los Angeles
-    (2501, 'White', 'Henry', '251 West Century Boulevard', 'Los Angeles', 'B5B0B1', 'gestionnaire', 'admin-la@hyatt-hotels.com', 'Password@2501', 25),
-    (2502, 'Harris', 'Scarlett', '252 West Century Boulevard', 'Los Angeles', 'B5B0B2', 'receptioniste', 'reception-la@hyatt-hotels.com', 'Password@2502', 25),
-    (2503, 'Martin', 'Ethan', '253 West Century Boulevard', 'Los Angeles', 'B5B0B3', 'nettoyeur', 'nettoyage-la@hyatt-hotels.com', 'Password@2503', 25),
+    (250000001, 'White', 'Henry', '251 West Century Boulevard', 'Los Angeles', 'B5B0B1', 'gestionnaire', 'admin-la@hyatt-hotels.com', 'Password@2501', 25),
+    (250000002, 'Harris', 'Scarlett', '252 West Century Boulevard', 'Los Angeles', 'B5B0B2', 'receptioniste', 'reception-la@hyatt-hotels.com', 'Password@2502', 25),
+    (250000003, 'Martin', 'Ethan', '253 West Century Boulevard', 'Los Angeles', 'B5B0B3', 'nettoyeur', 'nettoyage-la@hyatt-hotels.com', 'Password@2503', 25),
     -- 26 - Hyatt Houston
-    (2601, 'Thompson', 'Liam', '261 Louisiana Street', 'Houston', 'B6B0B1', 'gestionnaire', 'admin-houston@hyatt-hotels.com', 'Password@2601', 26),
-    (2602, 'Garcia', 'Isabella', '262 Louisiana Street', 'Houston', 'B6B0B2', 'receptioniste', 'reception-houston@hyatt-hotels.com', 'Password@2602', 26),
-    (2603, 'Martinez', 'Sebastian', '263 Louisiana Street', 'Houston', 'B6B0B3', 'nettoyeur', 'nettoyage-houston@hyatt-hotels.com', 'Password@2603', 26),
+    (260000001, 'Thompson', 'Liam', '261 Louisiana Street', 'Houston', 'B6B0B1', 'gestionnaire', 'admin-houston@hyatt-hotels.com', 'Password@2601', 26),
+    (260000002, 'Garcia', 'Isabella', '262 Louisiana Street', 'Houston', 'B6B0B2', 'receptioniste', 'reception-houston@hyatt-hotels.com', 'Password@2602', 26),
+    (260000003, 'Martinez', 'Sebastian', '263 Louisiana Street', 'Houston', 'B6B0B3', 'nettoyeur', 'nettoyage-houston@hyatt-hotels.com', 'Password@2603', 26),
     -- 27 - Hyatt Toronto
-    (2701, 'Robinson', 'Zoe', '271 King Street West', 'Toronto', 'B7B0B1', 'gestionnaire', 'admin-toronto@hyatt-hotels.com', 'Password@2701', 27),
-    (2702, 'Clark', 'Daniel', '272 King Street West', 'Toronto', 'B7B0B2', 'receptioniste', 'reception-toronto@hyatt-hotels.com', 'Password@2702', 27),
-    (2703, 'Rodriguez', 'Emily', '273 King Street West', 'Toronto', 'B7B0B3', 'nettoyeur', 'nettoyage-toronto@hyatt-hotels.com', 'Password@2703', 27),
+    (270000001, 'Robinson', 'Zoe', '271 King Street West', 'Toronto', 'B7B0B1', 'gestionnaire', 'admin-toronto@hyatt-hotels.com', 'Password@2701', 27),
+    (270000002, 'Clark', 'Daniel', '272 King Street West', 'Toronto', 'B7B0B2', 'receptioniste', 'reception-toronto@hyatt-hotels.com', 'Password@2702', 27),
+    (270000003, 'Rodriguez', 'Emily', '273 King Street West', 'Toronto', 'B7B0B3', 'nettoyeur', 'nettoyage-toronto@hyatt-hotels.com', 'Password@2703', 27),
     -- 28 - Hyatt Vancouver
-    (2801, 'Lewis', 'Alexander', '281 Burrard Street', 'Vancouver', 'B8B0B1', 'gestionnaire', 'admin-vancouver@hyatt-hotels.com', 'Password@2801', 28),
-    (2802, 'Walker', 'Sofia', '282 Burrard Street', 'Vancouver', 'B8B0B2', 'receptioniste', 'reception-vancouver@hyatt-hotels.com', 'Password@2802', 28),
-    (2803, 'Hall', 'Jack', '283 Burrard Street', 'Vancouver', 'B8B0B3', 'nettoyeur', 'nettoyage-vancouver@hyatt-hotels.com', 'Password@2803', 28),
+    (280000001, 'Lewis', 'Alexander', '281 Burrard Street', 'Vancouver', 'B8B0B1', 'gestionnaire', 'admin-vancouver@hyatt-hotels.com', 'Password@2801', 28),
+    (280000002, 'Walker', 'Sofia', '282 Burrard Street', 'Vancouver', 'B8B0B2', 'receptioniste', 'reception-vancouver@hyatt-hotels.com', 'Password@2802', 28),
+    (280000003, 'Hall', 'Jack', '283 Burrard Street', 'Vancouver', 'B8B0B3', 'nettoyeur', 'nettoyage-vancouver@hyatt-hotels.com', 'Password@2803', 28),
 
 -- 3 - Hilton Hotels & Resorts
 	-- 31 - Hilton NYC Central
-	(3101, 'Stevens', 'Alex', '311 Fifth Avenue', 'New York', 'C1C0C1', 'gestionnaire', 'admin-nyc@hilton-hotels.com', 'Password@3101', 31),
-	(3102, 'Murphy', 'Jordan', '312 Fifth Avenue', 'New York', 'C1C0C2', 'receptioniste', 'reception-nyc@hilton-hotels.com', 'Password@3102', 31),
-	(3103, 'Foster', 'Taylor', '313 Fifth Avenue', 'New York', 'C1C0C3', 'nettoyeur', 'nettoyage-nyc@hilton-hotels.com', 'Password@3103', 31),
+	(310000001, 'Stevens', 'Alex', '311 Fifth Avenue', 'New York', 'C1C0C1', 'gestionnaire', 'admin-nyc@hilton-hotels.com', 'Password@3101', 31),
+	(310000002, 'Murphy', 'Jordan', '312 Fifth Avenue', 'New York', 'C1C0C2', 'receptioniste', 'reception-nyc@hilton-hotels.com', 'Password@3102', 31),
+	(310000003, 'Foster', 'Taylor', '313 Fifth Avenue', 'New York', 'C1C0C3', 'nettoyeur', 'nettoyage-nyc@hilton-hotels.com', 'Password@3103', 31),
 	-- 32 - Hilton Miami South Beach
-	(3201, 'Adams', 'Morgan', '321 Collins Avenue', 'Miami', 'C2C0C1', 'gestionnaire', 'admin-miami@hilton-hotels.com', 'Password@3201', 32),
-	(3202, 'Mason', 'Bailey', '322 Collins Avenue', 'Miami', 'C2C0C2', 'receptioniste', 'reception-miami@hilton-hotels.com', 'Password@3202', 32),
-	(3203, 'Bennett', 'Casey', '323 Collins Avenue', 'Miami', 'C2C0C3', 'nettoyeur', 'nettoyage-miami@hilton-hotels.com', 'Password@3203', 32),
+	(320000001, 'Adams', 'Morgan', '321 Collins Avenue', 'Miami', 'C2C0C1', 'gestionnaire', 'admin-miami@hilton-hotels.com', 'Password@3201', 32),
+	(320000002, 'Mason', 'Bailey', '322 Collins Avenue', 'Miami', 'C2C0C2', 'receptioniste', 'reception-miami@hilton-hotels.com', 'Password@3202', 32),
+	(320000003, 'Bennett', 'Casey', '323 Collins Avenue', 'Miami', 'C2C0C3', 'nettoyeur', 'nettoyage-miami@hilton-hotels.com', 'Password@3203', 32),
 	-- 33 - Hilton Chicago
-	(3301, 'Ward', 'Riley', '331 South Michigan', 'Chicago', 'C3C0C1', 'gestionnaire', 'admin-chicago@hilton-hotels.com', 'Password@3301', 33),
-	(3302, 'Gray', 'Jordan', '332 South Michigan', 'Chicago', 'C3C0C2', 'receptioniste', 'reception-chicago@hilton-hotels.com', 'Password@3302', 33),
-	(3303, 'Fleming', 'Skyler', '333 South Michigan', 'Chicago', 'C3C0C3', 'nettoyeur', 'nettoyage-chicago@hilton-hotels.com', 'Password@3303', 33),
+	(330000001, 'Ward', 'Riley', '331 South Michigan', 'Chicago', 'C3C0C1', 'gestionnaire', 'admin-chicago@hilton-hotels.com', 'Password@3301', 33),
+	(330000002, 'Gray', 'Jordan', '332 South Michigan', 'Chicago', 'C3C0C2', 'receptioniste', 'reception-chicago@hilton-hotels.com', 'Password@3302', 33),
+	(330000003, 'Fleming', 'Skyler', '333 South Michigan', 'Chicago', 'C3C0C3', 'nettoyeur', 'nettoyage-chicago@hilton-hotels.com', 'Password@3303', 33),
 	-- 34 - Hilton Dallas
-	(3401, 'Holt', 'River', '341 North Watson Road', 'Dallas', 'C4C0C1', 'gestionnaire', 'admin-dallas@hilton-hotels.com', 'Password@3401', 34),
-	(3402, 'Young', 'Jamie', '342 North Watson Road', 'Dallas', 'C4C0C2', 'receptioniste', 'reception-dallas@hilton-hotels.com', 'Password@3402', 34),
-	(3403, 'Ross', 'Peyton', '343 North Watson Road', 'Dallas', 'C4C0C3', 'nettoyeur', 'nettoyage-dallas@hilton-hotels.com', 'Password@3403', 34),
+	(340000001, 'Holt', 'River', '341 North Watson Road', 'Dallas', 'C4C0C1', 'gestionnaire', 'admin-dallas@hilton-hotels.com', 'Password@3401', 34),
+	(340000002, 'Young', 'Jamie', '342 North Watson Road', 'Dallas', 'C4C0C2', 'receptioniste', 'reception-dallas@hilton-hotels.com', 'Password@3402', 34),
+	(340000003, 'Ross', 'Peyton', '343 North Watson Road', 'Dallas', 'C4C0C3', 'nettoyeur', 'nettoyage-dallas@hilton-hotels.com', 'Password@3403', 34),
 	-- 35 - Hilton Los Angeles
-	(3501, 'Lawson', 'Cameron', '351 West Century Boulevard', 'Los Angeles', 'C5C0C1', 'gestionnaire', 'admin-la@hilton-hotels.com', 'Password@3501', 35),
-	(3502, 'Davidson', 'Avery', '352 West Century Boulevard', 'Los Angeles', 'C5C0C2', 'receptioniste', 'reception-la@hilton-hotels.com', 'Password@3502', 35),
-	(3503, 'Barnes', 'Reese', '352 West Century Boulevard', 'Los Angeles', 'C5C0C3', 'nettoyeur', 'nettoyage-la@hilton-hotels.com', 'Password@3503', 35),
+	(350000001, 'Lawson', 'Cameron', '351 West Century Boulevard', 'Los Angeles', 'C5C0C1', 'gestionnaire', 'admin-la@hilton-hotels.com', 'Password@3501', 35),
+	(350000002, 'Davidson', 'Avery', '352 West Century Boulevard', 'Los Angeles', 'C5C0C2', 'receptioniste', 'reception-la@hilton-hotels.com', 'Password@3502', 35),
+	(350000003, 'Barnes', 'Reese', '352 West Century Boulevard', 'Los Angeles', 'C5C0C3', 'nettoyeur', 'nettoyage-la@hilton-hotels.com', 'Password@3503', 35),
 	-- 36 - Hilton Houston
-	(3601, 'Gibson', 'Charlie', '361 Travis Street', 'Houston', 'C6C0C1', 'gestionnaire', 'admin-houston@hilton-hotels.com', 'Password@3601', 36),
-	(3602, 'Willis', 'Drew', '362 Travis Street', 'Houston', 'C6C0C2', 'receptioniste', 'reception-houston@hilton-hotels.com', 'Password@3602', 36),
-	(3603, 'Harrison', 'Taylor', '363 Travis Street', 'Houston', 'C6C0C3', 'nettoyeur', 'nettoyage-houston@hilton-hotels.com', 'Password@3603', 36),
+	(360000001, 'Gibson', 'Charlie', '361 Travis Street', 'Houston', 'C6C0C1', 'gestionnaire', 'admin-houston@hilton-hotels.com', 'Password@3601', 36),
+	(360000002, 'Willis', 'Drew', '362 Travis Street', 'Houston', 'C6C0C2', 'receptioniste', 'reception-houston@hilton-hotels.com', 'Password@3602', 36),
+	(360000003, 'Harrison', 'Taylor', '363 Travis Street', 'Houston', 'C6C0C3', 'nettoyeur', 'nettoyage-houston@hilton-hotels.com', 'Password@3603', 36),
 	-- 37 - Hilton Toronto
-	(3701, 'Hudson', 'Riley', '371 Richmond Street West', 'Toronto', 'C7C0C1', 'gestionnaire', 'admin-toronto@hilton-hotels.com', 'Password@3701', 37),
-	(3702, 'Hunter', 'Casey', '372 Richmond Street West', 'Toronto', 'C7C0C2', 'receptioniste', 'reception-toronto@hilton-hotels.com', 'Password@3702', 37),
-	(3703, 'Cruz', 'Jordan', '373 Richmond Street West', 'Toronto', 'C7C0C3', 'nettoyeur', 'nettoyage-toronto@hilton-hotels.com', 'Password@3703', 37),
+	(370000001, 'Hudson', 'Riley', '371 Richmond Street West', 'Toronto', 'C7C0C1', 'gestionnaire', 'admin-toronto@hilton-hotels.com', 'Password@3701', 37),
+	(370000002, 'Hunter', 'Casey', '372 Richmond Street West', 'Toronto', 'C7C0C2', 'receptioniste', 'reception-toronto@hilton-hotels.com', 'Password@3702', 37),
+	(370000003, 'Cruz', 'Jordan', '373 Richmond Street West', 'Toronto', 'C7C0C3', 'nettoyeur', 'nettoyage-toronto@hilton-hotels.com', 'Password@3703', 37),
 	-- 38 - Hilton Vancouver
-	(3801, 'Franklin', 'Bailey', '381 Robson Street', 'Vancouver', 'C8C0C1', 'gestionnaire', 'admin-vancouver@hilton-hotels.com', 'Password@3801', 38),
-	(3802, 'Tate', 'Morgan', '382 Robson Street', 'Vancouver', 'C8C0C2', 'receptioniste', 'reception-vancouver@hilton-hotels.com', 'Password@3802', 38),
-	(3803, 'Love', 'Skyler', '383 Robson Street', 'Vancouver', 'C8C0C3', 'nettoyeur', 'nettoyage-vancouver@hilton-hotels.com', 'Password@3803', 38),
+	(380000001, 'Franklin', 'Bailey', '381 Robson Street', 'Vancouver', 'C8C0C1', 'gestionnaire', 'admin-vancouver@hilton-hotels.com', 'Password@3801', 38),
+	(380000002, 'Tate', 'Morgan', '382 Robson Street', 'Vancouver', 'C8C0C2', 'receptioniste', 'reception-vancouver@hilton-hotels.com', 'Password@3802', 38),
+	(380000003, 'Love', 'Skyler', '383 Robson Street', 'Vancouver', 'C8C0C3', 'nettoyeur', 'nettoyage-vancouver@hilton-hotels.com', 'Password@3803', 38),
 
 -- 4 - InterContinental Hotels Group (IHG)
 	-- 41 - InterContinental New York
-	(4101, 'Foster', 'Alex', '411 East 48th Street', 'New York', 'D1D0D1', 'gestionnaire', 'admin-nyc@intercontinental-hotels.com', 'Password@4101', 41),
-	(4102, 'Stewart', 'Taylor', '412 East 48th Street', 'New York', 'D1D0D2', 'receptioniste', 'reception-nyc@intercontinental-hotels.com', 'Password@4102', 41),
-	(4103, 'Bennett', 'Jordan', '413 East 48th Street', 'New York', 'D1D0D3', 'nettoyeur', 'nettoyage-nyc@intercontinental-hotels.com', 'Password@4103', 41),
+	(410000001, 'Foster', 'Alex', '411 East 48th Street', 'New York', 'D1D0D1', 'gestionnaire', 'admin-nyc@intercontinental-hotels.com', 'Password@4101', 41),
+	(410000002, 'Stewart', 'Taylor', '412 East 48th Street', 'New York', 'D1D0D2', 'receptioniste', 'reception-nyc@intercontinental-hotels.com', 'Password@4102', 41),
+	(410000003, 'Bennett', 'Jordan', '413 East 48th Street', 'New York', 'D1D0D3', 'nettoyeur', 'nettoyage-nyc@intercontinental-hotels.com', 'Password@4103', 41),
 	-- 42 - InterContinental Miami
-	(4201, 'Hudson', 'Morgan', '421 Chopin Plaza', 'Miami', 'D2D0D1', 'gestionnaire', 'admin-miami@intercontinental-hotels.com', 'Password@4201', 42),
-	(4202, 'Ward', 'Bailey', '422 Chopin Plaza', 'Miami', 'D2D0D2', 'receptioniste', 'reception-miami@intercontinental-hotels.com', 'Password@4202', 42),
-	(4203, 'Gibson', 'Casey', '423 Chopin Plaza', 'Miami', 'D2D0D3', 'nettoyeur', 'nettoyage-miami@intercontinental-hotels.com', 'Password@4203', 42),
+	(420000001, 'Hudson', 'Morgan', '421 Chopin Plaza', 'Miami', 'D2D0D1', 'gestionnaire', 'admin-miami@intercontinental-hotels.com', 'Password@4201', 42),
+	(420000002, 'Ward', 'Bailey', '422 Chopin Plaza', 'Miami', 'D2D0D2', 'receptioniste', 'reception-miami@intercontinental-hotels.com', 'Password@4202', 42),
+	(420000003, 'Gibson', 'Casey', '423 Chopin Plaza', 'Miami', 'D2D0D3', 'nettoyeur', 'nettoyage-miami@intercontinental-hotels.com', 'Password@4203', 42),
 	-- 43 - Holiday Inn Chicago
-	(4301, 'Holt', 'Skyler', '431 West Harrison Street', 'Chicago', 'D3D0D1', 'gestionnaire', 'admin-chicago@holidayin-hotels.com', 'Password@4301', 43),
-	(4302, 'Mason', 'Peyton', '432 West Harrison Street', 'Chicago', 'D3D0D2', 'receptioniste', 'reception-chicago@holidayin-hotels.com', 'Password@4302', 43),
-	(4303, 'Young', 'Drew', '433 West Harrison Street', 'Chicago', 'D3D0D3', 'nettoyeur', 'nettoyage-chicago@holidayin-hotels.com', 'Password@4303', 43),
+	(430000001, 'Holt', 'Skyler', '431 West Harrison Street', 'Chicago', 'D3D0D1', 'gestionnaire', 'admin-chicago@holidayin-hotels.com', 'Password@4301', 43),
+	(430000002, 'Mason', 'Peyton', '432 West Harrison Street', 'Chicago', 'D3D0D2', 'receptioniste', 'reception-chicago@holidayin-hotels.com', 'Password@4302', 43),
+	(430000003, 'Young', 'Drew', '433 West Harrison Street', 'Chicago', 'D3D0D3', 'nettoyeur', 'nettoyage-chicago@holidayin-hotels.com', 'Password@4303', 43),
 	-- 44 - Crowne Plaza Dallas
-	(4401, 'Franklin', 'Avery', '441 Elm Street', 'Dallas', 'D4D0D1', 'gestionnaire', 'admin-dallas@crowne-hotels.com', 'Password@4401', 44),
-	(4402, 'Ross', 'Riley', '442 Elm Street', 'Dallas', 'D4D0D2', 'receptioniste', 'reception-dallas@crowne-hotels.com', 'Password@4402', 44),
-	(4403, 'Fleming', 'Jamie', '443 Elm Street', 'Dallas', 'D4D0D3', 'nettoyeur', 'nettoyage-dallas@crowne-hotels.com', 'Password@4403', 44),
+	(440000001, 'Franklin', 'Avery', '441 Elm Street', 'Dallas', 'D4D0D1', 'gestionnaire', 'admin-dallas@crowne-hotels.com', 'Password@4401', 44),
+	(440000002, 'Ross', 'Riley', '442 Elm Street', 'Dallas', 'D4D0D2', 'receptioniste', 'reception-dallas@crowne-hotels.com', 'Password@4402', 44),
+	(440000003, 'Fleming', 'Jamie', '443 Elm Street', 'Dallas', 'D4D0D3', 'nettoyeur', 'nettoyage-dallas@crowne-hotels.com', 'Password@4403', 44),
 	-- 45 - Hotel Indigo Los Angeles
-	(4501, 'Hunter', 'Cameron', '451 Francisco Street', 'Los Angeles', 'D5D0D1', 'gestionnaire', 'admin-la@indigo-hotels.com', 'Password@4501', 45),
-	(4502, 'Love', 'Bailey', '452 Francisco Street', 'Los Angeles', 'D5D0D2', 'receptioniste', 'reception-la@indigo-hotels.com', 'Password@4502', 45),
-	(4503, 'Barnes', 'Charlie', '453 Francisco Street', 'Los Angeles', 'D5D0D3', 'nettoyeur', 'nettoyage-la@indigo-hotels.com', 'Password@4503', 45),
+	(450000001, 'Hunter', 'Cameron', '451 Francisco Street', 'Los Angeles', 'D5D0D1', 'gestionnaire', 'admin-la@indigo-hotels.com', 'Password@4501', 45),
+	(450000002, 'Love', 'Bailey', '452 Francisco Street', 'Los Angeles', 'D5D0D2', 'receptioniste', 'reception-la@indigo-hotels.com', 'Password@4502', 45),
+	(450000003, 'Barnes', 'Charlie', '453 Francisco Street', 'Los Angeles', 'D5D0D3', 'nettoyeur', 'nettoyage-la@indigo-hotels.com', 'Password@4503', 45),
 	-- 46 - Holiday Inn Express Houston
-	(4601, 'Tate', 'Skyler', '461 South Main Street', 'Houston', 'D6D0D1', 'gestionnaire', 'admin-houston@holidayin-hotels.com', 'Password@4601', 46),
-	(4602, 'Cruz', 'Morgan', '462 South Main Street', 'Houston', 'D6D0D2', 'receptioniste', 'reception-houston@holidayin-hotels.com', 'Password@4602', 46),
-	(4603, 'Willis', 'Drew', '463 South Main Street', 'Houston', 'D6D0D3', 'nettoyeur', 'nettoyage-houston@holidayin-hotels.com', 'Password@4603', 46),
+	(460000001, 'Tate', 'Skyler', '461 South Main Street', 'Houston', 'D6D0D1', 'gestionnaire', 'admin-houston@holidayin-hotels.com', 'Password@4601', 46),
+	(460000002, 'Cruz', 'Morgan', '462 South Main Street', 'Houston', 'D6D0D2', 'receptioniste', 'reception-houston@holidayin-hotels.com', 'Password@4602', 46),
+	(460000003, 'Willis', 'Drew', '463 South Main Street', 'Houston', 'D6D0D3', 'nettoyeur', 'nettoyage-houston@holidayin-hotels.com', 'Password@4603', 46),
 	-- 47 - InterContinental Toronto
-	(4701, 'Davidson', 'Jordan', '471 Front Street West', 'Toronto', 'D7D0D1', 'gestionnaire', 'admin-toronto@intercontinental-hotels.com', 'Password@4701', 47),
-	(4702, 'Harrison', 'Taylor', '472 Front Street West', 'Toronto', 'D7D0D2', 'receptioniste', 'reception-toronto@intercontinental-hotels.com', 'Password@4702', 47),
-	(4703, 'Stevens', 'Casey', '473 Front Street West', 'Toronto', 'D7D0D2', 'nettoyeur', 'nettoyage-toronto@intercontinental-hotels.com', 'Password@4703', 47),
+	(470000001, 'Davidson', 'Jordan', '471 Front Street West', 'Toronto', 'D7D0D1', 'gestionnaire', 'admin-toronto@intercontinental-hotels.com', 'Password@4701', 47),
+	(470000002, 'Harrison', 'Taylor', '472 Front Street West', 'Toronto', 'D7D0D2', 'receptioniste', 'reception-toronto@intercontinental-hotels.com', 'Password@4702', 47),
+	(470000003, 'Stevens', 'Casey', '473 Front Street West', 'Toronto', 'D7D0D2', 'nettoyeur', 'nettoyage-toronto@intercontinental-hotels.com', 'Password@4703', 47),
 	-- 48 - InterContinental Vancouver
-	(4801, 'Adams', 'Bailey', '481 Canada Place', 'Vancouver', 'D8D0D1', 'gestionnaire', 'admin-vancouver@intercontinental-hotels.com', 'Password@4801', 48),
-	(4802, 'Gray', 'Riley', '482 Canada Place', 'Vancouver', 'D8D0D2', 'receptioniste', 'reception-vancouver@intercontinental-hotels.com', 'Password@4802', 48),
-	(4803, 'Murphy', 'Peyton', '483 Canada Place', 'Vancouver', 'D8D0D3', 'nettoyeur', 'nettoyage-vancouver@intercontinental-hotels.com', 'Password@4803', 48),
+	(480000001, 'Adams', 'Bailey', '481 Canada Place', 'Vancouver', 'D8D0D1', 'gestionnaire', 'admin-vancouver@intercontinental-hotels.com', 'Password@4801', 48),
+	(480000002, 'Gray', 'Riley', '482 Canada Place', 'Vancouver', 'D8D0D2', 'receptioniste', 'reception-vancouver@intercontinental-hotels.com', 'Password@4802', 48),
+	(480000003, 'Murphy', 'Peyton', '483 Canada Place', 'Vancouver', 'D8D0D3', 'nettoyeur', 'nettoyage-vancouver@intercontinental-hotels.com', 'Password@4803', 48),
 	
 -- 5 - Wyndham Hotels & Resorts
 	-- 51 - Wyndham Grand New York
-	(5101, 'Foster', 'Alex', '511 East 42nd Street', 'New York', 'E1E0E1', 'gestionnaire', 'admin-nyc@wyndham-hotels.com', 'Password@5101', 51),
-	(5102, 'Stewart', 'Taylor', '512 East 42nd Street', 'New York', 'E1E0E2', 'receptioniste', 'reception-nyc@wyndham-hotels.com', 'Password@5102', 51),
-	(5103, 'Bennett', 'Jordan', '513 East 42nd Street', 'New York', 'E1E0E3', 'nettoyeur', 'nettoyage-nyc@wyndham-hotels.com', 'Password@5103', 51),
+	(510000001, 'Foster', 'Alex', '511 East 42nd Street', 'New York', 'E1E0E1', 'gestionnaire', 'admin-nyc@wyndham-hotels.com', 'Password@5101', 51),
+	(510000002, 'Stewart', 'Taylor', '512 East 42nd Street', 'New York', 'E1E0E2', 'receptioniste', 'reception-nyc@wyndham-hotels.com', 'Password@5102', 51),
+	(510000003, 'Bennett', 'Jordan', '513 East 42nd Street', 'New York', 'E1E0E3', 'nettoyeur', 'nettoyage-nyc@wyndham-hotels.com', 'Password@5103', 51),
 	-- 52 - Wyndham Miami Beach
-	(5201, 'Hudson', 'Morgan', '521 Collins Avenue', 'Miami', 'E2E0E1', 'gestionnaire', 'admin-miami@wyndham-hotels.com', 'Password@5201', 52),
-	(5202, 'Ward', 'Bailey', '522 Collins Avenue', 'Miami', 'E2E0E2', 'receptioniste', 'reception-miami@wyndham-hotels.com', 'Password@5202', 52),
-	(5203, 'Gibson', 'Casey', '523 Collins Avenue', 'Miami', 'E2E0E3', 'nettoyeur', 'nettoyage-miami@wyndham-hotels.com', 'Password@5203', 52),
+	(520000001, 'Hudson', 'Morgan', '521 Collins Avenue', 'Miami', 'E2E0E1', 'gestionnaire', 'admin-miami@wyndham-hotels.com', 'Password@5201', 52),
+	(520000002, 'Ward', 'Bailey', '522 Collins Avenue', 'Miami', 'E2E0E2', 'receptioniste', 'reception-miami@wyndham-hotels.com', 'Password@5202', 52),
+	(520000003, 'Gibson', 'Casey', '523 Collins Avenue', 'Miami', 'E2E0E3', 'nettoyeur', 'nettoyage-miami@wyndham-hotels.com', 'Password@5203', 52),
 	-- 53 - Wyndham Chicago
-	(5301, 'Holt', 'Skyler', '531 North Saint Clair Street', 'Chicago', 'E3E0E1', 'gestionnaire', 'admin-chicago@wyndham-hotels.com', 'Password@5301', 53),
-	(5302, 'Mason', 'Peyton', '532 North Saint Clair Street', 'Chicago', 'E3E0E2', 'receptioniste', 'reception-chicago@wyndham-hotels.com', 'Password@5302', 53),
-	(5303, 'Young', 'Drew', '533 North Saint Clair Street', 'Chicago', 'E3E0E3', 'nettoyeur', 'nettoyage-chicago@wyndham-hotels.com', 'Password@5303', 53),
+	(530000001, 'Holt', 'Skyler', '531 North Saint Clair Street', 'Chicago', 'E3E0E1', 'gestionnaire', 'admin-chicago@wyndham-hotels.com', 'Password@5301', 53),
+	(530000002, 'Mason', 'Peyton', '532 North Saint Clair Street', 'Chicago', 'E3E0E2', 'receptioniste', 'reception-chicago@wyndham-hotels.com', 'Password@5302', 53),
+	(530000003, 'Young', 'Drew', '533 North Saint Clair Street', 'Chicago', 'E3E0E3', 'nettoyeur', 'nettoyage-chicago@wyndham-hotels.com', 'Password@5303', 53),
 	-- 54 - Wyndham Dallas
-	(5401, 'Franklin', 'Avery', '541 Alpha Road', 'Dallas', 'E4E0E1', 'gestionnaire', 'admin-dallas@wyndham-hotels.com', 'Password@5401', 54),
-	(5402, 'Ross', 'Riley', '542 Alpha Road', 'Dallas', 'E4E0E2', 'receptioniste', 'reception-dallas@wyndham-hotels.com', 'Password@5402', 54),
-	(5403, 'Fleming', 'Jamie', '543 Alpha Road', 'Dallas', 'E4E0E3', 'nettoyeur', 'nettoyage-dallas@wyndham-hotels.com', 'Password@5403', 54),
+	(540000001, 'Franklin', 'Avery', '541 Alpha Road', 'Dallas', 'E4E0E1', 'gestionnaire', 'admin-dallas@wyndham-hotels.com', 'Password@5401', 54),
+	(540000002, 'Ross', 'Riley', '542 Alpha Road', 'Dallas', 'E4E0E2', 'receptioniste', 'reception-dallas@wyndham-hotels.com', 'Password@5402', 54),
+	(540000003, 'Fleming', 'Jamie', '543 Alpha Road', 'Dallas', 'E4E0E3', 'nettoyeur', 'nettoyage-dallas@wyndham-hotels.com', 'Password@5403', 54),
 	-- 55 - Wyndham Los Angeles
-	(5501, 'Hunter', 'Cameron', '551 South Los Angeles Street', 'Los Angeles', 'E5E0E1', 'gestionnaire', 'admin-la@wyndham-hotels.com', 'Password@5501', 55),
-	(5502, 'Love', 'Bailey', '552 South Los Angeles Street', 'Los Angeles', 'E5E0E2', 'receptioniste', 'reception-la@wyndham-hotels.com', 'Password@5502', 55),
-	(5503, 'Barnes', 'Charlie', '553 South Los Angeles Street', 'Los Angeles', 'E5E0E3', 'nettoyeur', 'nettoyage-la@wyndham-hotels.com', 'Password@5503', 55),
+	(550000001, 'Hunter', 'Cameron', '551 South Los Angeles Street', 'Los Angeles', 'E5E0E1', 'gestionnaire', 'admin-la@wyndham-hotels.com', 'Password@5501', 55),
+	(550000002, 'Love', 'Bailey', '552 South Los Angeles Street', 'Los Angeles', 'E5E0E2', 'receptioniste', 'reception-la@wyndham-hotels.com', 'Password@5502', 55),
+	(550000003, 'Barnes', 'Charlie', '553 South Los Angeles Street', 'Los Angeles', 'E5E0E3', 'nettoyeur', 'nettoyage-la@wyndham-hotels.com', 'Password@5503', 55),
 	-- 56 - Wyndham Houston
-	(5601, 'Tate', 'Skyler', '561 Greenspoint Drive', 'Houston', 'E6E0E1', 'gestionnaire', 'admin-houston@wyndham-hotels.com', 'Password@5601', 56),
-	(5602, 'Cruz', 'Morgan', '562 Greenspoint Drive', 'Houston', 'E6E0E2', 'receptioniste', 'reception-houston@wyndham-hotels.com', 'Password@5602', 56),
-	(5603, 'Willis', 'Drew', '563 Greenspoint Drive', 'Houston', 'E6E0E3', 'nettoyeur', 'nettoyage-houston@wyndham-hotels.com', 'Password@5603', 56),
+	(560000001, 'Tate', 'Skyler', '561 Greenspoint Drive', 'Houston', 'E6E0E1', 'gestionnaire', 'admin-houston@wyndham-hotels.com', 'Password@5601', 56),
+	(560000002, 'Cruz', 'Morgan', '562 Greenspoint Drive', 'Houston', 'E6E0E2', 'receptioniste', 'reception-houston@wyndham-hotels.com', 'Password@5602', 56),
+	(560000003, 'Willis', 'Drew', '563 Greenspoint Drive', 'Houston', 'E6E0E3', 'nettoyeur', 'nettoyage-houston@wyndham-hotels.com', 'Password@5603', 56),
 	-- 57 - Wyndham Toronto
-	(5701, 'Davidson', 'Jordan', '571 York Mills Road', 'Toronto', 'E7E0E1', 'gestionnaire', 'admin-toronto@wyndham-hotels.com', 'Password@5701', 57),
-	(5702, 'Harrison', 'Taylor', '572 York Mills Road', 'Toronto', 'E7E0E2', 'receptioniste', 'reception-toronto@wyndham-hotels.com', 'Password@5702', 57),
-	(5703, 'Stevens', 'Casey', '573 York Mills Road', 'Toronto', 'E7E0E3', 'nettoyeur', 'nettoyage-toronto@wyndham-hotels.com', 'Password@5703', 57),
+	(570000001, 'Davidson', 'Jordan', '571 York Mills Road', 'Toronto', 'E7E0E1', 'gestionnaire', 'admin-toronto@wyndham-hotels.com', 'Password@5701', 57),
+	(570000002, 'Harrison', 'Taylor', '572 York Mills Road', 'Toronto', 'E7E0E2', 'receptioniste', 'reception-toronto@wyndham-hotels.com', 'Password@5702', 57),
+	(570000003, 'Stevens', 'Casey', '573 York Mills Road', 'Toronto', 'E7E0E3', 'nettoyeur', 'nettoyage-toronto@wyndham-hotels.com', 'Password@5703', 57),
 	-- 58 - Wyndham Vancouver
-	(5801, 'Adams', 'Bailey', '581 Cambie Road', 'Vancouver', 'E8E0E1', 'gestionnaire', 'admin-vancouver@wyndham-hotels.com', 'Password@5801', 58),
-	(5802, 'Gray', 'Riley', '582 Cambie Road', 'Vancouver', 'E8E0E2', 'receptioniste', 'reception-vancouver@wyndham-hotels.com', 'Password@5802', 58),
-	(5803, 'Murphy', 'Peyton', '583 Cambie Road', 'Vancouver', 'E8E0E3', 'nettoyeur', 'nettoyage-vancouver@wyndham-hotels.com', 'Password@5803', 58);
+	(580000001, 'Adams', 'Bailey', '581 Cambie Road', 'Vancouver', 'E8E0E1', 'gestionnaire', 'admin-vancouver@wyndham-hotels.com', 'Password@5801', 58),
+	(580000002, 'Gray', 'Riley', '582 Cambie Road', 'Vancouver', 'E8E0E2', 'receptioniste', 'reception-vancouver@wyndham-hotels.com', 'Password@5802', 58),
+	(580000003, 'Murphy', 'Peyton', '583 Cambie Road', 'Vancouver', 'E8E0E3', 'nettoyeur', 'nettoyage-vancouver@wyndham-hotels.com', 'Password@5803', 58);
