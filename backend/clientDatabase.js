@@ -83,6 +83,7 @@ export const deleteClientByNAS = async (req, res) => {
         res.status(500).json({ error: "Erreur lors de la suppression du compte" });
     }
 };
+
 //fonction pour mettre à jour les informations d'un client par son NAS
 export const updateClientByNAS = async (req, res) => {
     const { nas } = req.params;
