@@ -71,10 +71,18 @@ function Login() {
     } catch (err) {
       console.error("Login error:", err);
 
-      // Determine which field might be incorrect
+      // Determine which specific field is incorrect based on error code
       if (err.response?.status === 401) {
-        setError("Courriel ou mot de passe incorrect");
-        setErrorField("credentials");
+        if (err.response?.data?.errorType === "EMAIL_NOT_FOUND") {
+          setError("Courriel invalide ou compte inexistant");
+          setErrorField("email");
+        } else if (err.response?.data?.errorType === "INVALID_PASSWORD") {
+          setError("Mot de passe incorrect");
+          setErrorField("password");
+        } else {
+          setError("Identifiants invalides");
+          setErrorField("credentials");
+        }
       } else if (err.response?.status === 403) {
         setError(err.response.data.message || "Accès non autorisé");
       } else {
@@ -86,7 +94,7 @@ function Login() {
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -147,9 +155,8 @@ function Login() {
                     placeholder="Entrez votre courriel"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className={`mt-2 ${
-                      errorField === "credentials" ? "border-danger" : ""
-                    }`}
+                    className={`mt-2 ${errorField === "credentials" ? "border-danger" : ""
+                      }`}
                     required
                   />
                   <Form.Control.Feedback type="invalid">

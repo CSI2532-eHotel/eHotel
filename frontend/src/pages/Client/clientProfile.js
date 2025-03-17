@@ -134,12 +134,6 @@ const ClientProfile = () => {
         motpasse_client: editFormData.motpasse_client,
       };
 
-      // Send data to backend
-      /* 
-      const response = await axios.put(`${process.env.REACT_APP_API_URL}/api/client/${clientData.NAS_client}`, updatedClientData);
-      console.log("Update successful:", response.data);
-      */
-
       // For demo purposes, update local state
       setClientData({
         ...clientData,
@@ -153,7 +147,7 @@ const ClientProfile = () => {
       console.error("Error during update:", err.response?.data || err.message);
       setError(
         err.response?.data?.error ||
-          "Une erreur s'est produite lors de la mise à jour"
+        "Une erreur s'est produite lors de la mise à jour"
       );
     }
 
@@ -163,14 +157,18 @@ const ClientProfile = () => {
   // Handle delete profile
   const handleDeleteProfile = async () => {
     try {
-      // Send request to backend
-      /* 
-      await axios.delete(`${process.env.REACT_APP_API_URL}/api/client/${clientData.NAS_client}`);
-      */
+      // Add confirmation dialog
+      if (window.confirm("Êtes-vous sûr de vouloir supprimer votre compte? Cette action est irréversible.")) {
+        // Send request to backend
+        await axios.delete(`${process.env.REACT_APP_API_URL}/api/client/${clientData.NAS_client}`);
 
-      // Show success message and redirect to login page
-      alert("Votre compte a été supprimé avec succès !");
-      window.location.href = "/"; // Redirect to login page
+        // Clear local storage
+        localStorage.removeItem("userData");
+
+        // Show success message and redirect to login page
+        alert("Votre compte a été supprimé avec succès !");
+        window.location.href = "/"; // Redirect to login page
+      }
     } catch (error) {
       console.error("Erreur lors de la suppression du compte:", error);
       alert("Une erreur s'est produite lors de la suppression du compte.");
