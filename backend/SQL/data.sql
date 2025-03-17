@@ -10,7 +10,7 @@ VALUES
 ---------------------------------------------------------------------------------------------------------------
 
 -- insertion: hotel 1 - Marriott International
-INSERT INTO Hotel (hotel_ID, nom_hotel, rue, ville, code_postal, nombre_chambre, courriel_chaine, numero_telephone_hotel, etoile, chaine_ID) 
+INSERT INTO Hotel (hotel_ID, nom_hotel, rue, ville, code_postal, nombre_chambre, courriel_hotel, numero_telephone_hotel, etoile, chaine_ID) 
 VALUES 
     (11, 'Marriott Downtown NYC', '85 West Street at Albany Street', 'New York', 'A1A1A1', 5, 'nyc@marriott-hotels.com', '1111111111', 5, 1),
     (12, 'Marriott Los Angeles', '333 South Figueroa Street', 'Los Angeles', 'A1A1A2', 5, 'la@marriott-hotels.com', '1111111112', 4, 1),
@@ -22,7 +22,7 @@ VALUES
     (18, 'Marriott Quebec City', '850 Place d Youville', 'Quebec City', 'A1A1A8', 5, 'qc@marriott-hotels.com', '1111111118', 1, 1);
 
 -- insertion: Hotel 2 - Hyatt Hotels Corporation
-INSERT INTO Hotel (hotel_ID, nom_hotel, rue, ville, code_postal, nombre_chambre, courriel_chaine, numero_telephone_hotel, etoile, chaine_ID) 
+INSERT INTO Hotel (hotel_ID, nom_hotel, rue, ville, code_postal, nombre_chambre, courriel_hotel, numero_telephone_hotel, etoile, chaine_ID) 
 VALUES 
     (21, 'Hyatt Regency NYC', '109 East 42nd Street', 'New York', 'B2B2B1', 5, 'nyc@hyatt-hotels.com', '2222222221', 5, 2),
     (22, 'Hyatt Miami Beach', '1601 Collins Avenue', 'Miami', 'B2B2B2', 5, 'miami@hyatt-hotels.com', '2222222222', 4, 2),
@@ -34,7 +34,7 @@ VALUES
     (28, 'Hyatt Vancouver', '655 Burrard Street', 'Vancouver', 'B2B2B8', 5, 'vancouver@hyatt-hotels.com', '2222222228', 1, 2);
 
 -- insertion: hotel 3 - Hilton Hotels & Resorts
-INSERT INTO Hotel (hotel_ID, nom_hotel, rue, ville, code_postal, nombre_chambre, courriel_chaine, numero_telephone_hotel, etoile, chaine_ID) 
+INSERT INTO Hotel (hotel_ID, nom_hotel, rue, ville, code_postal, nombre_chambre, courriel_hotel, numero_telephone_hotel, etoile, chaine_ID) 
 VALUES 
     (31, 'Hilton NYC Central', '1335 Avenue of the Americas', 'New York', 'C3C3C1', 5, 'nyc@hilton-hotels.com', '3333333331', 5, 3),
     (32, 'Hilton Miami South Beach', '1601 Collins Avenue', 'Miami', 'C3C3C2', 5, 'miami@hilton-hotels.com', '3333333332', 3, 3),
@@ -46,7 +46,7 @@ VALUES
     (38, 'Hilton Vancouver', '433 Robson Street', 'Vancouver', 'C3C3C8', 5, 'vancouver@hilton-hotels.com', '3333333338', 3, 3);
 
 -- insertion: hotel 4 - InterContinental Hotels Group (IHG)
-INSERT INTO Hotel (hotel_ID, nom_hotel, rue, ville, code_postal, nombre_chambre, courriel_chaine, numero_telephone_hotel, etoile, chaine_ID) 
+INSERT INTO Hotel (hotel_ID, nom_hotel, rue, ville, code_postal, nombre_chambre, courriel_hotel, numero_telephone_hotel, etoile, chaine_ID) 
 VALUES 
     (41, 'InterContinental New York', '111 East 48th Street', 'New York', 'D4D4D1', 5, 'nyc@intercontinental-hotels.com', '4444444441', 5, 4),
     (42, 'InterContinental Miami', '100 Chopin Plaza', 'Miami', 'D4D4D2', 5, 'miami@intercontinental-hotels.com', '4444444442', 5, 4),
@@ -58,7 +58,7 @@ VALUES
     (48, 'InterContinental Vancouver', '1028 Canada Place', 'Vancouver', 'D4D4D8', 5, 'vancouver@intercontinental-hotels.com', '4444444448', 5, 4);
 
 -- insertion: hotel 5 - Wyndham Hotels & Resorts
-INSERT INTO Hotel (hotel_ID, nom_hotel, rue, ville, code_postal, nombre_chambre, courriel_chaine, numero_telephone_hotel, etoile, chaine_ID) 
+INSERT INTO Hotel (hotel_ID, nom_hotel, rue, ville, code_postal, nombre_chambre, courriel_hotel, numero_telephone_hotel, etoile, chaine_ID) 
 VALUES 
     (51, 'Wyndham Grand New York', '109 East 42nd Street', 'New York', 'E5E5E1', 5, 'nyc@wyndham-hotels.com', '5555555551', 5, 5),
     (52, 'Wyndham Miami Beach', '4833 Collins Avenue', 'Miami', 'E5E5E2', 5, 'miami@wyndham-hotels.com', '5555555552', 1, 5),
