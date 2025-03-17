@@ -103,7 +103,7 @@ const ClientProfile = () => {
     });
   };
 
-  // Handle edit form submission
+  // Handle edit form submission- update client profile
   const handleEditSubmit = async (event) => {
     event.preventDefault();
     const form = event.currentTarget;
@@ -135,16 +135,25 @@ const ClientProfile = () => {
       };
 
       // Send data to backend
-      /* 
-      const response = await axios.put(`${process.env.REACT_APP_API_URL}/api/client/${clientData.NAS_client}`, updatedClientData);
-      console.log("Update successful:", response.data);
-      */
+      const response = await axios.put(
+        `${process.env.REACT_APP_API_URL}/api/client/${clientData.NAS_client}`,
+        updatedClientData
+      );
 
-      // For demo purposes, update local state
+      console.log("Update successful:", response.data);
+
+      // Update local state
       setClientData({
         ...clientData,
         ...updatedClientData,
       });
+
+      // Update localStorage with new client data
+      const userData = JSON.parse(localStorage.getItem("userData"));
+      localStorage.setItem("userData", JSON.stringify({
+        ...userData,
+        ...updatedClientData
+      }));
 
       // Close modal and show success message
       setShowEditModal(false);
@@ -153,7 +162,7 @@ const ClientProfile = () => {
       console.error("Error during update:", err.response?.data || err.message);
       setError(
         err.response?.data?.error ||
-          "Une erreur s'est produite lors de la mise à jour"
+        "Une erreur s'est produite lors de la mise à jour"
       );
     }
 
@@ -163,14 +172,18 @@ const ClientProfile = () => {
   // Handle delete profile
   const handleDeleteProfile = async () => {
     try {
-      // Send request to backend
-      /* 
-      await axios.delete(`${process.env.REACT_APP_API_URL}/api/client/${clientData.NAS_client}`);
-      */
+      // Add confirmation dialog
+      if (window.confirm("Êtes-vous sûr de vouloir supprimer votre compte? Cette action est irréversible.")) {
+        // Send request to backend
+        await axios.delete(`${process.env.REACT_APP_API_URL}/api/client/${clientData.NAS_client}`);
 
-      // Show success message and redirect to login page
-      alert("Votre compte a été supprimé avec succès !");
-      window.location.href = "/"; // Redirect to login page
+        // Clear local storage
+        localStorage.removeItem("userData");
+
+        // Show success message and redirect to login page
+        alert("Votre compte a été supprimé avec succès !");
+        window.location.href = "/"; // Redirect to login page
+      }
     } catch (error) {
       console.error("Erreur lors de la suppression du compte:", error);
       alert("Une erreur s'est produite lors de la suppression du compte.");
@@ -194,7 +207,7 @@ const ClientProfile = () => {
                       className="me-4"
                       onClick={openEditModal}
                     >
-                      Modifiez mon Profil
+                      Modifier mon Profil
                     </Button>
                     <Button variant="danger" onClick={handleDeleteProfile}>
                       Supprimer Profil
@@ -313,12 +326,12 @@ const ClientProfile = () => {
                   required
                   type="text"
                   placeholder="Code Postal"
-                  pattern="[A-Z][0-9][A-Z] [0-9][A-Z][0-9]"
+                  pattern="[A-Z][0-9][A-Z][0-9][A-Z][0-9]"
                   defaultValue={editFormData.code_postal}
                   onChange={handleEditChange}
                 />
                 <Form.Control.Feedback type="invalid">
-                  Svp entrez un code postal valide (ex: K1A 0B1).
+                  Svp entrez un code postal valide (ex: K1A0B1).
                 </Form.Control.Feedback>
               </Form.Group>
             </Row>

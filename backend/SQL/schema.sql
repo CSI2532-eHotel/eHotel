@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS Reservation (
 	chambre_ID INTEGER,
 	PRIMARY KEY (reservation_ID),
 	FOREIGN KEY (NAS_client) REFERENCES Client(NAS_client) ON UPDATE CASCADE ON DELETE CASCADE,
-	FOREIGN KEY (chambre_ID) REFERENCES Chambre(chambre_ID) ON UPDATE CASCADE
+	FOREIGN KEY (chambre_ID) REFERENCES Chambre(chambre_ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 -- creation table: Location

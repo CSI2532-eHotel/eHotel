@@ -57,31 +57,44 @@ function Login() {
         if (response.data.userType === "client") {
           navigate("/clientHome");
         } else if (response.data.userType === "employee") {
-          // Check if employee is a manager
+          // Check if employee is a manager or receptionist
           if (response.data.userData.est_gestionnaire) {
             navigate("/manageEmployee");
-          } else {
+          } else if (response.data.userData.est_receptioniste) {
             navigate("/employeeHome");
+          } else {
+            setError("Accès non autorisé pour ce type d'employé");
+            return;
           }
         }
       }
     } catch (err) {
       console.error("Login error:", err);
 
-      // Determine which field might be incorrect
+      // Determine which specific field is incorrect based on error code
       if (err.response?.status === 401) {
-        setError("Courriel ou mot de passe incorrect");
-        setErrorField("credentials"); 
+        if (err.response?.data?.errorType === "EMAIL_NOT_FOUND") {
+          setError("Courriel invalide ou compte inexistant");
+          setErrorField("email");
+        } else if (err.response?.data?.errorType === "INVALID_PASSWORD") {
+          setError("Mot de passe incorrect");
+          setErrorField("password");
+        } else {
+          setError("Identifiants invalides");
+          setErrorField("credentials");
+        }
+      } else if (err.response?.status === 403) {
+        setError(err.response.data.message || "Accès non autorisé");
       } else {
         setError(
           err.response?.data?.message ||
-            "Erreur de connexion. Veuillez réessayer."
+          "Erreur de connexion. Veuillez réessayer."
         );
       }
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -142,9 +155,8 @@ function Login() {
                     placeholder="Entrez votre courriel"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className={`mt-2 ${
-                      errorField === "credentials" ? "border-danger" : ""
-                    }`}
+                    className={`mt-2 ${errorField === "credentials" ? "border-danger" : ""
+                      }`}
                     required
                   />
                   <Form.Control.Feedback type="invalid">
