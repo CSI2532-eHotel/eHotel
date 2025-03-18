@@ -1,10 +1,33 @@
 import express from 'express';
+
 import cors from 'cors';
-import { insertClient, validateClientLogin,getClientProfileByEmail, deleteClientByNAS, updateClientByNAS} from './clientDatabase.js';
-import { validateEmployeeLogin } from './employeeDatabase.js';
-import { getEmployeesByHotelId, insertEmployee, updateEmployee, deleteEmployee } from './managerDatabase.js';
+
+import { 
+    insertClient, 
+    validateClientLogin,
+    getClientProfileByEmail,
+    deleteClientByNAS, 
+    updateClientByNAS,
+    // D: added these 2 for my client functions
+    updateClientProfile,
+    deleteClientReservation
+} from './clientDatabase.js';
+
+import { 
+    validateEmployeeLogin 
+} from './employeeDatabase.js';
+
+import { 
+    getEmployeesByHotelId, 
+    insertEmployee, 
+    updateEmployee, 
+    deleteEmployee 
+} from './managerDatabase.js';
+
 import env from 'dotenv';
+
 env.config(); 
+
 const app = express();
 
 // Middleware- nous permet de lire les données envoyées par le client 
@@ -19,6 +42,10 @@ app.post('/api/login/client', validateClientLogin);
 app.get('/api/client/:email', getClientProfileByEmail);
 app.delete('/api/client/:nas', deleteClientByNAS);
 app.put('/api/client/:nas', updateClientByNAS);
+// D: added these 2 for my client functions
+app.put('/api/client/profile', updateClientProfile);
+app.delete('/api/client/reservation/:reservation_ID', deleteClientReservation);
+
 // =================================route pour employee===========================
 app.post('/api/login/employee', validateEmployeeLogin);
 
