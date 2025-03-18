@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Button, Card, Col, Container, Form, Nav, Navbar, Row, Modal, Table, } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import ManagerNavbar from "../../components/managerNavbar";
 
@@ -17,6 +16,7 @@ const ManageEmployee = () => {
   const [showEmployeeModal, setShowEmployeeModal] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [validated, setValidated] = useState(false);
+  const [modalError, setModalError] = useState("");
 
   // Données du formulaire employé
   const [formData, setFormData] = useState({
@@ -121,68 +121,44 @@ const ManageEmployee = () => {
   };
 
   // Gérer la soumission du formulaire (créer/mettre à jour l'employé)
-  // Gérer la soumission du formulaire (créer/mettre à jour l'employé)
   const handleSubmit = async (event) => {
     event.preventDefault();
     const form = event.currentTarget;
-    setValidated(true);
+
+    // Réinitialiser l'erreur du modal
+    setModalError("");
 
     // Validation du formulaire
     if (form.checkValidity() === false) {
       event.stopPropagation();
+      setValidated(true);
       return;
     }
 
-    // Définir tous les champs obligatoires, y compris les mots de passe
-    const requiredFields = [
-      'NAS_employe', 'hotel_ID', 'nom_employe', 'prenom_employe',
-      'rue', 'ville', 'code_postal', 'role', 'courriel_employee',
-      'motpasse_employee', 'confirm_password'  // Toujours obligatoires
-    ];
-
-    // Vérifier si des champs obligatoires sont vides
-    const emptyFields = requiredFields.filter(field => !formData[field] || formData[field].trim() === '');
-
-    if (emptyFields.length > 0) {
-      setError(`Veuillez remplir tous les champs obligatoires: ${emptyFields.join(', ')}`);
-      return;
-    }
-
-    // Validation des mots de passe (toujours obligatoire)
-    if (formData.motpasse_employee !== formData.confirm_password) {
-      setError("Les mots de passe ne correspondent pas.");
-      return;
-    }
-
-    // Validation du format NAS (9 chiffres)
-    if (!/^\d{9}$/.test(formData.NAS_employe)) {
-      setError("Le NAS doit contenir exactement 9 chiffres.");
-      return;
-    }
-
-    // Validation du code postal canadien (format A1A1A1)
-    if (!/^[A-Za-z]\d[A-Za-z]\d[A-Za-z]\d$/.test(formData.code_postal)) {
-      setError("Le code postal doit être au format A1A1A1.");
-      return;
-    }
-
-    // Validation de l'adresse email
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.courriel_employee)) {
-      setError("Veuillez entrer une adresse email valide.");
-      return;
+    // Vérification du mot de passe seulement pour les nouveaux employés ou si un mot de passe est fourni
+    if (!isEditing || (formData.motpasse_employee && formData.motpasse_employee.length > 0)) {
+      if (formData.motpasse_employee !== formData.confirm_password) {
+        setModalError("Les mots de passe ne correspondent pas.");
+        return;
+      }
     }
 
     try {
       if (isEditing) {
-        // Préparation des données pour la mise à jour (exclure confirm_password)
+        // Créer un objet sans mot de passe si le champ est vide
         const updateData = { ...formData };
-        delete updateData.confirm_password;
-        // Mise à jour d'un employé existant (avec mot de passe obligatoire)
+        if (!updateData.motpasse_employee) {
+          delete updateData.motpasse_employee;
+          delete updateData.confirm_password;
+        }
+
+        // Mise à jour d'un employé existant
         await axios.put(`${process.env.REACT_APP_API_URL}/api/employee/${formData.NAS_employe}`, updateData);
         // Mettre à jour l'employé dans la liste locale
         setEmployees(employees.map(emp =>
           emp.NAS_employe === formData.NAS_employe ? { ...formData } : emp
         ));
+
         alert("Employé mis à jour avec succès!");
       } else {
         // Création d'un nouvel employé
@@ -197,14 +173,12 @@ const ManageEmployee = () => {
         alert("Employé ajouté avec succès!");
       }
 
-      // Réinitialiser le formulaire et fermer le modal
       setShowEmployeeModal(false);
-      setError("");
-      setValidated(false);
     } catch (err) {
-      setError("Erreur lors de l'enregistrement: " + (err.response?.data?.error || err.message));
+      setModalError("Erreur lors de l'enregistrement: " + (err.response?.data?.error || err.message));
     }
   };
+
   // Gérer la suppression d'un employé
   const handleDeleteEmployee = async () => {
     if (!employeeToDelete) return;
@@ -322,8 +296,7 @@ const ManageEmployee = () => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {error && <div className="alert alert-danger">{error}</div>}
-
+          {modalError && <div className="alert alert-danger">{modalError}</div>}
           <Form noValidate validated={validated} onSubmit={handleSubmit}>
             <Row className="mb-3">
               <Form.Group as={Col} md="6" controlId="validationNAS">
