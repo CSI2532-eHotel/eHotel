@@ -1,92 +1,86 @@
 import React, { useState, useEffect } from "react";
-import {Button,Card,Col,Container,Form,Nav,Navbar,Row,Modal,Table,} from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { Button, Card, Col, Container, Row, Modal, Table } from "react-bootstrap";
 import axios from "axios";
 import ManagerNavbar from "../../components/managerNavbar";
 
 const ManageClient = () => {
-  // Mock clients data based on the correct schema
-  const [clients] = useState([
-    {
-      NAS_client: "123456789",
-      nom_client: "Martin",
-      prenom_client: "Sophie",
-      rue: "456 Rue Notre-Dame",
-      ville: "Montréal",
-      code_postal: "H2Y1B6",
-      courriel_client: "sophie.martin@example.com",
-      date_enregistrement: "2024-01-15"
-    },
-    {
-      NAS_client: "987654321",
-      nom_client: "Bouchard",
-      prenom_client: "Michel",
-      rue: "789 Avenue du Mont-Royal",
-      ville: "Montréal",
-      code_postal: "H2J1Z7",
-      courriel_client: "michel.bouchard@example.com",
-      date_enregistrement: "2024-02-10"
-    },
-    {
-      NAS_client: "456789123",
-      nom_client: "Tremblay",
-      prenom_client: "Claire",
-      rue: "123 Boulevard René-Lévesque",
-      ville: "Québec",
-      code_postal: "G1R5T8",
-      courriel_client: "claire.tremblay@example.com",
-      date_enregistrement: "2024-03-05"
-    },
-  ]);
-
+  const [clients, setClients] = useState([]);
   const [error, setError] = useState("");
-
-  // State for client form
-  const [showClientModal, setShowClientModal] = useState(false);
-  const [validated, setValidated] = useState(false);
-
-  // Client form data
-  const [formData, setFormData] = useState({
-    NAS_client: "",
-    nom_client: "",
-    prenom_client: "",
-    rue: "",
-    ville: "",
-    code_postal: "",
-    courriel_client: "",
-    motpasse_client: "", // Only for password reset, not displayed in table
-    date_enregistrement: ""
-  });
+  const [loading, setLoading] = useState(true);
+  // Get manager data from localStorage
+  const employeeData = JSON.parse(localStorage.getItem("userData"));
+  const hotelId = employeeData ? employeeData.hotel_id : null;
 
   // State for delete confirmation modal
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [clientToDelete, setClientToDelete] = useState(null);
 
-  // Handle form input changes
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
+  // State for clients with their reservation and location information
+  const [clientsWithDetails, setClientsWithDetails] = useState([]);
 
-  // Open modal for editing an existing client
-  const openEditClientModal = (client) => {
-    setFormData({
-      NAS_client: client.NAS_client,
-      nom_client: client.nom_client,
-      prenom_client: client.prenom_client,
-      rue: client.rue,
-      ville: client.ville,
-      code_postal: client.code_postal,
-      courriel_client: client.courriel_client,
-      motpasse_client: "", // Password field is empty for editing
-      date_enregistrement: client.date_enregistrement
-    });
-    setValidated(false);
-    setShowClientModal(true);
-  };
+  // Load clients for the hotel and add reservation and location information
+  useEffect(() => {
+    const fetchClients = async () => {
+      if (!hotelId) {
+        setLoading(false);
+        setError("L'ID de l'hôtel n'est pas disponible. Veuillez vous reconnecter.");
+        return;
+      }
+      try {
+        // Fetch basic client information
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/clients/${hotelId}`);
+        
+        // Format the NAS_client as string
+        const formattedClients = response.data.map(client => ({
+          ...client,
+          NAS_client: String(client.nas_client || client.NAS_client)
+        }));
+        
+        setClients(formattedClients);
+        
+        // Get detailed information for each client
+        const clientsWithDetailsArray = await Promise.all(
+          formattedClients.map(async (client) => {
+            try {
+              // Fetch client's reservations
+              const resResponse = await axios.get(`${process.env.REACT_APP_API_URL}/api/client/${client.NAS_client}/reservations`);
+              const sortedReservations = resResponse.data.sort((a, b) => 
+                new Date(b.debut_date_reservation) - new Date(a.debut_date_reservation)
+              );
+              
+              // Fetch client's locations/stays
+              const locResponse = await axios.get(`${process.env.REACT_APP_API_URL}/api/client/${client.NAS_client}/locations`);
+              const sortedLocations = locResponse.data.sort((a, b) => 
+                new Date(b.debut_date_location) - new Date(a.debut_date_location)
+              );
+              
+              return {
+                ...client,
+                reservations: sortedReservations,
+                locations: sortedLocations
+              };
+            } catch (err) {
+              console.error(`Error fetching details for client ${client.NAS_client}:`, err);
+              return {
+                ...client,
+                reservations: [],
+                locations: []
+              };
+            }
+          })
+        );
+        
+        setClientsWithDetails(clientsWithDetailsArray);
+        setError("");
+      } catch (err) {
+        console.error("Error fetching clients:", err);
+        setError("Erreur lors du chargement des clients: " + (err.response?.data?.error || err.message));
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchClients();
+  }, [hotelId]);
 
   // Open delete confirmation modal
   const openDeleteModal = (client) => {
@@ -94,28 +88,29 @@ const ManageClient = () => {
     setShowDeleteModal(true);
   };
 
-  // Handle form submission (update client)
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const form = event.currentTarget;
+  // Handle client deletion
+  const handleDeleteClient = async () => {
+    if (!clientToDelete) return;
 
-    // Form validation
-    if (form.checkValidity() === false) {
-      event.stopPropagation();
-      setValidated(true);
-      return;
+    try {
+      // Delete the client
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/client/${clientToDelete.NAS_client}`);
+
+      // Remove client from both local lists
+      setClients(clients.filter(client => client.NAS_client !== clientToDelete.NAS_client));
+      setClientsWithDetails(clientsWithDetails.filter(client => client.NAS_client !== clientToDelete.NAS_client));
+
+      alert("Client supprimé avec succès!");
+      setShowDeleteModal(false);
+    } catch (err) {
+      setError("Erreur lors de la suppression: " + (err.response?.data?.error || err.message));
+      setShowDeleteModal(false);
     }
-
-    // In a real app, this is where you would update the client data
-    alert("Client mis à jour avec succès!");
-    setShowClientModal(false);
   };
 
-  // Handle client deletion
-  const handleDeleteClient = () => {
-    // In a real app, this is where you would delete the client
-    alert("Client supprimé avec succès!");
-    setShowDeleteModal(false);
+  // Format date for display
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('fr-CA');
   };
 
   return (
@@ -123,7 +118,7 @@ const ManageClient = () => {
       <ManagerNavbar />
       <Container className="py-4">
         {/* Clients Section */}
-        <Row className="mb-4">
+        <Row className="mb-2">
           <Col>
             <h3 className="text-primary">Liste des Clients</h3>
           </Col>
@@ -136,223 +131,134 @@ const ManageClient = () => {
             </Col>
           </Row>
         )}
-
         <Row>
           <Col>
             <Card>
               <Card.Body>
-                <Table responsive striped hover>
-                  <thead>
-                    <tr>
-                      <th>NAS</th>
-                      <th>Prénom</th>
-                      <th>Nom</th>
-                      <th>Adresse</th>
-                      <th>Courriel</th>
-                      <th>Date d'enregistrement</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {clients.map((client) => (
-                      <tr key={client.NAS_client}>
-                        <td>{client.NAS_client}</td>
-                        <td>{client.prenom_client}</td>
-                        <td>{client.nom_client}</td>
-                        <td>{`${client.rue}, ${client.ville}, ${client.code_postal}`}</td>
-                        <td>{client.courriel_client}</td>
-                        <td>{new Date(client.date_enregistrement).toLocaleDateString('fr-CA')}</td>
-                        <td>
-                          <Button
-                            variant="primary"
-                            size="sm"
-                            className="me-3"
-                            onClick={() => openEditClientModal(client)}
-                          >
-                            Modifier
-                          </Button>
-                          <Button
-                            variant="danger"
-                            size="sm"
-                            onClick={() => openDeleteModal(client)}
-                          >
-                            Supprimer
-                          </Button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
+                {loading ? (
+                  <p>Chargement des données...</p>
+                ) : (
+                  <Table responsive striped hover>
+                    <tbody>
+                      {clientsWithDetails.length > 0 ? (
+                        clientsWithDetails.map((client) => (
+                          <React.Fragment key={client.NAS_client}>
+                            {/* Row 1: Client Information */}
+                            <tr className="bg-light">
+                              <td colSpan="6">
+                                <div className="d-flex justify-content-between align-items-center">
+                                  <strong>Client: {client.prenom_client} {client.nom_client} (NAS: {client.NAS_client})</strong>
+                                  <Button
+                                    variant="danger"
+                                    size="sm"
+                                    onClick={() => openDeleteModal(client)}
+                                  >
+                                    Supprimer
+                                  </Button>
+                                </div>
+                                <div>
+                                  <small>
+                                    <strong>Adresse:</strong> {`${client.rue}, ${client.ville}, ${client.code_postal}`} |
+                                    <strong> Courriel:</strong> {client.courriel_client} |
+                                    <strong> Date d'enregistrement:</strong> {formatDate(client.date_enregistrement)}
+                                  </small>
+                                </div>
+                              </td>
+                            </tr>
+                            
+                            {/* Row 2: Reservations */}
+                            <tr>
+                              <td colSpan="6">
+                                <div className="px-2">
+                                  <h6 className="mb-2 text-primary ">Réservations</h6>
+                                  {client.reservations && client.reservations.length > 0 ? (
+                                    <Table responsive borderless size="sm" className="mb-2">
+                                      <thead>
+                                        <tr className="text-muted">
+                                          <th>ID Réservation</th>
+                                          <th>Date de début</th>
+                                          <th>Date de fin</th>
+                                          <th>ID Chambre</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {client.reservations.map(reservation => (
+                                          <tr key={reservation.reservation_id}>
+                                            <td>{reservation.reservation_id}</td>
+                                            <td>{formatDate(reservation.debut_date_reservation)}</td>
+                                            <td>{formatDate(reservation.fin_date_reservation)}</td>
+                                            <td>{reservation.chambre_id}</td>
+                                          </tr>
+                                        ))}
+                                      </tbody>
+                                    </Table>
+                                  ) : (
+                                    <p className="text-muted small">Aucune réservation pour ce client</p>
+                                  )}
+                                </div>
+                              </td>
+                            </tr>
+                            
+                            {/* Row 3: Locations/Stays */}
+                            <tr>
+                              <td colSpan="6">
+                                <div className="px-2 mb-4">
+                                  <h6 className="mb-2 text-primary ">Séjours</h6>
+                                  {client.locations && client.locations.length > 0 ? (
+                                    <Table responsive borderless size="sm">
+                                      <thead>
+                                        <tr className="text-muted">
+                                          <th>ID Location</th>
+                                          <th>Date de début</th>
+                                          <th>Date de fin</th>
+                                          <th>Montant</th>
+                                          <th>ID Chambre</th>
+                                          <th>ID Réservation</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {client.locations.map(location => (
+                                          <tr key={location.location_id}>
+                                            <td>{location.location_id}</td>
+                                            <td>{formatDate(location.debut_date_location)}</td>
+                                            <td>{formatDate(location.fin_date_location)}</td>
+                                            <td>{location.montant} €</td>
+                                            <td>{location.chambre_id}</td>
+                                            <td>{location.reservation_id || 'N/A'}</td>
+                                          </tr>
+                                        ))}
+                                      </tbody>
+                                    </Table>
+                                  ) : (
+                                    <p className="text-muted small">Aucun séjour pour ce client</p>
+                                  )}
+                                </div>
+                              </td>
+                            </tr>
+                            
+                            {/* Separator between clients */}
+                            <tr>
+                              <td colSpan="6" className="p-0">
+                                <hr className="my-0" />
+                              </td>
+                            </tr>
+                          </React.Fragment>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="6" className="text-center">
+                            Aucun client trouvé pour cet hôtel
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </Table>
+                )}
               </Card.Body>
             </Card>
           </Col>
         </Row>
       </Container>
-
-      {/* Client Form Modal */}
-      <Modal
-        show={showClientModal}
-        onHide={() => setShowClientModal(false)}
-        size="lg"
-      >
-        <Modal.Header closeButton>
-          <Modal.Title className="text-primary">
-            Modifier un Client
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {error && <div className="alert alert-danger">{error}</div>}
-
-          <Form noValidate validated={validated} onSubmit={handleSubmit}>
-            <Row className="mb-3">
-              <Form.Group as={Col} md="12" controlId="validationNAS">
-                <Form.Label>NAS Client</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="NAS"
-                  name="NAS_client"
-                  value={formData.NAS_client}
-                  readOnly={true}
-                />
-              </Form.Group>
-            </Row>
-
-            <Row className="mb-3">
-              <Form.Group as={Col} md="6" controlId="validationFirstName">
-                <Form.Label>Prénom</Form.Label>
-                <Form.Control
-                  required
-                  type="text"
-                  placeholder="Prénom"
-                  name="prenom_client"
-                  value={formData.prenom_client}
-                  onChange={handleChange}
-                />
-                <Form.Control.Feedback type="invalid">
-                  Svp entrez le prénom.
-                </Form.Control.Feedback>
-              </Form.Group>
-
-              <Form.Group as={Col} md="6" controlId="validationLastName">
-                <Form.Label>Nom</Form.Label>
-                <Form.Control
-                  required
-                  type="text"
-                  placeholder="Nom"
-                  name="nom_client"
-                  value={formData.nom_client}
-                  onChange={handleChange}
-                />
-                <Form.Control.Feedback type="invalid">
-                  Svp entrez le nom.
-                </Form.Control.Feedback>
-              </Form.Group>
-            </Row>
-
-            <Row className="mb-3">
-              <Form.Group as={Col} md="12" controlId="validationAddress">
-                <Form.Label>Rue</Form.Label>
-                <Form.Control
-                  required
-                  type="text"
-                  placeholder="Rue"
-                  name="rue"
-                  value={formData.rue}
-                  onChange={handleChange}
-                />
-                <Form.Control.Feedback type="invalid">
-                  Svp entrez la rue.
-                </Form.Control.Feedback>
-              </Form.Group>
-            </Row>
-
-            <Row className="mb-3">
-              <Form.Group as={Col} md="6" controlId="validationCity">
-                <Form.Label>Ville</Form.Label>
-                <Form.Control
-                  required
-                  type="text"
-                  placeholder="Ville"
-                  name="ville"
-                  value={formData.ville}
-                  onChange={handleChange}
-                />
-                <Form.Control.Feedback type="invalid">
-                  Svp entrez la ville.
-                </Form.Control.Feedback>
-              </Form.Group>
-
-              <Form.Group as={Col} md="6" controlId="validationPostalCode">
-                <Form.Label>Code Postal</Form.Label>
-                <Form.Control
-                  required
-                  type="text"
-                  placeholder="Code Postal"
-                  name="code_postal"
-                  pattern="[A-Za-z][0-9][A-Za-z][0-9][A-Za-z][0-9]"
-                  value={formData.code_postal}
-                  onChange={handleChange}
-                />
-                <Form.Control.Feedback type="invalid">
-                  Svp entrez un code postal valide (6 caractères sans espace).
-                </Form.Control.Feedback>
-              </Form.Group>
-            </Row>
-
-            <Row className="mb-3">
-              <Form.Group as={Col} md="6" controlId="validationEmail">
-                <Form.Label>Courriel</Form.Label>
-                <Form.Control
-                  required
-                  type="email"
-                  placeholder="Courriel"
-                  name="courriel_client"
-                  value={formData.courriel_client}
-                  onChange={handleChange}
-                />
-                <Form.Control.Feedback type="invalid">
-                  Svp entrez un courriel valide.
-                </Form.Control.Feedback>
-              </Form.Group>
-
-              <Form.Group as={Col} md="6" controlId="validationDate">
-                <Form.Label>Date d'enregistrement</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="date_enregistrement"
-                  value={new Date(formData.date_enregistrement).toLocaleDateString('fr-CA')}
-                  readOnly={true}
-                  disabled={true}
-                />
-                <Form.Text className="text-muted">
-                  La date d'enregistrement ne peut pas être modifiée.
-                </Form.Text>
-              </Form.Group>
-            </Row>
-
-            <Row className="mb-3">
-              <Form.Group as={Col} md="12" controlId="validationPassword">
-                <Form.Label>
-                  Nouveau Mot de Passe (laisser vide pour garder l'actuel)
-                </Form.Label>
-                <Form.Control
-                  type="password"
-                  placeholder="Mot de Passe"
-                  name="motpasse_client"
-                  value={formData.motpasse_client}
-                  onChange={handleChange}
-                />
-              </Form.Group>
-            </Row>
-
-            <div className="d-flex justify-content-end">
-              <Button type="submit" variant="primary">
-                Mettre à jour
-              </Button>
-            </div>
-          </Form>
-        </Modal.Body>
-      </Modal>
 
       {/* Delete Confirmation Modal */}
       <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
@@ -379,6 +285,5 @@ const ManageClient = () => {
     </div>
   );
 };
-
 
 export default ManageClient;
