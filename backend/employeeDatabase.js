@@ -46,7 +46,7 @@ export const validateEmployeeLogin = async (req, res) => {
 };
 
 // fonction - employé annule reservation
-export const deleteEmployeReservation = async (req, res) => {
+export const deleteEmployeeReservation = async (req, res) => {
     try {
         const { reservation_ID } = req.params; 
         // annulation
