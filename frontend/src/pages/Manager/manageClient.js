@@ -222,7 +222,7 @@ const ManageClient = () => {
                                             <td>{location.location_id}</td>
                                             <td>{formatDate(location.debut_date_location)}</td>
                                             <td>{formatDate(location.fin_date_location)}</td>
-                                            <td>{location.montant} €</td>
+                                            <td>$ {location.montant}</td>
                                             <td>{location.chambre_id}</td>
                                             <td>{location.reservation_id || 'N/A'}</td>
                                           </tr>

@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import { insertClient, validateClientLogin,getClientProfileByEmail, deleteClientByNAS, updateClientByNAS} from './clientDatabase.js';
 import { validateEmployeeLogin } from './employeeDatabase.js';
-import { getEmployeesByHotelId, insertEmployee, updateEmployee, deleteEmployee, getClientsByHotelId, getClientReservations, getClientLocations, getHotelById} from './managerDatabase.js';
+import { getEmployeesByHotelId, insertEmployee, updateEmployee, deleteEmployee, getClientsByHotelId, getClientReservations, getClientLocations, getHotelById, getChambresByHotelId, insertChambre, getChambreStatus, deleteChambre, updateChambre} from './managerDatabase.js';
 import env from 'dotenv';
 env.config(); 
 const app = express();
@@ -31,6 +31,11 @@ app.get('/api/clients/:hotelId', getClientsByHotelId);
 app.get('/api/client/:nasClient/reservations', getClientReservations);
 app.get('/api/client/:nasClient/locations', getClientLocations);
 app.get('/api/hotel/:hotelId', getHotelById);
+app.get('/api/chambres/:hotelId', getChambresByHotelId);
+app.get('/api/chambre/:chambreId/status', getChambreStatus);
+app.post('/api/chambre', insertChambre);
+app.put('/api/chambre/:chambreId', updateChambre);
+app.delete('/api/chambre/:chambreId', deleteChambre);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
