@@ -151,3 +151,21 @@ export const getClientLocations = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
+// Fonction pour obtenir les informations d'un hôtel spécifique
+export const getHotelById = async (req, res) => {
+    try {
+        const { hotelId } = req.params;
+        const hotel = await pool.query(
+            "SELECT * FROM Hotel WHERE hotel_ID = $1",
+            [hotelId]
+        );
+        if (hotel.rows.length === 0) {
+            return res.status(404).json({ error: "Hôtel non trouvé" });
+        }
+        res.json(hotel.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ error: err.message });
+    }
+};
