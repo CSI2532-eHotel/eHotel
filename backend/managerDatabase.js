@@ -46,7 +46,7 @@ export const insertEmployee = async (req, res) => {
     }
 };
 
-//fonction pour meettre à jour un employé
+//fonction pour mettre à jour un employé
 export const updateEmployee = async (req, res) => {
     try {
         const { nas } = req.params;
@@ -86,6 +86,66 @@ export const deleteEmployee = async (req, res) => {
             return res.status(404).json({ error: "Employé non trouvé" });
         }
         res.json({ message: "Employé supprimé avec succès" });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ error: err.message });
+    }
+};
+
+// Fonction pour obtenir tous les clients d'un hôtel spécifique
+export const getClientsByHotelId = async (req, res) => {
+    try {
+        const { hotelId } = req.params;
+
+        // Cette requête cherche les clients qui ont des réservations ou des locations dans l'hôtel où le gestionnaire travaille
+        const clients = await pool.query(
+            `SELECT DISTINCT c.* 
+             FROM Client c
+             LEFT JOIN Reservation r ON c.NAS_client = r.NAS_client
+             LEFT JOIN Chambre ch ON r.chambre_ID = ch.chambre_ID
+             LEFT JOIN Location l ON c.NAS_client = l.NAS_client
+             LEFT JOIN Chambre ch2 ON l.chambre_ID = ch2.chambre_ID
+             WHERE ch.hotel_ID = $1 OR ch2.hotel_ID = $1`,
+            [hotelId]
+        );
+        // Exclure les mots de passe de la réponse
+        const clientsWithoutPasswords = clients.rows.map(client => {
+            const { motpasse_client, ...clientWithoutPassword } = client;
+            return clientWithoutPassword;
+        });
+
+        res.json(clientsWithoutPasswords);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ error: err.message });
+    }
+};
+
+// Fonction pour obtenir les réservations d'un client
+export const getClientReservations = async (req, res) => {
+    try {
+        const { nasClient } = req.params;
+        const reservations = await pool.query(
+            "SELECT * FROM Reservation WHERE NAS_client = $1 ORDER BY debut_date_reservation DESC",
+            [nasClient]
+        );
+
+        res.json(reservations.rows);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ error: err.message });
+    }
+};
+
+// Fonction pour obtenir les locations d'un client
+export const getClientLocations = async (req, res) => {
+    try {
+        const { nasClient } = req.params;
+        const locations = await pool.query(
+            "SELECT * FROM Location WHERE NAS_client = $1 ORDER BY debut_date_location DESC",
+            [nasClient]
+        );
+        res.json(locations.rows);
     } catch (err) {
         console.error(err.message);
         res.status(500).json({ error: err.message });

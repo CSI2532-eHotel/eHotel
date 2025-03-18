@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Button, Card, Col, Container, Form, Nav, Navbar, Row, Modal, Table, } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import ManagerNavbar from "../../components/managerNavbar";
 
@@ -17,6 +16,7 @@ const ManageEmployee = () => {
   const [showEmployeeModal, setShowEmployeeModal] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [validated, setValidated] = useState(false);
+  const [modalError, setModalError] = useState("");
 
   // Données du formulaire employé
   const [formData, setFormData] = useState({
@@ -125,6 +125,9 @@ const ManageEmployee = () => {
     event.preventDefault();
     const form = event.currentTarget;
 
+    // Réinitialiser l'erreur du modal
+    setModalError("");
+
     // Validation du formulaire
     if (form.checkValidity() === false) {
       event.stopPropagation();
@@ -132,16 +135,25 @@ const ManageEmployee = () => {
       return;
     }
 
-    // Validation des mots de passe
-    if (formData.motpasse_employee !== formData.confirm_password) {
-      setError("Les mots de passe ne correspondent pas.");
-      return;
+    // Vérification du mot de passe seulement pour les nouveaux employés ou si un mot de passe est fourni
+    if (!isEditing || (formData.motpasse_employee && formData.motpasse_employee.length > 0)) {
+      if (formData.motpasse_employee !== formData.confirm_password) {
+        setModalError("Les mots de passe ne correspondent pas.");
+        return;
+      }
     }
 
     try {
       if (isEditing) {
+        // Créer un objet sans mot de passe si le champ est vide
+        const updateData = { ...formData };
+        if (!updateData.motpasse_employee) {
+          delete updateData.motpasse_employee;
+          delete updateData.confirm_password;
+        }
+
         // Mise à jour d'un employé existant
-        await axios.put(`${process.env.REACT_APP_API_URL}/api/employee/${formData.NAS_employe}`, formData);
+        await axios.put(`${process.env.REACT_APP_API_URL}/api/employee/${formData.NAS_employe}`, updateData);
         // Mettre à jour l'employé dans la liste locale
         setEmployees(employees.map(emp =>
           emp.NAS_employe === formData.NAS_employe ? { ...formData } : emp
@@ -158,13 +170,12 @@ const ManageEmployee = () => {
         };
         // Ajouter le nouvel employé à la liste locale
         setEmployees([...employees, newEmployee]);
-
         alert("Employé ajouté avec succès!");
       }
 
       setShowEmployeeModal(false);
     } catch (err) {
-      setError("Erreur lors de l'enregistrement: " + (err.response?.data?.error || err.message));
+      setModalError("Erreur lors de l'enregistrement: " + (err.response?.data?.error || err.message));
     }
   };
 
@@ -285,8 +296,7 @@ const ManageEmployee = () => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {error && <div className="alert alert-danger">{error}</div>}
-
+          {modalError && <div className="alert alert-danger">{modalError}</div>}
           <Form noValidate validated={validated} onSubmit={handleSubmit}>
             <Row className="mb-3">
               <Form.Group as={Col} md="6" controlId="validationNAS">
@@ -442,7 +452,7 @@ const ManageEmployee = () => {
               <Form.Group as={Col} md="6" controlId="validationPassword">
                 <Form.Label>Mot de passe</Form.Label>
                 <Form.Control
-                  required={!isEditing}
+                  required
                   type="password"
                   placeholder="Mot de passe"
                   name="motpasse_employee"
@@ -457,7 +467,7 @@ const ManageEmployee = () => {
               <Form.Group as={Col} md="6" controlId="validationConfirmPassword">
                 <Form.Label>Confirmer le mot de passe</Form.Label>
                 <Form.Control
-                  required={!isEditing}
+                  required
                   type="password"
                   placeholder="Confirmer le mot de passe"
                   name="confirm_password"
