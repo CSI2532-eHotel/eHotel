@@ -44,3 +44,32 @@ export const validateEmployeeLogin = async (req, res) => {
       res.status(500).json({ success: false, error: err.message });
   }
 };
+
+// fonction - employé annule reservation
+export const deleteEmployeReservation = async (req, res) => {
+    try {
+        const { reservation_ID } = req.params; 
+        // annulation
+        const deleteQuery = `
+            DELETE FROM Reservation
+            WHERE reservation_ID = $1
+            RETURNING reservation_ID;
+        `;
+        
+        const deletedReservation = await pool.query(deleteQuery, [reservation_ID]);
+        // Confirmer la suppression
+        if (deletedReservation.rows.length === 0) {
+            return res.status(404).json({
+                error: "Réservation introuvable."
+            });
+        }
+        
+        res.status(200).json({
+            message: "Réservation annulée par l'employé.",
+            id: deletedReservation.rows[0].reservation_ID
+        });
+    } catch (err) {
+        console.error('Erreur lors de la suppression :', err.message);
+        res.status(500).json({ error: err.message });
+    }
+};
