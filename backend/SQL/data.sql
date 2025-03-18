@@ -4,7 +4,7 @@ VALUES
     (1, 'Marriott International', '10400 Fernwood Road', 'Bethesda', 'A1A1A0', 8, 'hq@marriott-hotels.com', '1111111110'),
     (2, 'Hyatt Hotels Corporation', '7930 Jones Branch Drive', 'McLean', 'B2B2B0', 8, 'hq@hyatt-hotels.com', '2222222220'),
     (3, 'Hilton Hotels & Resorts', '150 N Riverside Plaza', 'Chicago', 'C3C3C0', 8, 'hq@hilton-hotels.com', '3333333330'),
-	(4, 'InterContinental Hotels Group (IHG)', '3 Ravinia Drive', 'Atlanta', 'D4D4D0', 8, 'hq@intercontinental-hotels.com', '4444444440'),
+    (4, 'InterContinental Hotels Group (IHG)', '3 Ravinia Drive', 'Atlanta', 'D4D4D0', 8, 'hq@intercontinental-hotels.com', '4444444440'),
     (5, 'Wyndham Hotels & Resorts', '22 Sylvan Way', 'Parsippany', 'E5E5E0', 8, 'hq@wyndham-hotels.com', '5555555550');
 
 ---------------------------------------------------------------------------------------------------------------
@@ -16,7 +16,7 @@ VALUES
     (12, 'Marriott Los Angeles', '333 South Figueroa Street', 'Los Angeles', 'A1A1A2', 5, 'la@marriott-hotels.com', '1111111112', 4, 1),
     (13, 'Marriott Miami', '4200 Collins Avenue', 'Miami', 'A1A1A3', 5, 'miami@marriott-hotels.com', '1111111113', 3, 1),
     (14, 'Marriott Chicago', '540 North Michigan Avenue', 'Chicago', 'A1A1A4', 5, 'chicago@marriott-hotels.com', '1111111114', 5, 1),
-	(15, 'Marriott Toronto', '525 Bay Street', 'Toronto', 'A1A1A5', 5, 'toronto@marriott-hotels.com', '1111111115', 3, 1),
+    (15, 'Marriott Toronto', '525 Bay Street', 'Toronto', 'A1A1A5', 5, 'toronto@marriott-hotels.com', '1111111115', 3, 1),
     (16, 'Marriott Vancouver', '1128 West Hastings Street', 'Vancouver', 'A1A1A6', 5, 'vancouver@marriott-hotels.com', '1111111116', 2, 1),
     (17, 'Marriott Montreal', '1050 de la Gauchetiere West', 'Montreal', 'A1A1A7', 5, 'montreal@marriott-hotels.com', '1111111117', 4, 1),
     (18, 'Marriott Quebec City', '850 Place d Youville', 'Quebec City', 'A1A1A8', 5, 'qc@marriott-hotels.com', '1111111118', 1, 1);
