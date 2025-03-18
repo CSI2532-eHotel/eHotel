@@ -417,7 +417,7 @@ INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage,
 VALUES
 (561, 50, 'TV + fridge', 'simple', 'non', 'oui', 'montagne', 56),
 (562, 100, 'TV + fridge', 'double', 'non', 'oui', 'montagne', 56),
-(563, 125, 'TV + fridge + sofa', 'double', 'oui', 'no', 'mer', 56),
+(563, 125, 'TV + fridge + sofa', 'double', 'oui', 'non', 'mer', 56),
 (564, 200, 'TV + fridge', 'famille', 'non' 'non', 'mer', 56),
 (565, 225, 'TV + fridge + sofa', 'famille', 'oui', 'non', 'mer', 56);
 
