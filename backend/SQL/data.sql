@@ -4,7 +4,7 @@ VALUES
     (1, 'Marriott International', '10400 Fernwood Road', 'Bethesda', 'A1A1A0', 8, 'hq@marriott-hotels.com', '1111111110'),
     (2, 'Hyatt Hotels Corporation', '7930 Jones Branch Drive', 'McLean', 'B2B2B0', 8, 'hq@hyatt-hotels.com', '2222222220'),
     (3, 'Hilton Hotels & Resorts', '150 N Riverside Plaza', 'Chicago', 'C3C3C0', 8, 'hq@hilton-hotels.com', '3333333330'),
-	(4, 'InterContinental Hotels Group (IHG)', '3 Ravinia Drive', 'Atlanta', 'D4D4D0', 8, 'hq@intercontinental-hotels.com', '4444444440'),
+    (4, 'InterContinental Hotels Group (IHG)', '3 Ravinia Drive', 'Atlanta', 'D4D4D0', 8, 'hq@intercontinental-hotels.com', '4444444440'),
     (5, 'Wyndham Hotels & Resorts', '22 Sylvan Way', 'Parsippany', 'E5E5E0', 8, 'hq@wyndham-hotels.com', '5555555550');
 
 ---------------------------------------------------------------------------------------------------------------
@@ -16,7 +16,7 @@ VALUES
     (12, 'Marriott Los Angeles', '333 South Figueroa Street', 'Los Angeles', 'A1A1A2', 5, 'la@marriott-hotels.com', '1111111112', 4, 1),
     (13, 'Marriott Miami', '4200 Collins Avenue', 'Miami', 'A1A1A3', 5, 'miami@marriott-hotels.com', '1111111113', 3, 1),
     (14, 'Marriott Chicago', '540 North Michigan Avenue', 'Chicago', 'A1A1A4', 5, 'chicago@marriott-hotels.com', '1111111114', 5, 1),
-	(15, 'Marriott Toronto', '525 Bay Street', 'Toronto', 'A1A1A5', 5, 'toronto@marriott-hotels.com', '1111111115', 3, 1),
+    (15, 'Marriott Toronto', '525 Bay Street', 'Toronto', 'A1A1A5', 5, 'toronto@marriott-hotels.com', '1111111115', 3, 1),
     (16, 'Marriott Vancouver', '1128 West Hastings Street', 'Vancouver', 'A1A1A6', 5, 'vancouver@marriott-hotels.com', '1111111116', 2, 1),
     (17, 'Marriott Montreal', '1050 de la Gauchetiere West', 'Montreal', 'A1A1A7', 5, 'montreal@marriott-hotels.com', '1111111117', 4, 1),
     (18, 'Marriott Quebec City', '850 Place d Youville', 'Quebec City', 'A1A1A8', 5, 'qc@marriott-hotels.com', '1111111118', 1, 1);
@@ -74,370 +74,370 @@ VALUES
 -- insertion: chambres 11 - Marriott Downtown NYC
 INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
 VALUES
-(111, 150, 'TV + fridge', 'simple', 'no', 'no', 'mer', 11),
-(112, 200, 'TV + fridge', 'double', 'no', 'yes', 'montagne', 11),
-(113, 225, 'TV + fridge + sofa', 'double', 'yes', 'no', 'mer', 11),
-(114, 300, 'TV + fridge', 'famille', 'no', 'yes', 'montagne', 11),
-(115, 325, 'TV + fridge + sofa', 'famille', 'yes', 'no', 'montagne', 11);
+(111, 150, 'TV + fridge', 'simple', 'non', 'non', 'mer', 11),
+(112, 200, 'TV + fridge', 'double', 'non', 'oui', 'montagne', 11),
+(113, 225, 'TV + fridge + sofa', 'double', 'oui', 'non', 'mer', 11),
+(114, 300, 'TV + fridge', 'famille', 'non', 'oui', 'montagne', 11),
+(115, 325, 'TV + fridge + sofa', 'famille', 'oui', 'non', 'montagne', 11);
 
 -- insertion: chambres 12 - Marriott Los Angeles
 INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
 VALUES
-(121, 125, 'TV + fridge', 'simple', 'no', 'yes', 'mer', 12),
-(122, 175, 'TV + fridge', 'double', 'no', 'yes', 'montagne', 12),
-(123, 200, 'TV + fridge + sofa', 'double', 'yes', 'no', 'mer', 12),
-(124, 275, 'TV + fridge', 'famille', 'no', 'yes', 'mer', 12),
-(125, 300, 'TV + fridge + sofa', 'famille', 'yes', 'no', 'montagne', 12);
+(121, 125, 'TV + fridge', 'simple', 'non', 'oui', 'mer', 12),
+(122, 175, 'TV + fridge', 'double', 'non', 'oui', 'montagne', 12),
+(123, 200, 'TV + fridge + sofa', 'double', 'oui', 'non', 'mer', 12),
+(124, 275, 'TV + fridge', 'famille', 'non', 'oui', 'mer', 12),
+(125, 300, 'TV + fridge + sofa', 'famille', 'oui', 'non', 'montagne', 12);
 
 -- insertion: chambres 13 - Marriott Miami
 INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
 VALUES
-(131, 100, 'TV + fridge', 'simple', 'no', 'no', 'montagne', 13),
-(132, 150, 'TV + fridge', 'double', 'no', 'no', 'montagne', 13),
-(133, 175, 'TV + fridge + sofa', 'double', 'yes', 'no', 'mer', 13),
-(134, 250, 'TV + fridge', 'famille', 'no', 'yes', 'mer', 13),
-(135, 275, 'TV + fridge + sofa', 'famille', 'yes', 'no', 'mer', 13);
+(131, 100, 'TV + fridge', 'simple', 'non', 'non', 'montagne', 13),
+(132, 150, 'TV + fridge', 'double', 'non', 'non', 'montagne', 13),
+(133, 175, 'TV + fridge + sofa', 'double', 'oui', 'non', 'mer', 13),
+(134, 250, 'TV + fridge', 'famille', 'non', 'oui', 'mer', 13),
+(135, 275, 'TV + fridge + sofa', 'famille', 'oui', 'non', 'mer', 13);
 
 -- insertion: chambres 14 - Marriott Chicago
 INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
 VALUES
-(141, 150, 'TV + fridge', 'simple', 'no', 'no', 'mer', 14),
-(142, 200, 'TV + fridge', 'double', 'no', 'no', 'montagne', 14),
-(143, 225, 'TV + fridge + sofa', 'double', 'yes', 'yes', 'montagne', 14),
-(144, 300, 'TV + fridge', 'famille', 'no', 'yes', 'mer', 14),
-(145, 325, 'TV + fridge + sofa', 'famille', 'yes', 'no', 'montagne', 14);
+(141, 150, 'TV + fridge', 'simple', 'non', 'non', 'mer', 14),
+(142, 200, 'TV + fridge', 'double', 'non', 'non', 'montagne', 14),
+(143, 225, 'TV + fridge + sofa', 'double', 'oui', 'oui', 'montagne', 14),
+(144, 300, 'TV + fridge', 'famille', 'non', 'oui', 'mer', 14),
+(145, 325, 'TV + fridge + sofa', 'famille', 'oui', 'non', 'montagne', 14);
 
 -- insertion: chambres 15 - Marriott Toronto
 INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
 VALUES
-(151, 100, 'TV + fridge', 'simple', 'no', 'no', 'mer', 15),
-(152, 150, 'TV + fridge', 'double', 'no', 'yes', 'mer', 15),
-(153, 175, 'TV + fridge + sofa', 'double', 'yes', 'no', 'mer', 15),
-(154, 250, 'TV + fridge', 'famille', 'no', 'no', 'montagne', 15),
-(155, 275, 'TV + fridge + sofa', 'famille', 'yes', 'yes', 'montagne', 15);
+(151, 100, 'TV + fridge', 'simple', 'non', 'non', 'mer', 15),
+(152, 150, 'TV + fridge', 'double', 'non', 'oui', 'mer', 15),
+(153, 175, 'TV + fridge + sofa', 'double', 'oui', 'non', 'mer', 15),
+(154, 250, 'TV + fridge', 'famille', 'non', 'non', 'montagne', 15),
+(155, 275, 'TV + fridge + sofa', 'famille', 'oui', 'oui', 'montagne', 15);
 
 -- insertion: chambres 16 - Marriott Vancouver
 INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
 VALUES
-(161, 75, 'TV + fridge', 'simple', 'no', 'yes', 'montagne', 16),
-(162, 125, 'TV + fridge', 'double', 'no', 'yes', 'montagne', 16),
-(163, 150, 'TV + fridge + sofa', 'double', 'yes', 'no', 'mer', 16),
-(164, 225, 'TV + fridge', 'famille', 'no', 'no', 'mer', 16),
-(165, 250, 'TV + fridge + sofa', 'famille', 'yes', 'no', 'mer', 16);
+(161, 75, 'TV + fridge', 'simple', 'non', 'oui', 'montagne', 16),
+(162, 125, 'TV + fridge', 'double', 'non', 'oui', 'montagne', 16),
+(163, 150, 'TV + fridge + sofa', 'double', 'oui', 'non', 'mer', 16),
+(164, 225, 'TV + fridge', 'famille', 'non', 'non', 'mer', 16),
+(165, 250, 'TV + fridge + sofa', 'famille', 'oui', 'non', 'mer', 16);
 
 -- insertion: chambres 17 - Marriott Montreal
 INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
 VALUES
-(171, 125, 'TV + fridge', 'simple', 'no', 'no', 'mer', 17),
-(172, 175, 'TV + fridge', 'double', 'no', 'yes', 'mer', 17),
-(173, 200, 'TV + fridge + sofa', 'double', 'yes', 'no', 'montagne', 17),
-(174, 275, 'TV + fridge', 'famille', 'no', 'yes', 'mer', 17),
-(175, 300, 'TV + fridge + sofa', 'famille', 'yes', 'no', 'montagne', 17);
+(171, 125, 'TV + fridge', 'simple', 'non', 'non', 'mer', 17),
+(172, 175, 'TV + fridge', 'double', 'non', 'oui', 'mer', 17),
+(173, 200, 'TV + fridge + sofa', 'double', 'oui', 'non', 'montagne', 17),
+(174, 275, 'TV + fridge', 'famille', 'non', 'oui', 'mer', 17),
+(175, 300, 'TV + fridge + sofa', 'famille', 'oui', 'non', 'montagne', 17);
 
 -- insertion: chambres 18 - Marriott Quebec City
 INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
 VALUES
-(181, 50, 'TV + fridge', 'simple', 'no', 'no', 'mer', 18),
-(182, 100, 'TV + fridge', 'double', 'no', 'no', 'montagne', 18),
-(183, 125, 'TV + fridge + sofa', 'double', 'yes', 'no', 'montagne', 18),
-(184, 200, 'TV + fridge', 'famille', 'no', 'yes', 'mer', 18),
-(185, 225, 'TV + fridge + sofa', 'famille', 'yes', 'no', 'mer', 18);
+(181, 50, 'TV + fridge', 'simple', 'non', 'non', 'mer', 18),
+(182, 100, 'TV + fridge', 'double', 'non', 'non', 'montagne', 18),
+(183, 125, 'TV + fridge + sofa', 'double', 'oui', 'non', 'montagne', 18),
+(184, 200, 'TV + fridge', 'famille', 'non', 'oui', 'mer', 18),
+(185, 225, 'TV + fridge + sofa', 'famille', 'oui', 'non', 'mer', 18);
 
 ---------------------------------------------------------------------------------------------------------------
 
 -- insertion: chambres 21 - Hyatt Regency NYC
 INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
 VALUES
-(211, 150, 'TV + fridge', 'simple', 'no', 'yes', 'montagne', 21),
-(212, 200, 'TV + fridge', 'double', 'no', 'yes', 'montagne', 21),
-(213, 225, 'TV + fridge + sofa', 'double', 'yes', 'no', 'mer', 21),
-(214, 300, 'TV + fridge', 'famille', 'no', 'no', 'mer', 21),
-(215, 325, 'TV + fridge + sofa', 'famille', 'yes', 'no', 'mer', 21);
+(211, 150, 'TV + fridge', 'simple', 'non', 'oui', 'montagne', 21),
+(212, 200, 'TV + fridge', 'double', 'non', 'oui', 'montagne', 21),
+(213, 225, 'TV + fridge + sofa', 'double', 'oui', 'non', 'mer', 21),
+(214, 300, 'TV + fridge', 'famille', 'non', 'non', 'mer', 21),
+(215, 325, 'TV + fridge + sofa', 'famille', 'oui', 'non', 'mer', 21);
 
 -- insertion: chambres 22 - Hyatt Miami Beach
 INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
 VALUES
-(221, 125, 'TV + fridge', 'simple', 'no', 'no', 'mer', 22),
-(222, 175, 'TV + fridge', 'double', 'no', 'yes', 'montagne', 22),
-(223, 200, 'TV + fridge + sofa', 'double', 'yes', 'no', 'mer', 22),
-(224, 275, 'TV + fridge', 'famille', 'no', 'yes', 'mer', 22),
-(225, 300, 'TV + fridge + sofa', 'famille', 'yes', 'no', 'montagne', 22);
+(221, 125, 'TV + fridge', 'simple', 'non', 'non', 'mer', 22),
+(222, 175, 'TV + fridge', 'double', 'non', 'oui', 'montagne', 22),
+(223, 200, 'TV + fridge + sofa', 'double', 'oui', 'non', 'mer', 22),
+(224, 275, 'TV + fridge', 'famille', 'non', 'oui', 'mer', 22),
+(225, 300, 'TV + fridge + sofa', 'famille', 'oui', 'non', 'montagne', 22);
 
 -- insertion: chambres 23 - Hyatt Place Chicago
 INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
 VALUES
-(231, 75, 'TV + fridge', 'simple', 'no', 'no', 'mer', 23),
-(232, 125, 'TV + fridge', 'double', 'no', 'yes', 'mer', 23),
-(233, 150, 'TV + fridge + sofa', 'double', 'yes', 'no', 'mer', 23),
-(234, 225, 'TV + fridge', 'famille', 'no', 'no', 'montagne', 23),
-(235, 250, 'TV + fridge + sofa', 'famille', 'yes', 'yes', 'montagne', 23);
+(231, 75, 'TV + fridge', 'simple', 'non', 'non', 'mer', 23),
+(232, 125, 'TV + fridge', 'double', 'non', 'oui', 'mer', 23),
+(233, 150, 'TV + fridge + sofa', 'double', 'oui', 'non', 'mer', 23),
+(234, 225, 'TV + fridge', 'famille', 'non', 'non', 'montagne', 23),
+(235, 250, 'TV + fridge + sofa', 'famille', 'oui', 'oui', 'montagne', 23);
 
 -- insertion: chambres 24 - Hyatt Dallas Downtown
 INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
 VALUES
-(241, 50, 'TV + fridge', 'simple', 'no', 'no', 'mer', 24),
-(242, 100, 'TV + fridge', 'double', 'no', 'no', 'montagne', 24),
-(243, 125, 'TV + fridge + sofa', 'double', 'yes', 'no', 'montagne', 24),
-(244, 200, 'TV + fridge', 'famille', 'no', 'yes', 'mer', 24),
-(245, 225, 'TV + fridge + sofa', 'famille', 'yes', 'yes', 'montagne', 24);
+(241, 50, 'TV + fridge', 'simple', 'non', 'non', 'mer', 24),
+(242, 100, 'TV + fridge', 'double', 'non', 'non', 'montagne', 24),
+(243, 125, 'TV + fridge + sofa', 'double', 'oui', 'non', 'montagne', 24),
+(244, 200, 'TV + fridge', 'famille', 'non', 'oui', 'mer', 24),
+(245, 225, 'TV + fridge + sofa', 'famille', 'oui', 'oui', 'montagne', 24);
 
 -- insertion: chambres 25 - Hyatt Los Angeles
 INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
 VALUES
-(251, 150, 'TV + fridge', 'simple', 'no', 'no', 'mer', 25),
-(252, 200, 'TV + fridge', 'double', 'no', 'yes', 'mer', 25),
-(253, 225, 'TV + fridge + sofa', 'double', 'yes', 'no', 'montagne', 25),
-(254, 300, 'TV + fridge', 'famille', 'no', 'yes', 'mer', 25),
-(255, 325, 'TV + fridge + sofa', 'famille', 'yes', 'no', 'montagne', 25);
+(251, 150, 'TV + fridge', 'simple', 'non', 'non', 'mer', 25),
+(252, 200, 'TV + fridge', 'double', 'non', 'oui', 'mer', 25),
+(253, 225, 'TV + fridge + sofa', 'double', 'oui', 'non', 'montagne', 25),
+(254, 300, 'TV + fridge', 'famille', 'non', 'oui', 'mer', 25),
+(255, 325, 'TV + fridge + sofa', 'famille', 'oui', 'non', 'montagne', 25);
 
 -- insertion: chambres 26 - Hyatt Houston
 INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
 VALUES
-(261, 100, 'TV + fridge', 'simple', 'no', 'no', 'mer', 26),
-(262, 150, 'TV + fridge', 'double', 'no', 'no', 'montagne', 26),
-(263, 175, 'TV + fridge + sofa', 'double', 'yes', 'yes', 'montagne', 26),
-(264, 250, 'TV + fridge', 'famille', 'no', 'yes', 'mer', 26),
-(265, 275, 'TV + fridge + sofa', 'famille', 'yes', 'no', 'montagne', 26);
+(261, 100, 'TV + fridge', 'simple', 'non', 'non', 'mer', 26),
+(262, 150, 'TV + fridge', 'double', 'non', 'non', 'montagne', 26),
+(263, 175, 'TV + fridge + sofa', 'double', 'oui', 'oui', 'montagne', 26),
+(264, 250, 'TV + fridge', 'famille', 'non', 'oui', 'mer', 26),
+(265, 275, 'TV + fridge + sofa', 'famille', 'oui', 'non', 'montagne', 26);
 
 -- insertion: chambres 27 - Hyatt Toronto
 INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
 VALUES
-(271, 125, 'TV + fridge', 'simple', 'no', 'yes', 'mer', 27),
-(272, 175, 'TV + fridge', 'double', 'no', 'yes', 'montagne', 27),
-(273, 200, 'TV + fridge + sofa', 'double', 'yes', 'no', 'mer', 27),
-(274, 275, 'TV + fridge', 'famille', 'no', 'yes', 'mer', 27),
-(275, 300, 'TV + fridge + sofa', 'famille', 'yes', 'no', 'montagne', 27);
+(271, 125, 'TV + fridge', 'simple', 'non', 'oui', 'mer', 27),
+(272, 175, 'TV + fridge', 'double', 'non', 'oui', 'montagne', 27),
+(273, 200, 'TV + fridge + sofa', 'double', 'oui', 'non', 'mer', 27),
+(274, 275, 'TV + fridge', 'famille', 'non', 'oui', 'mer', 27),
+(275, 300, 'TV + fridge + sofa', 'famille', 'oui', 'non', 'montagne', 27);
 
 -- insertion: chambres 28 - Hyatt Vancouver
 INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
 VALUES
-(281, 50, 'TV + fridge', 'simple', 'no', 'no', 'montagne', 28),
-(282, 100, 'TV + fridge', 'double', 'no', 'no', 'montagne', 28),
-(283, 125, 'TV + fridge + sofa', 'double', 'yes', 'no', 'mer', 28),
-(284, 200, 'TV + fridge', 'famille', 'no', 'yes', 'mer', 28),
-(285, 225, 'TV + fridge + sofa', 'famille', 'yes', 'no', 'mer', 28);
+(281, 50, 'TV + fridge', 'simple', 'non', 'non', 'montagne', 28),
+(282, 100, 'TV + fridge', 'double', 'non', 'non', 'montagne', 28),
+(283, 125, 'TV + fridge + sofa', 'double', 'oui', 'non', 'mer', 28),
+(284, 200, 'TV + fridge', 'famille', 'non', 'oui', 'mer', 28),
+(285, 225, 'TV + fridge + sofa', 'famille', 'oui', 'non', 'mer', 28);
 
 ---------------------------------------------------------------------------------------------------------------
 
 -- insertion: chambres 31 - Hilton NYC Central
 INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
 VALUES
-(311, 150, 'TV + fridge', 'simple', 'no', 'no', 'mer', 31),
-(312, 200, 'TV + fridge', 'double', 'no', 'yes', 'mer', 31),
-(313, 225, 'TV + fridge + sofa', 'double', 'yes', 'no', 'montagne', 31),
-(314, 300, 'TV + fridge', 'famille', 'no', 'yes', 'mer', 31),
-(315, 325, 'TV + fridge + sofa', 'famille', 'yes', 'no', 'montagne', 31);
+(311, 150, 'TV + fridge', 'simple', 'non', 'non', 'mer', 31),
+(312, 200, 'TV + fridge', 'double', 'non', 'oui', 'mer', 31),
+(313, 225, 'TV + fridge + sofa', 'double', 'oui', 'non', 'montagne', 31),
+(314, 300, 'TV + fridge', 'famille', 'non', 'oui', 'mer', 31),
+(315, 325, 'TV + fridge + sofa', 'famille', 'oui', 'non', 'montagne', 31);
 
 -- insertion: chambres 32 - Hilton Miami South Beach
 INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
 VALUES
-(321, 100, 'TV + fridge', 'simple', 'no', 'yes', 'mer', 32),
-(322, 150, 'TV + fridge', 'double', 'no', 'yes', 'montagne', 32),
-(323, 175, 'TV + fridge + sofa', 'double', 'yes', 'no', 'mer', 32),
-(324, 250, 'TV + fridge', 'famille', 'no', 'yes', 'mer', 32),
-(325, 275, 'TV + fridge + sofa', 'famille', 'yes', 'no', 'montagne', 32);
+(321, 100, 'TV + fridge', 'simple', 'non', 'oui', 'mer', 32),
+(322, 150, 'TV + fridge', 'double', 'non', 'oui', 'montagne', 32),
+(323, 175, 'TV + fridge + sofa', 'double', 'oui', 'non', 'mer', 32),
+(324, 250, 'TV + fridge', 'famille', 'non', 'oui', 'mer', 32),
+(325, 275, 'TV + fridge + sofa', 'famille', 'oui', 'non', 'montagne', 32);
 
 -- insertion: chambres 33 - Hilton Chicago
 INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
 VALUES
-(331, 50, 'TV + fridge', 'simple', 'no', 'no', 'montagne', 33),
-(332, 100, 'TV + fridge', 'double', 'no', 'no', 'montagne', 33),
-(333, 125, 'TV + fridge + sofa', 'double', 'yes', 'no', 'mer', 33),
-(334, 200, 'TV + fridge', 'famille', 'no', 'yes', 'mer', 33),
-(335, 225, 'TV + fridge + sofa', 'famille', 'yes', 'no', 'mer', 33);
+(331, 50, 'TV + fridge', 'simple', 'non', 'non', 'montagne', 33),
+(332, 100, 'TV + fridge', 'double', 'non', 'non', 'montagne', 33),
+(333, 125, 'TV + fridge + sofa', 'double', 'oui', 'non', 'mer', 33),
+(334, 200, 'TV + fridge', 'famille', 'non', 'oui', 'mer', 33),
+(335, 225, 'TV + fridge + sofa', 'famille', 'oui', 'non', 'mer', 33);
 
 -- insertion: chambres 34 - Hilton Dallas
 INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
 VALUES
-(341, 125, 'TV + fridge', 'simple', 'no', 'yes', 'montagne', 34),
-(342, 175, 'TV + fridge', 'double', 'no', 'yes', 'montagne', 34),
-(343, 200, 'TV + fridge + sofa', 'double', 'yes', 'no', 'mer', 34),
-(344, 275, 'TV + fridge', 'famille', 'no', 'no', 'mer', 34),
-(345, 300, 'TV + fridge + sofa', 'famille', 'yes', 'no', 'mer', 34);
+(341, 125, 'TV + fridge', 'simple', 'non', 'oui', 'montagne', 34),
+(342, 175, 'TV + fridge', 'double', 'non', 'oui', 'montagne', 34),
+(343, 200, 'TV + fridge + sofa', 'double', 'oui', 'non', 'mer', 34),
+(344, 275, 'TV + fridge', 'famille', 'non', 'non', 'mer', 34),
+(345, 300, 'TV + fridge + sofa', 'famille', 'oui', 'non', 'mer', 34);
 
 -- insertion: chambres 35 - Hilton Los Angeles
 INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
 VALUES
-(351, 75, 'TV + fridge', 'simple', 'no', 'no', 'mer', 35),
-(352, 125, 'TV + fridge', 'double', 'no', 'no', 'montagne', 35),
-(353, 150, 'TV + fridge + sofa', 'double', 'yes', 'yes', 'montagne', 35),
-(354, 225, 'TV + fridge', 'famille', 'no', 'yes', 'mer', 35),
-(355, 250, 'TV + fridge + sofa', 'famille', 'yes', 'no', 'montagne', 35);
+(351, 75, 'TV + fridge', 'simple', 'non', 'non', 'mer', 35),
+(352, 125, 'TV + fridge', 'double', 'non', 'non', 'montagne', 35),
+(353, 150, 'TV + fridge + sofa', 'double', 'oui', 'oui', 'montagne', 35),
+(354, 225, 'TV + fridge', 'famille', 'non', 'oui', 'mer', 35),
+(355, 250, 'TV + fridge + sofa', 'famille', 'oui', 'non', 'montagne', 35);
 
 -- insertion: chambres 36 - Hilton Houston
 INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
 VALUES
-(361, 50, 'TV + fridge', 'simple', 'no', 'no', 'mer', 36),
-(362, 100, 'TV + fridge', 'double', 'no', 'yes', 'montagne', 36),
-(363, 125, 'TV + fridge + sofa', 'double', 'yes', 'no', 'mer', 36),
-(364, 200, 'TV + fridge', 'famille', 'no', 'yes', 'montagne', 36),
-(365, 225, 'TV + fridge + sofa', 'famille', 'yes', 'no', 'montagne', 36);
+(361, 50, 'TV + fridge', 'simple', 'non', 'non', 'mer', 36),
+(362, 100, 'TV + fridge', 'double', 'non', 'oui', 'montagne', 36),
+(363, 125, 'TV + fridge + sofa', 'double', 'oui', 'non', 'mer', 36),
+(364, 200, 'TV + fridge', 'famille', 'non', 'oui', 'montagne', 36),
+(365, 225, 'TV + fridge + sofa', 'famille', 'oui', 'non', 'montagne', 36);
 
 -- insertion: chambres 37 - Hilton Toronto
 INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
 VALUES
-(371, 150, 'TV + fridge', 'simple', 'no', 'no', 'mer', 37),
-(372, 200, 'TV + fridge', 'double', 'no', 'no', 'montagne', 37),
-(373, 225, 'TV + fridge + sofa', 'double', 'yes', 'no', 'montagne', 37),
-(374, 300, 'TV + fridge', 'famille', 'no', 'yes', 'mer', 37),
-(375, 325, 'TV + fridge + sofa', 'famille', 'yes', 'yes', 'montagne', 37);
+(371, 150, 'TV + fridge', 'simple', 'non', 'non', 'mer', 37),
+(372, 200, 'TV + fridge', 'double', 'non', 'non', 'montagne', 37),
+(373, 225, 'TV + fridge + sofa', 'double', 'oui', 'non', 'montagne', 37),
+(374, 300, 'TV + fridge', 'famille', 'non', 'oui', 'mer', 37),
+(375, 325, 'TV + fridge + sofa', 'famille', 'oui', 'oui', 'montagne', 37);
 
 -- insertion: chambres 38 - Hilton Vancouver
 INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
 VALUES
-(381, 100, 'TV + fridge', 'simple', 'no', 'no', 'mer', 38),
-(382, 150, 'TV + fridge', 'double', 'no', 'no', 'montagne', 38),
-(383, 175, 'TV + fridge + sofa', 'double', 'yes', 'no', 'montagne', 38),
-(384, 250, 'TV + fridge', 'famille', 'no', 'yes', 'mer', 38),
-(385, 275, 'TV + fridge + sofa', 'famille', 'yes', 'yes', 'montagne', 38);
+(381, 100, 'TV + fridge', 'simple', 'non', 'non', 'mer', 38),
+(382, 150, 'TV + fridge', 'double', 'non', 'non', 'montagne', 38),
+(383, 175, 'TV + fridge + sofa', 'double', 'oui', 'non', 'montagne', 38),
+(384, 250, 'TV + fridge', 'famille', 'non', 'oui', 'mer', 38),
+(385, 275, 'TV + fridge + sofa', 'famille', 'oui', 'oui', 'montagne', 38);
 
 ---------------------------------------------------------------------------------------------------------------
 
 -- insertion: chambres 41 - InterContinental New York
 INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
 VALUES
-(411, 150, 'TV + fridge', 'simple', 'no', 'no', 'mer', 41),
-(412, 200, 'TV + fridge', 'double', 'no', 'no', 'montagne', 41),
-(413, 225, 'TV + fridge + sofa', 'double', 'yes', 'no', 'montagne', 41),
-(414, 300, 'TV + fridge', 'famille', 'no', 'yes', 'mer', 41),
-(415, 325, 'TV + fridge + sofa', 'famille', 'yes', 'yes', 'montagne', 41);
+(411, 150, 'TV + fridge', 'simple', 'non', 'non', 'mer', 41),
+(412, 200, 'TV + fridge', 'double', 'non', 'non', 'montagne', 41),
+(413, 225, 'TV + fridge + sofa', 'double', 'oui', 'non', 'montagne', 41),
+(414, 300, 'TV + fridge', 'famille', 'non', 'oui', 'mer', 41),
+(415, 325, 'TV + fridge + sofa', 'famille', 'oui', 'oui', 'montagne', 41);
 
 -- insertion: chambres 42 - InterContinental Miami
 INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
 VALUES
-(421, 150, 'TV + fridge', 'simple', 'no', 'no', 'mer', 42),
-(422, 200, 'TV + fridge', 'double', 'no', 'no', 'montagne', 42),
-(423, 225, 'TV + fridge + sofa', 'double', 'yes', 'yes', 'montagne', 42),
-(424, 300, 'TV + fridge', 'famille', 'no', 'yes', 'mer', 42),
-(425, 325, 'TV + fridge + sofa', 'famille', 'yes', 'no', 'montagne', 42);
+(421, 150, 'TV + fridge', 'simple', 'non', 'non', 'mer', 42),
+(422, 200, 'TV + fridge', 'double', 'non', 'non', 'montagne', 42),
+(423, 225, 'TV + fridge + sofa', 'double', 'oui', 'oui', 'montagne', 42),
+(424, 300, 'TV + fridge', 'famille', 'non', 'oui', 'mer', 42),
+(425, 325, 'TV + fridge + sofa', 'famille', 'oui', 'non', 'montagne', 42);
 
 -- insertion: chambres 43 - Holiday Inn Chicago
 INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
 VALUES
-(431, 50, 'TV + fridge', 'simple', 'no', 'no', 'mer', 43),
-(432, 100, 'TV + fridge', 'double', 'no', 'yes', 'mer', 43),
-(433, 125, 'TV + fridge + sofa', 'double', 'yes', 'no', 'montagne', 43),
-(434, 200, 'TV + fridge', 'famille', 'no', 'yes', 'mer', 43),
-(435, 225, 'TV + fridge + sofa', 'famille', 'yes', 'no', 'montagne', 43);
+(431, 50, 'TV + fridge', 'simple', 'non', 'non', 'mer', 43),
+(432, 100, 'TV + fridge', 'double', 'non', 'oui', 'mer', 43),
+(433, 125, 'TV + fridge + sofa', 'double', 'oui', 'non', 'montagne', 43),
+(434, 200, 'TV + fridge', 'famille', 'non', 'oui', 'mer', 43),
+(435, 225, 'TV + fridge + sofa', 'famille', 'oui', 'non', 'montagne', 43);
 
 -- insertion: chambres 44 - Crowne Plaza Dallas
 INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
 VALUES
-(441, 75, 'TV + fridge', 'simple', 'no', 'no', 'mer', 44),
-(442, 125, 'TV + fridge', 'double', 'no', 'yes', 'montagne', 44),
-(443, 150, 'TV + fridge + sofa', 'double', 'yes', 'no', 'mer', 44),
-(444, 225, 'TV + fridge', 'famille', 'no', 'yes', 'montagne', 44),
-(445, 250, 'TV + fridge + sofa', 'famille', 'yes', 'no', 'montagne', 44);
+(441, 75, 'TV + fridge', 'simple', 'non', 'non', 'mer', 44),
+(442, 125, 'TV + fridge', 'double', 'non', 'oui', 'montagne', 44),
+(443, 150, 'TV + fridge + sofa', 'double', 'oui', 'non', 'mer', 44),
+(444, 225, 'TV + fridge', 'famille', 'non', 'oui', 'montagne', 44),
+(445, 250, 'TV + fridge + sofa', 'famille', 'oui', 'non', 'montagne', 44);
 
 -- insertion: chambres 45 - Hotel Indigo Los Angeles
 INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
 VALUES
-(451, 125, 'TV + fridge', 'simple', 'no', 'no', 'mer', 45),
-(452, 175, 'TV + fridge', 'double', 'no', 'yes', 'mer', 45),
-(453, 200, 'TV + fridge + sofa', 'double', 'yes', 'no', 'mer', 45),
-(454, 275, 'TV + fridge', 'famille', 'no', 'no', 'montagne', 45),
-(455, 300, 'TV + fridge + sofa', 'famille', 'yes', 'yes', 'montagne', 45);
+(451, 125, 'TV + fridge', 'simple', 'non', 'non', 'mer', 45),
+(452, 175, 'TV + fridge', 'double', 'non', 'oui', 'mer', 45),
+(453, 200, 'TV + fridge + sofa', 'double', 'oui', 'non', 'mer', 45),
+(454, 275, 'TV + fridge', 'famille', 'non', 'non', 'montagne', 45),
+(455, 300, 'TV + fridge + sofa', 'famille', 'oui', 'oui', 'montagne', 45);
 
 -- insertion: chambres 46 - Holiday Inn Express Houston
 INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
 VALUES
-(461, 75, 'TV + fridge', 'simple', 'no', 'yes', 'montagne', 46),
-(462, 125, 'TV + fridge', 'double', 'no', 'yes', 'montagne', 46),
-(463, 150, 'TV + fridge + sofa', 'double', 'yes', 'no', 'mer', 46),
-(464, 225, 'TV + fridge', 'famille', 'no', 'yes', 'mer', 46),
-(465, 250, 'TV + fridge + sofa', 'famille', 'yes', 'no', 'mer', 46);
+(461, 75, 'TV + fridge', 'simple', 'non', 'oui', 'montagne', 46),
+(462, 125, 'TV + fridge', 'double', 'non', 'oui', 'montagne', 46),
+(463, 150, 'TV + fridge + sofa', 'double', 'oui', 'non', 'mer', 46),
+(464, 225, 'TV + fridge', 'famille', 'non', 'oui', 'mer', 46),
+(465, 250, 'TV + fridge + sofa', 'famille', 'oui', 'non', 'mer', 46);
 
 -- insertion: chambres 47 - InterContinental Toronto
 INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
 VALUES
-(471, 100, 'TV + fridge', 'simple', 'no', 'no', 'mer', 47),
-(472, 150, 'TV + fridge', 'double', 'no', 'yes', 'mer', 47),
-(473, 175, 'TV + fridge + sofa', 'double', 'yes', 'no', 'mer', 47),
-(474, 250, 'TV + fridge', 'famille', 'no', 'yes', 'montagne', 47),
-(475, 275, 'TV + fridge + sofa', 'famille', 'yes', 'yes', 'montagne', 47);
+(471, 100, 'TV + fridge', 'simple', 'non', 'non', 'mer', 47),
+(472, 150, 'TV + fridge', 'double', 'non', 'oui', 'mer', 47),
+(473, 175, 'TV + fridge + sofa', 'double', 'oui', 'non', 'mer', 47),
+(474, 250, 'TV + fridge', 'famille', 'non', 'oui', 'montagne', 47),
+(475, 275, 'TV + fridge + sofa', 'famille', 'oui', 'oui', 'montagne', 47);
 
 -- insertion: chambres 48 - InterContinental Vancouver
 INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
 VALUES
-(481, 150, 'TV + fridge', 'simple', 'no', 'no', 'mer', 48),
-(482, 200, 'TV + fridge', 'double', 'no', 'no', 'montagne', 48),
-(483, 225, 'TV + fridge + sofa', 'double', 'yes', 'no', 'montagne', 48),
-(484, 300, 'TV + fridge', 'famille', 'no', 'yes', 'mer', 48),
-(485, 325, 'TV + fridge + sofa', 'famille', 'yes', 'yes', 'montagne', 48);
+(481, 150, 'TV + fridge', 'simple', 'non', 'non', 'mer', 48),
+(482, 200, 'TV + fridge', 'double', 'non', 'non', 'montagne', 48),
+(483, 225, 'TV + fridge + sofa', 'double', 'oui', 'non', 'montagne', 48),
+(484, 300, 'TV + fridge', 'famille', 'non', 'oui', 'mer', 48),
+(485, 325, 'TV + fridge + sofa', 'famille', 'oui', 'oui', 'montagne', 48);
 
 ---------------------------------------------------------------------------------------------------------------
 
 -- insertion: chambres 51 - Wyndham Grand New York
 INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
 VALUES
-(511, 150, 'TV + fridge', 'simple', 'no', 'yes', 'mer', 51),
-(512, 200, 'TV + fridge', 'double', 'no', 'yes', 'montagne', 51),
-(513, 225, 'TV + fridge + sofa', 'double', 'yes', 'no', 'mer', 51),
-(514, 300, 'TV + fridge', 'famille', 'no', 'yes', 'mer', 51),
-(515, 325, 'TV + fridge + sofa', 'famille', 'yes', 'no', 'montagne', 51);
+(511, 150, 'TV + fridge', 'simple', 'non', 'oui', 'mer', 51),
+(512, 200, 'TV + fridge', 'double', 'non', 'oui', 'montagne', 51),
+(513, 225, 'TV + fridge + sofa', 'double', 'oui', 'non', 'mer', 51),
+(514, 300, 'TV + fridge', 'famille', 'non', 'oui', 'mer', 51),
+(515, 325, 'TV + fridge + sofa', 'famille', 'oui', 'non', 'montagne', 51);
 
 -- insertion: chambres 52 - Wyndham Miami Beach
 INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
 VALUES
-(521, 50, 'TV + fridge', 'simple', 'no', 'no', 'mer', 52),
-(522, 100, 'TV + fridge', 'double', 'no', 'yes', 'mer', 52),
-(523, 125, 'TV + fridge + sofa', 'double', 'yes', 'no', 'mer', 52),
-(524, 200, 'TV + fridge', 'famille', 'no', 'no', 'montagne', 52),
-(525, 225, 'TV + fridge + sofa', 'famille', 'yes', 'yes', 'montagne', 52);
+(521, 50, 'TV + fridge', 'simple', 'non', 'non', 'mer', 52),
+(522, 100, 'TV + fridge', 'double', 'non', 'oui', 'mer', 52),
+(523, 125, 'TV + fridge + sofa', 'double', 'oui', 'non', 'mer', 52),
+(524, 200, 'TV + fridge', 'famille', 'non', 'non', 'montagne', 52),
+(525, 225, 'TV + fridge + sofa', 'famille', 'oui', 'oui', 'montagne', 52);
 
 -- insertion: chambres 53 - Wyndham Chicago
 INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
 VALUES
-(531, 125, 'TV + fridge', 'simple', 'no', 'no', 'mer', 53),
-(532, 175, 'TV + fridge', 'double', 'no', 'no', 'montagne', 53),
-(533, 200, 'TV + fridge + sofa', 'double', 'yes', 'yes', 'montagne', 53),
-(534, 275, 'TV + fridge', 'famille', 'no', 'yes', 'mer', 53),
-(535, 300, 'TV + fridge + sofa', 'famille', 'yes', 'no', 'montagne', 53);
+(531, 125, 'TV + fridge', 'simple', 'non', 'non', 'mer', 53),
+(532, 175, 'TV + fridge', 'double', 'non', 'non', 'montagne', 53),
+(533, 200, 'TV + fridge + sofa', 'double', 'oui', 'oui', 'montagne', 53),
+(534, 275, 'TV + fridge', 'famille', 'non', 'oui', 'mer', 53),
+(535, 300, 'TV + fridge + sofa', 'famille', 'oui', 'non', 'montagne', 53);
 
 -- insertion: chambres 54 - Wyndham Dallas
 INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
 VALUES
-(541, 75, 'TV + fridge', 'simple', 'no', 'no', 'mer', 54),
-(542, 125, 'TV + fridge', 'double', 'no', 'no', 'montagne', 54),
-(543, 150, 'TV + fridge + sofa', 'double', 'yes', 'yes', 'montagne', 54),
-(544, 225, 'TV + fridge', 'famille', 'no', 'yes', 'mer', 54),
-(545, 250, 'TV + fridge + sofa', 'famille', 'yes', 'no', 'montagne', 54);
+(541, 75, 'TV + fridge', 'simple', 'non', 'non', 'mer', 54),
+(542, 125, 'TV + fridge', 'double', 'non', 'non', 'montagne', 54),
+(543, 150, 'TV + fridge + sofa', 'double', 'oui', 'oui', 'montagne', 54),
+(544, 225, 'TV + fridge', 'famille', 'non', 'oui', 'mer', 54),
+(545, 250, 'TV + fridge + sofa', 'famille', 'oui', 'non', 'montagne', 54);
 
 -- insertion: chambres 55 - Wyndham Los Angeles
 INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
 VALUES
-(551, 100, 'TV + fridge', 'simple', 'no', 'no', 'mer', 55),
-(552, 150, 'TV + fridge', 'double', 'no', 'no', 'montagne', 55),
-(553, 175, 'TV + fridge + sofa', 'double', 'yes', 'no', 'montagne', 55),
-(554, 250, 'TV + fridge', 'famille', 'no', 'yes', 'mer', 55),
-(555, 275, 'TV + fridge + sofa', 'famille', 'yes', 'yes', 'montagne', 55);
+(551, 100, 'TV + fridge', 'simple', 'non', 'non', 'mer', 55),
+(552, 150, 'TV + fridge', 'double', 'non', 'non', 'montagne', 55),
+(553, 175, 'TV + fridge + sofa', 'double', 'oui', 'non', 'montagne', 55),
+(554, 250, 'TV + fridge', 'famille', 'non', 'oui', 'mer', 55),
+(555, 275, 'TV + fridge + sofa', 'famille', 'oui', 'oui', 'montagne', 55);
 
 -- insertion: chambres 56 - Wyndham Houston
 INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
 VALUES
-(561, 50, 'TV + fridge', 'simple', 'no', 'yes', 'montagne', 56),
-(562, 100, 'TV + fridge', 'double', 'no', 'yes', 'montagne', 56),
-(563, 125, 'TV + fridge + sofa', 'double', 'yes', 'no', 'mer', 56),
-(564, 200, 'TV + fridge', 'famille', 'no', 'no', 'mer', 56),
-(565, 225, 'TV + fridge + sofa', 'famille', 'yes', 'no', 'mer', 56);
+(561, 50, 'TV + fridge', 'simple', 'non', 'oui', 'montagne', 56),
+(562, 100, 'TV + fridge', 'double', 'non', 'oui', 'montagne', 56),
+(563, 125, 'TV + fridge + sofa', 'double', 'oui', 'non', 'mer', 56),
+(564, 200, 'TV + fridge', 'famille', 'non' 'non', 'mer', 56),
+(565, 225, 'TV + fridge + sofa', 'famille', 'oui', 'non', 'mer', 56);
 
 -- insertion: chambres 57 - Wyndham Toronto
 INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
 VALUES
-(571, 125, 'TV + fridge', 'simple', 'no', 'no', 'mer', 57),
-(572, 175, 'TV + fridge', 'double', 'no', 'yes', 'montagne', 57),
-(573, 200, 'TV + fridge + sofa', 'double', 'yes', 'no', 'mer', 57),
-(574, 275, 'TV + fridge', 'famille', 'no', 'yes', 'montagne', 57),
-(575, 300, 'TV + fridge + sofa', 'famille', 'yes', 'no', 'montagne', 57);
+(571, 125, 'TV + fridge', 'simple', 'non', 'non', 'mer', 57),
+(572, 175, 'TV + fridge', 'double', 'non', 'oui', 'montagne', 57),
+(573, 200, 'TV + fridge + sofa', 'double', 'oui', 'non', 'mer', 57),
+(574, 275, 'TV + fridge', 'famille', 'non', 'oui', 'montagne', 57),
+(575, 300, 'TV + fridge + sofa', 'famille', 'oui', 'non', 'montagne', 57);
 
 -- insertion: chambres 58 - Wyndham Vancouver
 INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
 VALUES
-(581, 150, 'TV + fridge', 'simple', 'no', 'no', 'mer', 58),
-(582, 200, 'TV + fridge', 'double', 'no', 'yes', 'mer', 58),
-(583, 225, 'TV + fridge + sofa', 'double', 'yes', 'no', 'montagne', 58),
-(584, 300, 'TV + fridge', 'famille', 'no', 'yes', 'mer', 58),
-(585, 325, 'TV + fridge + sofa', 'famille', 'yes', 'no', 'montagne', 58);
+(581, 150, 'TV + fridge', 'simple', 'non', 'non', 'mer', 58),
+(582, 200, 'TV + fridge', 'double', 'non', 'oui', 'mer', 58),
+(583, 225, 'TV + fridge + sofa', 'double', 'oui', 'non', 'montagne', 58),
+(584, 300, 'TV + fridge', 'famille', 'non', 'oui', 'mer', 58),
+(585, 325, 'TV + fridge + sofa', 'famille', 'oui', 'non', 'montagne', 58);
 
 ---------------------------------------------------------------------------------------------------------------
 
