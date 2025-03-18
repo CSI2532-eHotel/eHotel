@@ -121,32 +121,68 @@ const ManageEmployee = () => {
   };
 
   // Gérer la soumission du formulaire (créer/mettre à jour l'employé)
+  // Gérer la soumission du formulaire (créer/mettre à jour l'employé)
   const handleSubmit = async (event) => {
     event.preventDefault();
     const form = event.currentTarget;
+    setValidated(true);
 
     // Validation du formulaire
     if (form.checkValidity() === false) {
       event.stopPropagation();
-      setValidated(true);
       return;
     }
 
-    // Validation des mots de passe
+    // Définir tous les champs obligatoires, y compris les mots de passe
+    const requiredFields = [
+      'NAS_employe', 'hotel_ID', 'nom_employe', 'prenom_employe',
+      'rue', 'ville', 'code_postal', 'role', 'courriel_employee',
+      'motpasse_employee', 'confirm_password'  // Toujours obligatoires
+    ];
+
+    // Vérifier si des champs obligatoires sont vides
+    const emptyFields = requiredFields.filter(field => !formData[field] || formData[field].trim() === '');
+
+    if (emptyFields.length > 0) {
+      setError(`Veuillez remplir tous les champs obligatoires: ${emptyFields.join(', ')}`);
+      return;
+    }
+
+    // Validation des mots de passe (toujours obligatoire)
     if (formData.motpasse_employee !== formData.confirm_password) {
       setError("Les mots de passe ne correspondent pas.");
       return;
     }
 
+    // Validation du format NAS (9 chiffres)
+    if (!/^\d{9}$/.test(formData.NAS_employe)) {
+      setError("Le NAS doit contenir exactement 9 chiffres.");
+      return;
+    }
+
+    // Validation du code postal canadien (format A1A1A1)
+    if (!/^[A-Za-z]\d[A-Za-z]\d[A-Za-z]\d$/.test(formData.code_postal)) {
+      setError("Le code postal doit être au format A1A1A1.");
+      return;
+    }
+
+    // Validation de l'adresse email
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.courriel_employee)) {
+      setError("Veuillez entrer une adresse email valide.");
+      return;
+    }
+
     try {
       if (isEditing) {
-        // Mise à jour d'un employé existant
-        await axios.put(`${process.env.REACT_APP_API_URL}/api/employee/${formData.NAS_employe}`, formData);
+        // Préparation des données pour la mise à jour (exclure confirm_password)
+        const updateData = { ...formData };
+        delete updateData.confirm_password;
+        // Mise à jour d'un employé existant (avec mot de passe obligatoire)
+        await axios.put(`${process.env.REACT_APP_API_URL}/api/employee/${formData.NAS_employe}`, updateData);
         // Mettre à jour l'employé dans la liste locale
         setEmployees(employees.map(emp =>
           emp.NAS_employe === formData.NAS_employe ? { ...formData } : emp
         ));
-
         alert("Employé mis à jour avec succès!");
       } else {
         // Création d'un nouvel employé
@@ -158,16 +194,17 @@ const ManageEmployee = () => {
         };
         // Ajouter le nouvel employé à la liste locale
         setEmployees([...employees, newEmployee]);
-
         alert("Employé ajouté avec succès!");
       }
 
+      // Réinitialiser le formulaire et fermer le modal
       setShowEmployeeModal(false);
+      setError("");
+      setValidated(false);
     } catch (err) {
       setError("Erreur lors de l'enregistrement: " + (err.response?.data?.error || err.message));
     }
   };
-
   // Gérer la suppression d'un employé
   const handleDeleteEmployee = async () => {
     if (!employeeToDelete) return;
@@ -442,7 +479,7 @@ const ManageEmployee = () => {
               <Form.Group as={Col} md="6" controlId="validationPassword">
                 <Form.Label>Mot de passe</Form.Label>
                 <Form.Control
-                  required={!isEditing}
+                  required
                   type="password"
                   placeholder="Mot de passe"
                   name="motpasse_employee"
@@ -457,7 +494,7 @@ const ManageEmployee = () => {
               <Form.Group as={Col} md="6" controlId="validationConfirmPassword">
                 <Form.Label>Confirmer le mot de passe</Form.Label>
                 <Form.Control
-                  required={!isEditing}
+                  required
                   type="password"
                   placeholder="Confirmer le mot de passe"
                   name="confirm_password"
