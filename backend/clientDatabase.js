@@ -83,6 +83,7 @@ export const deleteClientByNAS = async (req, res) => {
         res.status(500).json({ error: "Erreur lors de la suppression du compte" });
     }
 };
+
 //fonction pour mettre à jour les informations d'un client par son NAS
 export const updateClientByNAS = async (req, res) => {
     const { nas } = req.params;
@@ -105,39 +106,9 @@ export const updateClientByNAS = async (req, res) => {
     }
 };
 
-// fonction - client annule reservation
-export const deleteClientReservation = async (req, res) => {
-    try {
-        const { reservation_ID } = req.params; 
-
-        // annulation
-        const deleteQuery = `
-            DELETE FROM Reservation
-            WHERE reservation_ID = $1
-            RETURNING reservation_ID;
-        `;
-        
-        const deletedReservation = await pool.query(deleteQuery, [reservation_ID]);
-
-        // Ensure the reservation was deleted
-        if (deletedReservation.rows.length === 0) {
-            return res.status(404).json({
-                error: "Réservation introuvable."
-            });
-        }
-        
-        res.status(200).json({
-            message: "Réservation annulée.",
-            id: deletedReservation.rows[0].reservation_ID
-        });
-    } catch (err) {
-        console.error('Erreur lors de la suppression de la réservation:', err.message);
-        res.status(500).json({ error: err.message });
-    }
-};
-
 // fonction pour modifier le profil / personal info
-// pas de NAS - peut pas changer
+// supposer que le client remplit toutes les cases
+// no security for password
 export const updateClientProfile = async (req, res) => {
     try {
         const { NAS_client, nom_client, prenom_client, rue, ville, code_postal, motpasse_client } = req.body;
@@ -146,17 +117,19 @@ export const updateClientProfile = async (req, res) => {
         const updateQuery = `
             UPDATE Client
             SET 
-                nom_client = $1,
-                prenom_client = $2,
-                rue = $3,
-                ville = $4,
-                code_postal = $5,
-                motpasse_client = $6
-            WHERE courriel_client = $7
+                NAS_client = $1,
+                nom_client = $2,
+                prenom_client = $3,
+                rue = $4,
+                ville = $5,
+                code_postal = $6,
+                motpasse_client = $7
+            WHERE courriel_client = $8
             RETURNING *;
         `;
 
         const values = [ 
+            NAS_client,
             nom_client, 
             prenom_client, 
             rue, 
@@ -174,3 +147,35 @@ export const updateClientProfile = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
+// fonction - client annule reservation
+export const deleteClientReservation = async (req, res) => {
+    try {
+        const { reservation_ID } = req.params; 
+
+        // annulation
+        const deleteQuery = `
+            DELETE FROM Reservation
+            WHERE reservation_ID = $1
+            RETURNING reservation_ID;
+        `;
+        
+        const deletedReservation = await pool.query(deleteQuery, [reservation_ID]);
+
+        // Confirmer la suppression
+        if (deletedReservation.rows.length === 0) {
+            return res.status(404).json({
+                error: "Réservation introuvable."
+            });
+        }
+        
+        res.status(200).json({
+            message: "Réservation annulée.",
+            id: deletedReservation.rows[0].reservation_ID
+        });
+    } catch (err) {
+        console.error('Erreur lors de la suppression de la réservation:', err.message);
+        res.status(500).json({ error: err.message });
+    }
+};
+
