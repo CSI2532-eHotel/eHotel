@@ -14,7 +14,9 @@ import {
 } from './clientDatabase.js';
 
 import { 
-    validateEmployeeLogin 
+    validateEmployeeLogin,
+    // D: added for my employee function
+    deleteEmployeReservation
 } from './employeeDatabase.js';
 
 import { 
@@ -48,6 +50,8 @@ app.delete('/api/client/reservation/:reservation_ID', deleteClientReservation);
 
 // =================================route pour employee===========================
 app.post('/api/login/employee', validateEmployeeLogin);
+// D: added for employee function
+app.post('/api/login/employee/:reservation_ID', deleteEmployeReservation);
 
 // =================================route pour manager===========================
 app.get('/api/employees/:hotelId', getEmployeesByHotelId);
