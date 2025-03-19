@@ -269,19 +269,20 @@ const ManageChambre = () => {
                                                             <Button
                                                                 variant="primary"
                                                                 size="sm"
-                                                                className="me-3"
+                                                                className="me-4"
                                                                 onClick={() => openEditChambreModal(chambre)}
                                                             >
                                                                 Modifier
                                                             </Button>
-                                                            <Button
-                                                                variant="danger"
-                                                                size="sm"
-                                                                onClick={() => openDeleteModal(chambre)}
-                                                                disabled={chambre.status !== "disponible"}
-                                                            >
-                                                                Supprimer
-                                                            </Button>
+                                                            {chambre.status === "disponible" && (
+                                                                <Button
+                                                                    variant="danger"
+                                                                    size="sm"
+                                                                    onClick={() => openDeleteModal(chambre)}
+                                                                >
+                                                                    Supprimer
+                                                                </Button>
+                                                            )}
                                                         </td>
                                                     </tr>
                                                 ))
@@ -468,7 +469,7 @@ const ManageChambre = () => {
                 </Modal.Header>
                 <Modal.Body>
                     {modalError && <div className="alert alert-danger">{modalError}</div>}
-                    
+
                     {chambreToDelete && (
                         <p>
                             Êtes-vous sûr de vouloir supprimer la chambre {chambreToDelete.chambre_id} ? Cette action est irréversible.

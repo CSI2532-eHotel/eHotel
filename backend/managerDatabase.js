@@ -36,24 +36,24 @@ export const getEmployeesByHotelId = async (req, res) => {
 //fonction pour inserer un nouveau employé dans l'hotel ou le gestionnaire travaille    
 export const insertEmployee = async (req, res) => {
     try {
-        const { 
-            NAS_employe, 
-            nom_employe, 
-            prenom_employe, 
-            rue, 
-            ville, 
-            code_postal, 
-            role, 
-            courriel_employee, 
-            motpasse_employee, 
-            hotel_ID 
+        const {
+            NAS_employe,
+            nom_employe,
+            prenom_employe,
+            rue,
+            ville,
+            code_postal,
+            role,
+            courriel_employee,
+            motpasse_employee,
+            hotel_ID
         } = req.body;
 
         const newEmployee = await pool.query(
             "INSERT INTO Employe (NAS_employe, nom_employe, prenom_employe, rue, ville, code_postal, role, courriel_employee, motpasse_employee, hotel_ID) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *",
             [NAS_employe, nom_employe, prenom_employe, rue, ville, code_postal, role, courriel_employee, motpasse_employee, hotel_ID]
         );
-        
+
         res.status(201).json(newEmployee.rows[0]);
     } catch (err) {
         console.error(err.message);
@@ -65,15 +65,15 @@ export const insertEmployee = async (req, res) => {
 export const updateEmployee = async (req, res) => {
     try {
         const { nas } = req.params;
-        const { 
-            nom_employe, 
-            prenom_employe, 
-            rue, 
-            ville, 
-            code_postal, 
-            role, 
-            courriel_employee, 
-            motpasse_employee 
+        const {
+            nom_employe,
+            prenom_employe,
+            rue,
+            ville,
+            code_postal,
+            role,
+            courriel_employee,
+            motpasse_employee
         } = req.body;
         const updatedEmployee = await pool.query(
             "UPDATE Employe SET nom_employe = $1, prenom_employe = $2, rue = $3, ville = $4, code_postal = $5, role = $6, courriel_employee = $7, motpasse_employee = $8 WHERE NAS_employe = $9 RETURNING *",
@@ -215,7 +215,7 @@ export const getChambresByHotelId = async (req, res) => {
                 c.chambre_id`,
             [hotelId]
         );
-        
+
         res.json(chambres.rows);
     } catch (err) {
         console.error(err.message);
@@ -235,40 +235,14 @@ export const getChambreStatus = async (req, res) => {
             `,
             [chambreId]
         );
-        
+
         const { is_reserved, is_rented } = statut.rows[0];
         // Une chambre peut être supprimée uniquement si elle n'est ni réservée ni louée
         const can_delete = !is_reserved && !is_rented;
-        res.json({ 
-            can_delete, 
+        res.json({
+            can_delete,
             status: is_rented ? 'loué' : (is_reserved ? 'réservé' : 'disponible')
         });
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).json({ error: err.message });
-    }
-};
-
-// Fonction pour inserer une nouvelle chambre dans l'hôtel ou le manager travaille
-export const insertChambre = async (req, res) => {
-    try {
-        const { 
-            chambre_ID,
-            prix, 
-            commodite, 
-            capacite, 
-            extensible, 
-            dommage, 
-            vue, 
-            hotel_ID 
-        } = req.body;
-        
-        const newChambre = await pool.query(
-            "INSERT INTO Chambre (chambre_id, prix, commodite, capacite, extensible, dommage, vue, hotel_id) VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *",
-            [chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID]
-        );
-        
-        res.status(201).json(newChambre.rows[0]);
     } catch (err) {
         console.error(err.message);
         res.status(500).json({ error: err.message });
@@ -279,15 +253,15 @@ export const insertChambre = async (req, res) => {
 export const updateChambre = async (req, res) => {
     try {
         const { chambreId } = req.params;
-        const { 
-            prix, 
-            commodite, 
-            capacite, 
-            extensible, 
-            dommage, 
-            vue 
+        const {
+            prix,
+            commodite,
+            capacite,
+            extensible,
+            dommage,
+            vue
         } = req.body;
-        
+
         const updatedChambre = await pool.query(
             "UPDATE Chambre SET prix = $1, commodite = $2, capacite = $3, extensible = $4, dommage = $5, vue = $6 WHERE chambre_id = $7 RETURNING *",
             [prix, commodite, capacite, extensible, dommage, vue, chambreId]
@@ -302,11 +276,52 @@ export const updateChambre = async (req, res) => {
     }
 };
 
-// Fonction pour supprimer une chambre
+// Modification de la fonction insertChambre pour mettre à jour nombre_chambre
+export const insertChambre = async (req, res) => {
+    try {
+        const {
+            chambre_ID,
+            prix,
+            commodite,
+            capacite,
+            extensible,
+            dommage,
+            vue,
+            hotel_ID
+        } = req.body;
+
+        // Commencer une transaction
+        await pool.query('BEGIN');
+
+        // Insérer la nouvelle chambre
+        const newChambre = await pool.query(
+            "INSERT INTO Chambre (chambre_id, prix, commodite, capacite, extensible, dommage, vue, hotel_id) VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *",
+            [chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID]
+        );
+
+        // Mettre à jour le nombre de chambres dans l'hôtel
+        await pool.query(
+            "UPDATE Hotel SET nombre_chambre = (SELECT COUNT(*) FROM Chambre WHERE hotel_id = $1) WHERE hotel_ID = $1",
+            [hotel_ID]
+        );
+
+        // Valider la transaction
+        await pool.query('COMMIT');
+
+        res.status(201).json(newChambre.rows[0]);
+    } catch (err) {
+        // Annuler la transaction en cas d'erreur
+        await pool.query('ROLLBACK');
+        console.error(err.message);
+        res.status(500).json({ error: err.message });
+    }
+};
+
+// Modification de la fonction deleteChambre pour mettre à jour nombre_chambre
 export const deleteChambre = async (req, res) => {
     try {
         const { chambreId } = req.params;
-        
+
         // Vérifier d'abord si la chambre est réservée ou louée
         const statut = await pool.query(
             `SELECT 
@@ -315,26 +330,48 @@ export const deleteChambre = async (req, res) => {
             `,
             [chambreId]
         );
-        
+
         const { is_reserved, is_rented } = statut.rows[0];
         if (is_reserved || is_rented) {
-            return res.status(400).json({ 
-                error: "Impossible de supprimer cette chambre car elle est actuellement réservée ou louée" 
+            return res.status(400).json({
+                error: "Impossible de supprimer cette chambre car elle est actuellement réservée ou louée"
             });
         }
-        
-        // Si la chambre n'est ni réservée ni louée, on peut la supprimer
+
+        // Obtenir l'hôtel_id de la chambre
+        const chambreInfo = await pool.query(
+            "SELECT hotel_id FROM Chambre WHERE chambre_id = $1",
+            [chambreId]
+        );
+
+        if (chambreInfo.rows.length === 0) {
+            return res.status(404).json({ error: "Chambre non trouvée" });
+        }
+
+        const hotelId = chambreInfo.rows[0].hotel_id;
+
+        // Commencer une transaction
+        await pool.query('BEGIN');
+
+        // Supprimer la chambre
         const deletedChambre = await pool.query(
             "DELETE FROM Chambre WHERE chambre_id = $1 RETURNING *",
             [chambreId]
         );
-        
-        if (deletedChambre.rows.length === 0) {
-            return res.status(404).json({ error: "Chambre non trouvée" });
-        }
-        
+
+        // Mettre à jour le nombre de chambres dans l'hôtel
+        await pool.query(
+            "UPDATE Hotel SET nombre_chambre = (SELECT COUNT(*) FROM Chambre WHERE hotel_id = $1) WHERE hotel_ID = $1",
+            [hotelId]
+        );
+
+        // Valider la transaction
+        await pool.query('COMMIT');
+
         res.json({ message: "Chambre supprimée avec succès" });
     } catch (err) {
+        // Annuler la transaction en cas d'erreur
+        await pool.query('ROLLBACK');
         console.error(err.message);
         res.status(500).json({ error: err.message });
     }
