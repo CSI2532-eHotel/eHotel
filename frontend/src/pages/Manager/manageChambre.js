@@ -388,8 +388,8 @@ const ManageChambre = () => {
                                     value={formData.extensible}
                                     onChange={handleChange}
                                 >
-                                    <option value="Oui">Oui</option>
-                                    <option value="Non">Non</option>
+                                    <option value="oui">oui</option>
+                                    <option value="non">non</option>
                                 </Form.Select>
                             </Form.Group>
                             <Form.Group as={Col} md="6" controlId="validationVue">
@@ -441,8 +441,8 @@ const ManageChambre = () => {
                                     onChange={handleChange}
                                 >
                                     <option value="">Sélectionner un état</option>
-                                    <option value="Oui">Oui</option>
-                                    <option value="Non">Non</option>
+                                    <option value="oui">oui</option>
+                                    <option value="non">non</option>
                                 </Form.Select>
                                 <Form.Control.Feedback type="invalid">
                                     Veuillez sélectionner l'état de dommage.
