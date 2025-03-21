@@ -23,5 +23,17 @@ VALUES
 INSERT INTO Location (debut_date_location, fin_date_location, transaction_date,montant,  NAS_employe, NAS_client, chambre_ID, reservation_ID)
 VALUES 
 ('2025-03-20', '2025-03-25','2025-03-20', 200, 210000001, 100000004, 218,10001),
-('2025-04-18', '2025-04-08','2025-04-12', 200, 210000001, 100000004, 219,10002),
+('2025-04-18', '2025-04-08','2025-04-12', 200, 210000001, 100000004, 219,10002);
+
+
+--Test data pour la liste de reservations de clients pour employeeHome page
+-- Insertion de clients
+INSERT INTO Client VALUES (220000001, 'Dupont', 'Jean', '789 Boulevard St-Laurent', 'Montréal', 'H2X1Y2', 'jean.dupont@email.com', 'mdp123', '2024-01-15');
+INSERT INTO Client VALUES (220000002, 'Martin', 'Sophie', '567 Rue St-Denis', 'Montréal', 'H2X3H4', 'sophie.martin@email.com', 'mdp456', '2024-02-10');
+
+-- Insertion de réservations
+INSERT INTO Reservation (reservation_id, debut_date_reservation, fin_date_reservation, NAS_client, chambre_ID) 
+VALUES 
+('2025-04-01', '2025-04-05', 220000001, 111),
+('2025-04-10', '2025-04-15', 220000002, 112);
 
