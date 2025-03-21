@@ -3,11 +3,13 @@ import { Button, Card, Col, Container, Form, Row, Modal, Table, Badge } from "re
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ManagerNavbar from "../../components/managerNavbar";
+
 const ManageChambre = () => {
     const navigate = useNavigate();
     const [chambres, setChambres] = useState([]);
     const [error, setError] = useState("");
-    // Suppression de l'état loading
+    const [modalError, setModalError] = useState(""); // Nouvel état pour les erreurs du modal
+    const [loading, setLoading] = useState(true);
 
     // État pour les modals
     const [showChambreModal, setShowChambreModal] = useState(false);
@@ -17,17 +19,8 @@ const ManageChambre = () => {
     const [validated, setValidated] = useState(false);
 
     // Obtenir l'ID de l'hôtel du gestionnaire depuis localStorage
-    const getManagerHotelId = () => {
-        try {
-            const userData = JSON.parse(localStorage.getItem("userData"));
-            return userData?.hotel_ID || "H001"; // Ajout d'une valeur par défaut
-        } catch (error) {
-            console.error("Erreur lors de la récupération des données utilisateur:", error);
-            return "H001"; // Valeur par défaut
-        }
-    };
-
-    const hotelId = getManagerHotelId();
+    const employeeData = JSON.parse(localStorage.getItem("userData") || "{}");
+    const hotelId = employeeData ? (employeeData.hotel_id || employeeData.hotel_ID) : null;
 
     // Formulaire de chambre
     const [formData, setFormData] = useState({
@@ -41,55 +34,53 @@ const ManageChambre = () => {
         hotel_ID: hotelId,
     });
 
-    // Initialisation directe des données fictives au chargement
+    // Charger les chambres depuis l'API
+    const fetchChambres = async () => {
+        try {
+            setLoading(true);
+            console.log("Fetching chambers for hotel ID:", hotelId);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/chambres/${hotelId}`);
+            console.log("Chambers response:", response.data);
+            setChambres(response.data);
+            setError("");
+        } catch (err) {
+            console.error("Erreur lors du chargement des chambres:", err);
+            setError("Erreur lors du chargement des chambres: " + (err.response?.data?.error || err.message));
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Vérifier si la chambre est réservée ou louée
+    const verifyChambreStatus = async (chambreId) => {
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/chambre/${chambreId}/status`);
+            return response.data;
+        } catch (err) {
+            console.error("Erreur lors de la vérification du statut de la chambre:", err);
+            throw err;
+        }
+    };
+
     useEffect(() => {
         // Vérifier si le gestionnaire est connecté
         const userType = localStorage.getItem("userType");
         const userData = JSON.parse(localStorage.getItem("userData") || "{}");
 
-        if (userType !== "employee" && !userData.est_gestionnaire) {
-            // Pour le développement, on ne redirige pas vers login
-            // navigate("/login");
-            // return;
+        if (userType !== "employee" || !userData.est_gestionnaire) {
+            navigate("/login");
+            return;
         }
 
-        // Initialisation directe des données fictives
-        setChambres([
-            {
-                chambre_ID: 101,
-                prix: 120,
-                commodite: "WiFi, TV, Mini-bar",
-                capacite: "2",
-                extensible: "Oui",
-                dommage: "Oui",
-                vue: "Mer",
-                hotel_ID: hotelId,
-                status: "disponible" // disponible, réservé, loué
-            },
-            {
-                chambre_ID: 102,
-                prix: 150,
-                commodite: "WiFi, TV, Baignoire",
-                capacite: "2",
-                extensible: "Non",
-                dommage: "Nom",
-                vue: "Montagne",
-                hotel_ID: hotelId,
-                status: "réservé"
-            },
-            {
-                chambre_ID: 103,
-                prix: 200,
-                commodite: "WiFi, TV, Mini-bar, Cuisine",
-                capacite: "4",
-                extensible: "Oui",
-                dommage: "Aucun",
-                vue: "Ville",
-                hotel_ID: hotelId,
-                status: "loué"
-            },
-        ]);
-    }, [hotelId]);
+        if (hotelId) {
+            console.log("Hotel ID found:", hotelId);
+            fetchChambres();
+        } else {
+            console.error("Hotel ID not found in user data");
+            setError("Impossible de déterminer l'hôtel du gestionnaire. Veuillez vous reconnecter.");
+            setLoading(false);
+        }
+    }, [hotelId, navigate]);
 
     // Gérer les changements dans le formulaire
     const handleChange = (e) => {
@@ -114,29 +105,32 @@ const ManageChambre = () => {
         });
         setIsEditing(false);
         setValidated(false);
+        setModalError(""); // Réinitialiser l'erreur du modal
         setShowChambreModal(true);
     };
 
     // Ouvrir le modal pour modifier une chambre existante
     const openEditChambreModal = (chambre) => {
         setFormData({
-            chambre_ID: chambre.chambre_ID,
+            chambre_ID: chambre.chambre_id,
             prix: chambre.prix,
             commodite: chambre.commodite,
             capacite: chambre.capacite,
             extensible: chambre.extensible,
             dommage: chambre.dommage,
             vue: chambre.vue,
-            hotel_ID: chambre.hotel_ID,
+            hotel_ID: chambre.hotel_id,
         });
         setIsEditing(true);
         setValidated(false);
+        setModalError(""); // Réinitialiser l'erreur du modal
         setShowChambreModal(true);
     };
 
     // Ouvrir le modal de confirmation de suppression
     const openDeleteModal = (chambre) => {
         setChambreToDelete(chambre);
+        setModalError(""); // Réinitialiser l'erreur du modal
         setShowDeleteModal(true);
     };
 
@@ -153,39 +147,48 @@ const ManageChambre = () => {
         }
 
         try {
-            // Pour des fins de démonstration, simuler un succès et mettre à jour les données locales
             if (isEditing) {
-                // Mettre à jour la chambre dans l'état local
-                setChambres(chambres.map(chambre =>
-                    chambre.chambre_ID === formData.chambre_ID ? formData : chambre
-                ));
+                // Mettre à jour une chambre existante
+                await axios.put(`${process.env.REACT_APP_API_URL}/api/chambre/${formData.chambre_ID}`, formData);
                 alert("Chambre mise à jour avec succès!");
             } else {
-                // Ajouter la nouvelle chambre à l'état local avec un statut par défaut
-                setChambres([...chambres, { ...formData, status: "disponible" }]);
+                // Ajouter une nouvelle chambre
+                await axios.post(`${process.env.REACT_APP_API_URL}/api/chambre`, formData);
                 alert("Chambre ajoutée avec succès!");
             }
 
+            // Rafraîchir la liste des chambres
+            fetchChambres();
+
             // Fermer le modal
             setShowChambreModal(false);
+            setModalError(""); // Réinitialiser l'erreur du modal
         } catch (err) {
             console.error("Erreur lors de l'enregistrement de la chambre:", err);
-            setError("Erreur lors de l'enregistrement de la chambre. Veuillez réessayer.");
+            setModalError("Erreur lors de l'enregistrement de la chambre: " + (err.response?.data?.error || err.message));
+            // Ne pas fermer le modal pour que l'utilisateur puisse voir l'erreur
         }
     };
 
     // Gérer la suppression d'une chambre
     const handleDeleteChambre = async () => {
         try {
-            // Simuler une suppression en mettant à jour l'état local
-            setChambres(chambres.filter(chambre => chambre.chambre_ID !== chambreToDelete.chambre_ID));
-            alert("Chambre supprimée avec succès!");
+            // Vérifier si la chambre peut être supprimée (pas de réservation ou location active)
+            const status = await verifyChambreStatus(chambreToDelete.chambre_id);
 
-            // Fermer le modal
-            setShowDeleteModal(false);
+            if (status.can_delete) {
+                await axios.delete(`${process.env.REACT_APP_API_URL}/api/chambre/${chambreToDelete.chambre_id}`);
+                alert("Chambre supprimée avec succès!");
+                fetchChambres();
+                setShowDeleteModal(false);
+            } else {
+                setModalError("Impossible de supprimer cette chambre car elle est actuellement réservée ou louée.");
+                // Ne pas fermer le modal pour que l'utilisateur puisse voir l'erreur
+            }
         } catch (err) {
             console.error("Erreur lors de la suppression de la chambre:", err);
-            setError("Erreur lors de la suppression de la chambre. Veuillez réessayer.");
+            setModalError("Erreur lors de la suppression de la chambre: " + (err.response?.data?.error || err.message));
+            // Ne pas fermer le modal pour que l'utilisateur puisse voir l'erreur
         }
     };
 
@@ -202,6 +205,7 @@ const ManageChambre = () => {
                 return <Badge bg="secondary">Inconnu</Badge>;
         }
     };
+
     return (
         <div>
             <ManagerNavbar />
@@ -230,53 +234,68 @@ const ManageChambre = () => {
                     <Col>
                         <Card>
                             <Card.Body>
-                                <Table responsive striped hover>
-                                    <thead>
-                                        <tr>
-                                            <th>N° Chambre</th>
-                                            <th>Prix</th>
-                                            <th>Capacité</th>
-                                            <th>Extensible</th>
-                                            <th>Vue</th>
-                                            <th>Commodités</th>
-                                            <th>Dommages</th>
-                                            <th>Statut</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {chambres.map((chambre) => (
-                                            <tr key={chambre.chambre_ID}>
-                                                <td>{chambre.chambre_ID}</td>
-                                                <td>{chambre.prix}€/nuit</td>
-                                                <td>{chambre.capacite} personne(s)</td>
-                                                <td>{chambre.extensible}</td>
-                                                <td>{chambre.vue}</td>
-                                                <td>{chambre.commodite}</td>
-                                                <td>{chambre.dommage || "Aucun"}</td>
-                                                <td>{renderStatusBadge(chambre.status)}</td>
-                                                <td>
-                                                    <Button
-                                                        variant="primary"
-                                                        size="sm"
-                                                        className="me-3"
-                                                        onClick={() => openEditChambreModal(chambre)}
-                                                    >
-                                                        Modifier
-                                                    </Button>
-                                                    <Button
-                                                        variant="danger"
-                                                        size="sm"
-                                                        onClick={() => openDeleteModal(chambre)}
-                                                        disabled={chambre.status === "loué" || chambre.status === "réservé"}
-                                                    >
-                                                        Supprimer
-                                                    </Button>
-                                                </td>
+                                {loading ? (
+                                    <div className="text-center">
+                                        <p>Chargement des chambres...</p>
+                                    </div>
+                                ) : (
+                                    <Table responsive striped>
+                                        <thead>
+                                            <tr>
+                                                <th>Chambre ID</th>
+                                                <th>Prix</th>
+                                                <th>Capacité</th>
+                                                <th>Extensible</th>
+                                                <th>Vue</th>
+                                                <th>Commodités</th>
+                                                <th>Dommages</th>
+                                                <th>Statut</th>
+                                                <th>Actions</th>
                                             </tr>
-                                        ))}
-                                    </tbody>
-                                </Table>
+                                        </thead>
+                                        <tbody>
+                                            {chambres.length > 0 ? (
+                                                chambres.map((chambre) => (
+                                                    <tr key={chambre.chambre_id}>
+                                                        <td>{chambre.chambre_id}</td>
+                                                        <td>{chambre.prix}$/nuit</td>
+                                                        <td>{chambre.capacite}</td>
+                                                        <td>{chambre.extensible}</td>
+                                                        <td>{chambre.vue}</td>
+                                                        <td>{chambre.commodite}</td>
+                                                        <td>{chambre.dommage}</td>
+                                                        <td>{renderStatusBadge(chambre.status)}</td>
+                                                        <td>
+                                                            <Button
+                                                                variant="primary"
+                                                                size="sm"
+                                                                className="me-4"
+                                                                onClick={() => openEditChambreModal(chambre)}
+                                                            >
+                                                                Modifier
+                                                            </Button>
+                                                            {chambre.status === "disponible" && (
+                                                                <Button
+                                                                    variant="danger"
+                                                                    size="sm"
+                                                                    onClick={() => openDeleteModal(chambre)}
+                                                                >
+                                                                    Supprimer
+                                                                </Button>
+                                                            )}
+                                                        </td>
+                                                    </tr>
+                                                ))
+                                            ) : (
+                                                <tr>
+                                                    <td colSpan="9" className="text-center">
+                                                        Aucune chambre trouvée pour cet hôtel
+                                                    </td>
+                                                </tr>
+                                            )}
+                                        </tbody>
+                                    </Table>
+                                )}
                             </Card.Body>
                         </Card>
                     </Col>
@@ -295,16 +314,16 @@ const ManageChambre = () => {
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    {error && <div className="alert alert-danger">{error}</div>}
+                    {modalError && <div className="alert alert-danger">{modalError}</div>}
 
                     <Form noValidate validated={validated} onSubmit={handleSubmit}>
                         <Row className="mb-3">
                             <Form.Group as={Col} md="6" controlId="validationChambreID">
-                                <Form.Label>chambre_ID</Form.Label>
+                                <Form.Label>ID Chambre</Form.Label>
                                 <Form.Control
                                     required
                                     type="text"
-                                    placeholder="chmabre_id"
+                                    placeholder="ID Chambre"
                                     name="chambre_ID"
                                     value={formData.chambre_ID}
                                     onChange={handleChange}
@@ -316,7 +335,7 @@ const ManageChambre = () => {
                             </Form.Group>
 
                             <Form.Group as={Col} md="6" controlId="validationHotelID">
-                                <Form.Label>Hôtel_ID</Form.Label>
+                                <Form.Label>Hôtel ID</Form.Label>
                                 <Form.Control
                                     required
                                     type="text"
@@ -345,13 +364,14 @@ const ManageChambre = () => {
                                 </Form.Control.Feedback>
                             </Form.Group>
                             <Form.Group as={Col} md="6" controlId="validationcapacite">
-                                <Form.Label>capacite</Form.Label>
+                                <Form.Label>Capacité</Form.Label>
                                 <Form.Select
                                     required
                                     name="capacite"
                                     value={formData.capacite}
                                     onChange={handleChange}
                                 >
+                                    <option value="">Sélectionner une capacité</option>
                                     <option value="Simple">Simple</option>
                                     <option value="Double">Double</option>
                                     <option value="Famille">Famille</option>
@@ -368,8 +388,8 @@ const ManageChambre = () => {
                                     value={formData.extensible}
                                     onChange={handleChange}
                                 >
-                                    <option value="Oui">Oui</option>
-                                    <option value="Non">Non</option>
+                                    <option value="oui">oui</option>
+                                    <option value="non">non</option>
                                 </Form.Select>
                             </Form.Group>
                             <Form.Group as={Col} md="6" controlId="validationVue">
@@ -380,6 +400,7 @@ const ManageChambre = () => {
                                     value={formData.vue}
                                     onChange={handleChange}
                                 >
+                                    <option value="">Sélectionner une vue</option>
                                     <option value="Mer">Mer</option>
                                     <option value="Montagne">Montagne</option>
                                 </Form.Select>
@@ -398,11 +419,15 @@ const ManageChambre = () => {
                                     value={formData.commodite}
                                     onChange={handleChange}
                                 >
-                                    <option value="TV">TV</option>
+                                    <option value="">Sélectionner une commodité</option>
                                     <option value="Sofa">Sofa</option>
+                                    <option value="TV">TV</option>
                                     <option value="Fridge">Fridge</option>
+                                    <option value="Sofa, TV">Sofa, TV</option>
+                                    <option value="Sofa, Fridge">Sofa, Fridge</option>
+                                    <option value="TV, Fridge">TV, Fridge</option>
+                                    <option value="Sofa, TV, Fridge">Sofa, TV, Fridge</option>
                                 </Form.Select>
-
                                 <Form.Control.Feedback type="invalid">
                                     Veuillez sélectionner une commodité.
                                 </Form.Control.Feedback>
@@ -415,15 +440,15 @@ const ManageChambre = () => {
                                     value={formData.dommage}
                                     onChange={handleChange}
                                 >
-                                    <option value="Oui">Oui</option>
-                                    <option value="Non">Non</option>
+                                    <option value="">Sélectionner un état</option>
+                                    <option value="oui">oui</option>
+                                    <option value="non">non</option>
                                 </Form.Select>
                                 <Form.Control.Feedback type="invalid">
-                                    Veuillez sélectionner si c'est dommage.
+                                    Veuillez sélectionner l'état de dommage.
                                 </Form.Control.Feedback>
                             </Form.Group>
                         </Row>
-
                         <div className="d-flex justify-content-end mt-4">
                             <Button type="submit" variant="primary">
                                 {isEditing ? "Sauvegarder" : "Ajouter"}
@@ -443,9 +468,11 @@ const ManageChambre = () => {
                     <Modal.Title className="text-danger">Confirmation de suppression</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+                    {modalError && <div className="alert alert-danger">{modalError}</div>}
+
                     {chambreToDelete && (
                         <p>
-                            Êtes-vous sûr de vouloir supprimer la chambre_ID {chambreToDelete.chambre_ID} ? Cette action est irréversible.
+                            Êtes-vous sûr de vouloir supprimer la chambre {chambreToDelete.chambre_id} ? Cette action est irréversible.
                         </p>
                     )}
                 </Modal.Body>

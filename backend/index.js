@@ -1,7 +1,8 @@
 import express from 'express';
 import cors from 'cors';
-import { insertClient, validateClientLogin,getClientProfileByEmail } from './clientDatabase.js';
+import { insertClient, validateClientLogin,getClientProfileByEmail, deleteClientByNAS, updateClientByNAS} from './clientDatabase.js';
 import { validateEmployeeLogin } from './employeeDatabase.js';
+import { getEmployeesByHotelId, insertEmployee, updateEmployee, deleteEmployee, getClientsByHotelId, getClientReservations, getClientLocations, getHotelById, getChambresByHotelId, insertChambre, getChambreStatus, deleteChambre, updateChambre} from './managerDatabase.js';
 import env from 'dotenv';
 import { insertClientReservation } from './clientDatabase.js';
 import { confirmClientReservation } from './employeeDatabase.js';
@@ -19,12 +20,25 @@ app.post('/api/insertClient', insertClient);
 app.post('/api/login/client', validateClientLogin);
 app.post('/api/reservations', insertClientReservation);
 app.get('/api/client/:email', getClientProfileByEmail);
+app.delete('/api/client/:nas', deleteClientByNAS);
+app.put('/api/client/:nas', updateClientByNAS);
 // =================================route pour employee===========================
 app.post('/api/login/employee', validateEmployeeLogin);
 app.post('/api/confirmClientReservation', confirmClientReservation);
 // =================================route pour manager===========================
-
-
+app.get('/api/employees/:hotelId', getEmployeesByHotelId);
+app.post('/api/employee', insertEmployee);
+app.put('/api/employee/:nas', updateEmployee);
+app.delete('/api/employee/:nas', deleteEmployee);
+app.get('/api/clients/:hotelId', getClientsByHotelId);
+app.get('/api/client/:nasClient/reservations', getClientReservations);
+app.get('/api/client/:nasClient/locations', getClientLocations);
+app.get('/api/hotel/:hotelId', getHotelById);
+app.get('/api/chambres/:hotelId', getChambresByHotelId);
+app.get('/api/chambre/:chambreId/status', getChambreStatus);
+app.post('/api/chambre', insertChambre);
+app.put('/api/chambre/:chambreId', updateChambre);
+app.delete('/api/chambre/:chambreId', deleteChambre);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
