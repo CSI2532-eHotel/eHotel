@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import { insertClient, validateClientLogin,getClientProfileByEmail, deleteClientByNAS, updateClientByNAS} from './clientDatabase.js';
-import { validateEmployeeLogin, getClientReservation, deleteReservation } from './employeeDatabase.js';
+import { validateEmployeeLogin, getClientReservation, deleteReservation, createLocationFromReservation, getClientLocation} from './employeeDatabase.js';
 import { getEmployeesByHotelId, insertEmployee, updateEmployee, deleteEmployee, getClientsByHotelId, getClientReservations, getClientLocations, getHotelById, getChambresByHotelId, insertChambre, getChambreStatus, deleteChambre, updateChambre} from './managerDatabase.js';
 import env from 'dotenv';
 env.config(); 
@@ -23,6 +23,8 @@ app.put('/api/client/:nas', updateClientByNAS);
 app.post('/api/login/employee', validateEmployeeLogin);
 app.get('/api/employee/:employeeId/reservations', getClientReservation);
 app.delete('/api/reservations/:reservationId', deleteReservation);
+app.post('/api/locations', createLocationFromReservation);
+app.get('/api/employee/:employeeId/locations', getClientLocation);
 
 // =================================route pour manager===========================
 app.get('/api/employees/:hotelId', getEmployeesByHotelId);
