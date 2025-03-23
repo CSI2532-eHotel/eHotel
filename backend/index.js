@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { insertClient, validateClientLogin,getClientProfileByEmail, deleteClientByNAS, updateClientByNAS} from './clientDatabase.js';
+import { insertClient, validateClientLogin,getClientProfileByEmail, deleteClientByNAS, updateClientByNAS, getRoomsByZone, getRoomsByCapacity, createClientReservation} from './clientDatabase.js';
 import { validateEmployeeLogin, getClientReservation, deleteReservation, createLocationFromReservation, getClientLocation, getAvailableRooms, createDirectLocation} from './employeeDatabase.js';
 import { getEmployeesByHotelId, insertEmployee, updateEmployee, deleteEmployee, getClientsByHotelId, getClientReservations, getClientLocations, getHotelById, getChambresByHotelId, insertChambre, getChambreStatus, deleteChambre, updateChambre} from './managerDatabase.js';
 import env from 'dotenv';
@@ -19,6 +19,10 @@ app.post('/api/login/client', validateClientLogin);
 app.get('/api/client/:email', getClientProfileByEmail);
 app.delete('/api/client/:nas', deleteClientByNAS);
 app.put('/api/client/:nas', updateClientByNAS);
+app.get('/api/rooms/by-zone', getRoomsByZone);
+app.get('/api/rooms/by-capacity', getRoomsByCapacity);
+app.post('/api/reservations', createClientReservation);
+
 // =================================route pour employee===========================
 app.post('/api/login/employee', validateEmployeeLogin);
 app.get('/api/employee/:employeeId/reservations', getClientReservation);
