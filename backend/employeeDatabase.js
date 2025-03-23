@@ -211,3 +211,120 @@ export const getClientLocation = async (req, res) => {
         res.status(500).json({ success: false, message: err.message });
     }
 };
+// Fonction pour obtenir les chambres disponibles de l'hôtel où travaille l'employé
+export const getAvailableRooms = async (req, res) => {
+    try {
+        const { employeeId } = req.params;
+
+        // obtenir l'hotel_id de l'employe
+        const employeeResult = await pool.query(
+            "SELECT hotel_ID FROM Employe WHERE NAS_employe = $1",
+            [employeeId]
+        );
+
+        if (employeeResult.rows.length === 0) {
+            return res.status(404).json({ success: false, message: "Employé non trouvé" });
+        }
+
+        const hotelId = employeeResult.rows[0].hotel_id;
+
+        // Obtenir les chambres qui 
+        // 1. Appartiennent à l'hôtel où travaille l'employé
+        // 2. Ne sont pas endommagées est non
+        // 3. Ne sont pas actuellement louées (pas dans la table Location avec des dates qui chevauchent aujourd'hui)
+        // 4. Ne sont pas réservées pour des dates futures (pas dans la table Reservation avec des dates futures)
+        const availableRoomsResult = await pool.query(
+            `SELECT c.chambre_id, c.prix, c.commodite, c.capacite, c.extensible, c.vue, c.hotel_id,
+                    h.nom_hotel
+             FROM Chambre c
+             JOIN Hotel h ON c.hotel_id = h.hotel_id
+             WHERE c.hotel_id = $1
+             AND (c.dommage = 'non')
+             AND c.chambre_id NOT IN (
+                 SELECT chambre_id FROM Location 
+                 WHERE debut_date_location <= CURRENT_DATE 
+                 AND fin_date_location >= CURRENT_DATE
+             )
+             AND c.chambre_id NOT IN (
+                 SELECT chambre_id FROM Reservation
+                 WHERE fin_date_reservation >= CURRENT_DATE
+             )`,
+            [hotelId]
+        );
+
+        res.json({
+            success: true,
+            availableRooms: availableRoomsResult.rows
+        });
+
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ success: false, message: err.message });
+    }
+};
+
+// Fonction pour créer une location directe (sans réservation préalable)
+export const createDirectLocation = async (req, res) => {
+    const client = await pool.connect();
+    try {
+        // Start transaction
+        await client.query('BEGIN');
+        
+        const { debut_date_location, fin_date_location, montant, NAS_employe, NAS_client, chambre_ID } = req.body;
+        
+        // Vérifier si le client existe
+        const clientResult = await client.query(
+            `SELECT NAS_client FROM Client WHERE NAS_client = $1`,
+            [NAS_client]
+        );
+        
+        if (clientResult.rows.length === 0) {
+            throw new Error("Client non trouvé. Veuillez d'abord enregistrer le client.");
+        }
+        
+        // Vérifier si la chambre est disponible pour ces dates
+        const availabilityCheck = await client.query(
+            `SELECT chambre_id FROM Chambre 
+             WHERE chambre_id = $1 
+             AND (dommage = 'non')
+             AND chambre_id NOT IN (
+                 SELECT chambre_id FROM Location 
+                 WHERE (debut_date_location <= $3 AND fin_date_location >= $2)
+             )
+             AND chambre_id NOT IN (
+                 SELECT chambre_id FROM Reservation
+                 WHERE (debut_date_reservation <= $3 AND fin_date_reservation >= $2)
+             )`,
+            [chambre_ID, debut_date_location, fin_date_location]
+        );
+        
+        if (availabilityCheck.rows.length === 0) {
+            throw new Error("Cette chambre n'est pas disponible pour les dates sélectionnées.");
+        }
+        
+        // Insert into Location table - the transaction_date will be set by the trigger
+        const locationResult = await client.query(
+            `INSERT INTO Location 
+            (debut_date_location, fin_date_location, montant, NAS_employe, NAS_client, chambre_ID, reservation_ID) 
+            VALUES ($1, $2, $3, $4, $5, $6, NULL) 
+            RETURNING *`,
+            [debut_date_location, fin_date_location, montant, NAS_employe, NAS_client, chambre_ID]
+        );
+        
+        // Commit transaction
+        await client.query('COMMIT');
+        
+        res.json({
+            success: true,
+            message: "Location créée avec succès",
+            location: locationResult.rows[0]
+        });
+    } catch (err) {
+        // Rollback in case of error
+        await client.query('ROLLBACK');
+        console.error("Erreur détaillée:", err);
+        res.status(500).json({ success: false, message: err.message });
+    } finally {
+        client.release();
+    }
+};

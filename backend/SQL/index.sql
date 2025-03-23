@@ -1,4 +1,4 @@
--- Index pour accélérer la recherche des réservations par hôtel
+-- Index pour accélérer la recherche des chambre par hôtel
 CREATE INDEX idx_chambre_hotel_id ON Chambre(hotel_id);
 
 -- Index pour accélérer la jointure entre réservation et chambre

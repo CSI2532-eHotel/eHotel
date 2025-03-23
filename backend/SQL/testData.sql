@@ -20,7 +20,7 @@ VALUES
 
 
 
---Test data pour la liste de reservations de clients pour employeeHome page
+--Test data pour la liste de reservations de clients pour employeeHome page, on test avec employee qui travaille dans l'hotel_id =11
 -- Insertion de clients
 INSERT INTO Client VALUES 
 (220000001, 'Dupont', 'Jean', '789 Boulevard St-Laurent', 'Montréal', 'H2X1Y2', 'jean.dupont@email.com', 'mdp123', '2024-01-15'),
@@ -34,3 +34,10 @@ VALUES
 ('2025-05-05', '2025-05-10', 220000002, 112),
 ('2025-04-20', '2025-04-25', 220000002, 113);
 
+--Insertion des chambres
+INSERT INTO Chambre (chambre_ID, prix, commodite, capacite, extensible, dommage, vue, hotel_ID)
+VALUES
+(117, 150, 'TV + fridge', 'simple', 'non', 'non', 'mer', 11),
+(118, 200, 'TV + fridge', 'double', 'non', 'non', 'montagne', 11),
+(119, 225, 'TV + fridge + sofa', 'double', 'non', 'non', 'mer', 11),
+(120, 300, 'TV + fridge', 'famille', 'non', 'non', 'montagne', 11);
