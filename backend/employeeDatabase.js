@@ -87,7 +87,7 @@ export const getClientReservation = async (req, res) => {
 };
 
 // Fonction pour supprimer une réservation
-export const deleteReservation = async (req, res) => {
+export const cancelReservation = async (req, res) => {
     try {
         const { reservationId } = req.params;
 

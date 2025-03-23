@@ -129,9 +129,9 @@ export const getRoomsByZone = async (req, res) => {
                 )
             ORDER BY h.ville, h.nom_hotel
         `;
-        
+
         const result = await pool.query(query);
-        
+
         res.json(result.rows);
     } catch (err) {
         console.error(err.message);
@@ -163,9 +163,9 @@ export const getRoomsByCapacity = async (req, res) => {
                 )
             ORDER BY c.capacite, h.nom_hotel
         `;
-        
+
         const result = await pool.query(query);
-        
+
         res.json(result.rows);
     } catch (err) {
         console.error(err.message);
@@ -196,9 +196,9 @@ export const createClientReservation = async (req, res) => {
         );
 
         if (checkAvailable.rows.length === 0) {
-            return res.status(400).json({ 
-                success: false, 
-                message: "La chambre n'est pas disponible pour ces dates" 
+            return res.status(400).json({
+                success: false,
+                message: "La chambre n'est pas disponible pour ces dates"
             });
         }
 
@@ -208,12 +208,54 @@ export const createClientReservation = async (req, res) => {
             [debut_date_reservation, fin_date_reservation, NAS_client, chambre_ID]
         );
 
-        res.status(201).json({ 
-            success: true, 
+        res.status(201).json({
+            success: true,
             reservation: newReservation.rows[0]
         });
     } catch (err) {
         console.error(err.message);
         res.status(500).json({ success: false, error: err.message });
+    }
+};
+
+// Function to get all reservations for a client
+export const getmyReservations = async (req, res) => {
+    try {
+        const { nasClient } = req.params;
+
+        const query = `
+            SELECT 
+                r.reservation_ID, 
+                r.NAS_client,
+                r.chambre_ID,
+                r.debut_date_reservation,
+                r.fin_date_reservation,
+                h.nom_hotel as hotel_name,
+                h.rue,
+                h.ville,
+                h.code_postal,
+                h.etoile,
+                c.vue,
+                c.extensible,
+                c.commodite,
+                c.prix,
+                c.capacite
+            FROM 
+                Reservation r
+            JOIN 
+                Chambre c ON r.chambre_ID = c.chambre_ID
+            JOIN 
+                Hotel h ON c.hotel_ID = h.hotel_ID
+            WHERE 
+                r.NAS_client = $1
+            ORDER BY 
+                r.debut_date_reservation DESC
+        `;
+
+        const result = await pool.query(query, [nasClient]);
+        res.json(result.rows);
+    } catch (err) {
+        console.error("Error fetching client reservations:", err.message);
+        res.status(500).json({ error: err.message });
     }
 };

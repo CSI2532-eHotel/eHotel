@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Button, Card, Col, Container, Form, Nav, Navbar, Row, Modal } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import axios from "axios";
 import "./clientProfile.css";
 import ClientNavbar from "../../components/clientNavbar";
