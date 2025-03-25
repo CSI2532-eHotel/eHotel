@@ -1,5 +1,6 @@
--- Vue 1: Nombre de chambres disponibles par zone (ville), on suppose que zone implique les chambres des hôtels dans une ville spécifique
-CREATE OR REPLACE VIEW ChambresDisponibleParZone AS
+-- Vue 1: Nombre de chambres disponibles par zone (ville), on suppose que zone implique les chambres des hôtels dans une ville spécifique- Ottawa, Chicago, Dallas,etc
+--recherche des chambres disponibles par zone qui ne sont pas endommagées et qui ne sont pas actuellement en location ou réservées
+CREATE VIEW ChambresDisponibleParZone AS
 SELECT 
     h.ville, 
     COUNT(c.chambre_ID) AS nombre_chambres_disponibles
@@ -23,8 +24,9 @@ WHERE
 GROUP BY 
     h.ville;
 
--- Vue 2: Capacité de toutes les chambres d'un hôtel spécifique (on suppose la capacité de chaque chambre est soit simple, double ou famille)
-CREATE OR REPLACE VIEW CapaciteChambresParHotel AS
+-- Vue 2: Capacité de toutes les chambres d'un hôtel spécifique (on suppose la capacité de chaque chambre est soit simple, double ou famille comme dans la description du projet)
+--recherche les chambre disponibles par capacité qui ne sont pas endommagées et qui ne sont pas actuellement en location ou réservées
+CREATE VIEW CapaciteChambresParHotel AS
 SELECT 
     h.hotel_ID,
     h.nom_hotel,
