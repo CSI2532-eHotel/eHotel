@@ -79,7 +79,7 @@ function Register() {
       };
 
       // Send data to backend
-      const response = await axios.post("http://localhost:5000/api/insertClient", clientData);
+      const response = await axios.post( `${process.env.REACT_APP_API_URL}/api/insertClient`, clientData);
       
       console.log("Registration successful:", response.data);
       
