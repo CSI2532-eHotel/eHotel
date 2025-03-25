@@ -7,5 +7,5 @@ CREATE INDEX idx_reservation_chambre_id ON Reservation(chambre_id);
 -- Index pour accélérer la recherche d'employé par NAS
 CREATE INDEX idx_employe_nas ON Employe(NAS_employe);
 
--- Index pour accélérer la recherche dans les tables de réservation
+-- Index pour accélérer la recherche dans la table de réservation
 CREATE INDEX idx_reservation_nas_client ON Reservation(nas_client);
