@@ -1,4 +1,4 @@
--- Vue 1: Nombre de chambres disponibles par zone (ville)
+-- Vue 1: Nombre de chambres disponibles par zone (ville), on suppose que zone implique les chambres des hôtels dans une ville spécifique
 CREATE OR REPLACE VIEW ChambresDisponibleParZone AS
 SELECT 
     h.ville, 
