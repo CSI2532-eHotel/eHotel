@@ -1,18 +1,21 @@
-import {Button,Card,CardText,Col,Container,Form,Nav,Navbar,Row,Badge,Modal,} from "react-bootstrap";
+import { Button, Card, CardText, Col, Container, Form, Row, Badge, Modal } from "react-bootstrap";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import axios from "axios"; // Import axios
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./clientHome.css";
 import image from "../../assets/chambre.jpg";
 import ClientNavbar from "../../components/clientNavbar";
+import { toast } from "react-toastify";
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 const ClientHome = () => {
-  const [price, setPrice] = useState(0); // State to store the price
-  const [viewMode, setViewMode] = useState("zone"); // "zone" or "capacity"
-  const [hotelData, setHotelData] = useState([]); // State to store hotel data
-  const [groupedHotels, setGroupedHotels] = useState({}); // State to store grouped hotels
-  const [showModal, setShowModal] = useState(false); // State to control modal visibility
-  const [selectedRoom, setSelectedRoom] = useState(null); // State to store selected room for reservation
+  const navigate = useNavigate();
+  const [price, setPrice] = useState(0);
+  const [viewMode, setViewMode] = useState("zone");
+  const [hotelData, setHotelData] = useState([]);
+  const [groupedHotels, setGroupedHotels] = useState({});
+  const [showModal, setShowModal] = useState(false);
+  const [selectedRoom, setSelectedRoom] = useState(null);
   const [reservationData, setReservationData] = useState({
     debut_date: "",
     fin_date: "",
@@ -21,17 +24,22 @@ const ClientHome = () => {
     montagne: false,
     mer: false,
     extensive: null,
-    tv: false,
-    sofa: false,
-    fridge: false,
+    stars: {
+      one: false,
+      two: false,
+      three: false,
+      four: false,
+      five: false
+    },
     price: 0,
   });
-  // States for success modal
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [reservationId, setReservationId] = useState("");
-  // Optional: Add loading and error states for better UX
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  // API base URL
+  const API_BASE_URL = process.env.REACT_APP_API_URL;
 
   // Handle change of price slider
   const handleChange = (e) => {
@@ -56,18 +64,20 @@ const ClientHome = () => {
     }
   };
 
-  // Handle commodité filter changes
-  const handleCommoditeChange = (e) => {
+  // Handle star rating filter changes
+  const handleStarChange = (e) => {
     setFilters({
       ...filters,
-      [e.target.id.replace("checkbox", "").toLowerCase()]: e.target.checked,
+      stars: {
+        ...filters.stars,
+        [e.target.id]: e.target.checked
+      }
     });
   };
 
   // Function to switch view mode
   const switchViewMode = (mode) => {
     setViewMode(mode);
-    // Fetch data based on the selected mode
     fetchHotelData(mode);
   };
 
@@ -77,18 +87,29 @@ const ClientHome = () => {
       montagne: false,
       mer: false,
       extensive: null,
-      tv: false,
-      sofa: false,
-      fridge: false,
+      stars: {
+        one: false,
+        two: false,
+        three: false,
+        four: false,
+        five: false
+      },
       price: 0,
     });
     setPrice(0);
-    // Re-fetch data for the current view mode
     fetchHotelData(viewMode);
   };
 
   // Function to open reservation modal
   const openReservationModal = (room) => {
+    // Check if user is logged in
+    const userData = JSON.parse(localStorage.getItem("userData"));
+    if (!userData) {
+      toast.error("Veuillez vous connecter pour réserver une chambre");
+      navigate("/login");
+      return;
+    }
+
     setSelectedRoom(room);
     setShowModal(true);
   };
@@ -117,189 +138,123 @@ const ClientHome = () => {
     });
   };
 
-  // Function to generate a random reservation ID
-  const generateReservationId = () => {
-    // Generate a random 4-digit number starting with 1 (as per your schema)
-    return "1" + Math.floor(Math.random() * 900 + 100);
-  };
-
   // Function to submit reservation using axios
   const submitReservation = async () => {
     // Validation
     if (!reservationData.debut_date || !reservationData.fin_date) {
-      alert("Veuillez sélectionner les dates de début et de fin.");
+      toast.error("Veuillez sélectionner les dates de début et de fin.");
       return;
     }
 
     const startDate = new Date(reservationData.debut_date);
     const endDate = new Date(reservationData.fin_date);
-    
+
     if (startDate >= endDate) {
-      alert("La date de fin doit être postérieure à la date de début.");
+      toast.error("La date de fin doit être postérieure à la date de début.");
       return;
     }
 
-    // Get current user's NAS_client (use getClientLoginDetail)
-    // For demo purposes, using a hardcoded value
-    const userNASClient = "123456789"; // This would come from auth context in a real app
+    // Get current user's NAS_client from localStorage
+    const userData = JSON.parse(localStorage.getItem("userData"));
+    if (!userData) {
+      toast.error("Session expirée, veuillez vous reconnecter");
+      navigate("/login");
+      return;
+    }
+
+    const userNASClient = userData.nas_client;
 
     // Set loading state
     setLoading(true);
     setError(null);
 
     try {
-      // This would be the actual API call to backend using axios
-      /* 
-      const response = await axios.post('/api/reservations', {
+      const response = await axios.post(`${API_BASE_URL}/api/reservations`, {
         NAS_client: userNASClient,
         chambre_ID: selectedRoom.chambre_ID,
         debut_date_reservation: reservationData.debut_date,
         fin_date_reservation: reservationData.fin_date
       });
-      
-      // Use the actual reservation ID from the response
-      const newReservationId = response.data.reservation_ID;
-      */
-      
-      // For demo - generate a reservation ID and show success modal
-      const newReservationId = generateReservationId();
-      
-      console.log("Réservation soumise:", {
-        reservation_ID: newReservationId,
-        NAS_client: userNASClient,
-        chambre_ID: selectedRoom.chambre_ID,
-        debut_date_reservation: reservationData.debut_date,
-        fin_date_reservation: reservationData.fin_date
-      });
-      
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
+
+      // Extract the reservation ID from the response
+      console.log("Réponse de la réservation:", response.data);
+      console.log("ID de réservation:", response.data.reservation.reservation_id);
+      const newReservationId = response.data.reservation.reservation_id;
+      console.log("Réservation réussie. ID de réservation:", newReservationId);
+
+      // Set the reservation ID in state to display in the success modal
       setReservationId(newReservationId);
+
+      // Close the reservation modal and show the success modal
       closeReservationModal();
       setShowSuccessModal(true);
+
+      // Refresh data after successful reservation
+      fetchHotelData(viewMode);
     } catch (err) {
-      // Handle errors
       console.error("Erreur lors de la réservation:", err);
-      setError(err.response?.data?.message || "Erreur lors de la réservation. Veuillez réessayer.");
-      alert(err.response?.data?.message || "Erreur lors de la réservation. Veuillez réessayer.");
+      const errorMessage = err.response?.data?.message || "Erreur lors de la réservation. Veuillez réessayer.";
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
+  // Function to parse commodities string to array
+  const parseCommodites = (commoditeString) => {
+    if (!commoditeString) return [];
+
+    // Diviser la chaîne par "+" et nettoyer les espaces
+    return commoditeString.split("+").map(item => item.trim());
+  };
+
   // Function to fetch hotel data using axios
   const fetchHotelData = async (mode) => {
-    // Set loading state
     setLoading(true);
     setError(null);
-    
+
     try {
-      // This would be replaced with actual API calls using axios
-      /* 
       let endpoint = '';
       if (mode === 'zone') {
-        endpoint = '/api/hotels/by-zone';
+        endpoint = `${API_BASE_URL}/api/rooms/by-zone`;
       } else if (mode === 'capacity') {
-        endpoint = '/api/hotels/by-capacity';
+        endpoint = `${API_BASE_URL}/api/rooms/by-capacity`;
       }
 
       const response = await axios.get(endpoint);
       const data = response.data;
-      setHotelData(data);
-      groupHotels(data, mode);
-      */
 
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 500));
+      // Format the data to match our expected structure
+      const formattedData = data.map(room => {
+        // Parse commodite
+        const commoditeArray = parseCommodites(room.commodite);
 
-      // Mock data for demonstration
-      const mockData = [
-        {
-          hotel_ID: "0001",
-          hotel_name: "Hôtel du Centre",
-          rue: "123 Rue Principale",
-          ville: "Ottawa",
-          code_postal: "K1P 1J1",
-          vue: "Montagne",
-          extensible: true,
-          commodite: ["TV", "Sofa", "Fridge"],
-          prix: 150,
-          capacite: "Simple",
-          chambre_ID: "101"
-        },
-        {
-          hotel_ID: "0002",
-          hotel_name: "Hôtel Riverside",
-          rue: "456 Rue du Pont",
-          ville: "Ottawa",
-          code_postal: "K1P 2K2",
-          vue: "Mer",
-          extensible: true,
-          commodite: ["TV", "Fridge"],
-          prix: 200,
-          capacite: "Double",
-          chambre_ID: "102"
-        },
-        {
-          hotel_ID: "0003",
-          hotel_name: "Hôtel Central",
-          rue: "789 Rue Saint-Paul",
-          ville: "Toronto",
-          code_postal: "M5V 2L6",
-          vue: "Mer",
-          extensible: false,
-          commodite: ["TV", "Sofa"],
-          prix: 180,
-          capacite: "Simple",
-          chambre_ID: "103"
-        },
-        {
-          hotel_ID: "0004",
-          hotel_name: "Hôtel Familial",
-          rue: "101 Avenue des Pins",
-          ville: "Toronto",
-          code_postal: "M5V 3L7",
-          vue: "Montagne",
-          extensible: true,
-          commodite: ["TV", "Sofa", "Fridge"],
-          prix: 250,
-          capacite: "Famille",
-          chambre_ID: "104"
-        },
-        {
-          hotel_ID: "0005",
-          hotel_name: "Hôtel Economique",
-          rue: "202 Boulevard Est",
-          ville: "Montreal",
-          code_postal: "H2X 1Y6",
-          vue: "Montagne",
-          extensible: false,
-          commodite: ["TV"],
-          prix: 120,
-          capacite: "Simple",
-          chambre_ID: "105"
-        },
-        {
-          hotel_ID: "0006",
-          hotel_name: "Hôtel Luxe",
-          rue: "303 Avenue de Luxe",
-          ville: "Montreal",
-          code_postal: "H2X 2Z7",
-          vue: "Mer",
-          extensible: true,
-          commodite: ["TV", "Sofa", "Fridge"],
-          prix: 350,
-          capacite: "Double",
-          chambre_ID: "106"
-        },
-      ];
+        // Determine extensible boolean value
+        const isExtensible = room.extensible === 'oui' || room.extensible === 'Oui';
 
-      setHotelData(mockData);
-      groupHotels(mockData, mode);
+        return {
+          hotel_ID: room.hotel_id,
+          hotel_name: room.nom_hotel,
+          rue: room.rue,
+          ville: room.ville,
+          code_postal: room.code_postal,
+          vue: room.vue,
+          extensible: isExtensible,
+          commodite: commoditeArray,
+          prix: parseInt(room.prix),
+          capacite: room.capacite,
+          chambre_ID: room.chambre_id,
+          etoile: room.etoile
+        };
+      });
+
+      setHotelData(formattedData);
+      groupHotels(formattedData, mode);
     } catch (err) {
       console.error("Error fetching hotel data:", err);
       setError(err.response?.data?.message || "Erreur lors du chargement des données. Veuillez réessayer.");
+      toast.error("Erreur lors du chargement des données. Veuillez réessayer.");
     } finally {
       setLoading(false);
     }
@@ -308,7 +263,7 @@ const ClientHome = () => {
   // Function to group hotels based on the selected view mode
   const groupHotels = (data, mode) => {
     const grouped = {};
-    
+
     if (mode === "zone") {
       // Group by city/zone
       data.forEach(hotel => {
@@ -318,15 +273,22 @@ const ClientHome = () => {
         grouped[hotel.ville].push(hotel);
       });
     } else if (mode === "capacity") {
-      // Group by capacity
+      // Group by capacity and capitalize first letter
       data.forEach(hotel => {
-        if (!grouped[hotel.capacite]) {
-          grouped[hotel.capacite] = [];
+        // Capitalize the first letter of capacity
+        const formattedCapacity = hotel.capacite.charAt(0).toUpperCase() + hotel.capacite.slice(1);
+
+        if (!grouped[formattedCapacity]) {
+          grouped[formattedCapacity] = [];
         }
-        grouped[hotel.capacite].push(hotel);
+        grouped[formattedCapacity].push({
+          ...hotel,
+          // Update the display capacity, but keep the original for filtering
+          displayCapacity: formattedCapacity
+        });
       });
     }
-    
+
     setGroupedHotels(grouped);
   };
 
@@ -334,36 +296,44 @@ const ClientHome = () => {
   const filterHotels = () => {
     // Start with all hotels
     let filteredData = [...hotelData];
-    
-    // Apply filters
+
+    // Apply filters (making vue comparison case-insensitive)
     if (filters.montagne) {
-      filteredData = filteredData.filter(hotel => hotel.vue === "Montagne");
+      filteredData = filteredData.filter(hotel =>
+        hotel.vue && hotel.vue.toLowerCase() === "montagne"
+      );
     }
-    
+
     if (filters.mer) {
-      filteredData = filteredData.filter(hotel => hotel.vue === "Mer");
+      filteredData = filteredData.filter(hotel =>
+        hotel.vue && hotel.vue.toLowerCase() === "mer"
+      );
     }
-    
+
     if (filters.extensive !== null) {
       filteredData = filteredData.filter(hotel => hotel.extensible === filters.extensive);
     }
-    
-    if (filters.tv) {
-      filteredData = filteredData.filter(hotel => hotel.commodite.includes("TV"));
+
+    // Filter by star rating using the checkboxes
+    const selectedStars = [];
+    if (filters.stars.one) selectedStars.push(1);
+    if (filters.stars.two) selectedStars.push(2);
+    if (filters.stars.three) selectedStars.push(3);
+    if (filters.stars.four) selectedStars.push(4);
+    if (filters.stars.five) selectedStars.push(5);
+
+    // Only apply star filter if at least one star checkbox is selected
+    if (selectedStars.length > 0) {
+      filteredData = filteredData.filter(hotel =>
+        selectedStars.includes(parseInt(hotel.etoile))
+      );
     }
-    
-    if (filters.sofa) {
-      filteredData = filteredData.filter(hotel => hotel.commodite.includes("Sofa"));
-    }
-    
-    if (filters.fridge) {
-      filteredData = filteredData.filter(hotel => hotel.commodite.includes("Fridge"));
-    }
-    
+
+    // N'applique pas le filtre de prix si le prix est à 0
     if (filters.price > 0) {
       filteredData = filteredData.filter(hotel => hotel.prix <= filters.price);
     }
-    
+
     // Re-group filtered data
     groupHotels(filteredData, viewMode);
   };
@@ -385,7 +355,7 @@ const ClientHome = () => {
 
   return (
     <div>
-     <ClientNavbar/>
+      <ClientNavbar />
       <Container>
         <Row>
           <Col md={5} className="mt-4 mb-5">
@@ -479,7 +449,7 @@ const ClientHome = () => {
                       <span
                         style={{
                           position: "absolute",
-                          left: `calc(${(price / 1000) * 100}% - 10px)`, // Position it relative to the thumb
+                          left: `calc(${(price / 1000) * 100}% - 10px)`,
                           bottom: "25px",
                           fontWeight: "bold",
                           color: "#D1A062",
@@ -521,40 +491,62 @@ const ClientHome = () => {
                   </Form>
                 </Row>
 
-                {/* Commodité */}
+                {/* Stars Rating Filter - Modified to use checkboxes */}
                 <Row className="align-items-center mt-3">
-                  <CardText>Commodité</CardText>
+                  <CardText>Nombre d'Étoiles</CardText>
                   <Form className="ms-3">
-                    <Form.Check
-                      inline
-                      label="TV"
-                      name="commodite"
-                      type="checkbox"
-                      id="tvcheckbox"
-                      className="custom-checkbox"
-                      checked={filters.tv}
-                      onChange={handleCommoditeChange}
-                    />
-                    <Form.Check
-                      inline
-                      label="Sofa"
-                      name="commodite"
-                      type="checkbox"
-                      id="sofacheckbox"
-                      className="custom-checkbox"
-                      checked={filters.sofa}
-                      onChange={handleCommoditeChange}
-                    />
-                    <Form.Check
-                      inline
-                      label="Fridge"
-                      name="commodite"
-                      type="checkbox"
-                      id="fridgecheckbox"
-                      className="custom-checkbox"
-                      checked={filters.fridge}
-                      onChange={handleCommoditeChange}
-                    />
+                    <div className="d-flex flex-wrap gap-2">
+                      <Form.Check
+                        inline
+                        label="1"
+                        name="star-rating"
+                        type="checkbox"
+                        id="one"
+                        className="custom-checkbox"
+                        checked={filters.stars.one}
+                        onChange={handleStarChange}
+                      />
+                      <Form.Check
+                        inline
+                        label="2"
+                        name="star-rating"
+                        type="checkbox"
+                        id="two"
+                        className="custom-checkbox"
+                        checked={filters.stars.two}
+                        onChange={handleStarChange}
+                      />
+                      <Form.Check
+                        inline
+                        label="3"
+                        name="star-rating"
+                        type="checkbox"
+                        id="three"
+                        className="custom-checkbox"
+                        checked={filters.stars.three}
+                        onChange={handleStarChange}
+                      />
+                      <Form.Check
+                        inline
+                        label="4"
+                        name="star-rating"
+                        type="checkbox"
+                        id="four"
+                        className="custom-checkbox"
+                        checked={filters.stars.four}
+                        onChange={handleStarChange}
+                      />
+                      <Form.Check
+                        inline
+                        label="5"
+                        name="star-rating"
+                        type="checkbox"
+                        id="five"
+                        className="custom-checkbox"
+                        checked={filters.stars.five}
+                        onChange={handleStarChange}
+                      />
+                    </div>
                   </Form>
                 </Row>
               </Card.Body>
@@ -583,10 +575,17 @@ const ClientHome = () => {
                 <h2 className="group-heading mb-4">{group}</h2>
                 <Row>
                   {groupedHotels[group].map((hotel) => (
-                    <Col md={3} key={hotel.hotel_ID} className="mb-4">
+                    <Col md={4} key={hotel.chambre_ID} className="mb-4">
                       <Card className="h-100 hotel-card">
                         <Card.Body>
-                          <Card.Title>{hotel.hotel_name}</Card.Title>
+                          <Card.Title className="d-flex align-items-center">
+                            {hotel.hotel_name}
+                            <div className="ms-1">
+                              {Array.from({ length: parseInt(hotel.etoile) || 0 }).map((_, i) => (
+                                <i key={i} className="bi bi-star-fill" style={{ color: "#D1A062" }}></i>
+                              ))}
+                            </div>
+                          </Card.Title>
                           <Card.Text>
                             <strong>Adresse:</strong> {hotel.rue}, {hotel.ville}, {hotel.code_postal}
                           </Card.Text>
@@ -599,8 +598,10 @@ const ClientHome = () => {
                           <Card.Text>
                             <strong>Commodités:</strong>
                             <div className="d-flex flex-wrap gap-1 mt-1">
-                              {hotel.commodite.map((item, idx) => (
-                                <Badge key={idx} bg="primary" className="me-1">{item}</Badge>
+                              {hotel.commodite && hotel.commodite.map((item, idx) => (
+                                <Badge key={idx} bg="primary" style={{ backgroundColor: "#D1A062" }} className="me-1">
+                                  {item.trim()}
+                                </Badge>
                               ))}
                             </div>
                           </Card.Text>
@@ -608,14 +609,17 @@ const ClientHome = () => {
                             <strong>Prix:</strong> ${hotel.prix}/nuit
                           </Card.Text>
                           <Card.Text>
-                            <strong>Capacité:</strong> {hotel.capacite}
+                            <strong>Capacité:</strong> {viewMode === "capacity" && hotel.displayCapacity
+                              ? hotel.displayCapacity
+                              : hotel.capacite.charAt(0).toUpperCase() + hotel.capacite.slice(1)}
                           </Card.Text>
                         </Card.Body>
                         <Card.Footer>
-                          <Button 
-                            variant="primary" 
+                          <Button
+                            variant="primary"
                             className="w-100"
                             onClick={() => openReservationModal(hotel)}
+                            style={{ backgroundColor: "#D1A062", borderColor: "#D1A062" }}
                           >
                             Réserver
                           </Button>
@@ -629,6 +633,7 @@ const ClientHome = () => {
           ) : (
             <div className="text-center py-5">
               <h3>Aucun hôtel trouvé correspondant à vos critères</h3>
+              <p>Veuillez ajuster vos filtres ou définir un prix supérieur à 0$.</p>
             </div>
           )}
         </div>
@@ -643,9 +648,16 @@ const ClientHome = () => {
           {selectedRoom && (
             <>
               <div className="mb-4">
-                <h5>{selectedRoom.hotel_name}</h5>
+                <h5>
+                  {selectedRoom.hotel_name}
+                  <span className="ms-2">
+                    {Array.from({ length: parseInt(selectedRoom.etoile) || 0 }).map((_, i) => (
+                      <i key={i} className="bi bi-star-fill" style={{ color: "#D1A062" }}></i>
+                    ))}
+                  </span>
+                </h5>
                 <p>
-                  <strong>Chambre:</strong> {selectedRoom.capacite}
+                  <strong>Chambre:</strong> {selectedRoom.capacite.charAt(0).toUpperCase() + selectedRoom.capacite.slice(1)}
                   <br />
                   <strong>Prix:</strong> ${selectedRoom.prix} par nuit
                   <br />
@@ -676,51 +688,22 @@ const ClientHome = () => {
                   />
                 </Form.Group>
               </Form>
-              {reservationData.debut_date && reservationData.fin_date && (
-                <div className="price-calculation mt-3 p-3 bg-light rounded">
-                  <h6>Récapitulatif</h6>
-                  <div className="d-flex justify-content-between">
-                    <span>Prix par nuit:</span>
-                    <span>${selectedRoom.prix}</span>
-                  </div>
-                  <div className="d-flex justify-content-between">
-                    <span>Nombre de nuits:</span>
-                    <span>
-                      {Math.ceil(
-                        (new Date(reservationData.fin_date) - new Date(reservationData.debut_date)) / 
-                        (1000 * 60 * 60 * 24)
-                      )}
-                    </span>
-                  </div>
-                  <div className="d-flex justify-content-between fw-bold mt-2">
-                    <span>Total:</span>
-                    <span>
-                      ${selectedRoom.prix * 
-                        Math.ceil(
-                          (new Date(reservationData.fin_date) - new Date(reservationData.debut_date)) / 
-                          (1000 * 60 * 60 * 24)
-                        )}
-                    </span>
-                  </div>
+              {error && (
+                <div className="alert alert-danger" role="alert">
+                  {error}
                 </div>
               )}
             </>
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button 
-            variant="primary" 
+          <Button
+            variant="primary"
             onClick={submitReservation}
             disabled={loading}
+            style={{ backgroundColor: "#D1A062", borderColor: "#D1A062" }}
           >
-            {loading ? (
-              <>
-                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                Traitement...
-              </>
-            ) : (
-              "Confirmer la réservation"
-            )}
+            {loading ? 'Traitement en cours...' : 'Confirmer la réservation'}
           </Button>
         </Modal.Footer>
       </Modal>
@@ -728,31 +711,23 @@ const ClientHome = () => {
       {/* Success Modal */}
       <Modal show={showSuccessModal} onHide={closeSuccessModal} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Réservation Confirmée</Modal.Title>
+          <Modal.Title>Réservation confirmée</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className="text-center mb-4">
-            <span className="text-success" style={{ fontSize: "4rem" }}>
-              <i className="bi bi-check-circle-fill"></i>
-            </span>
-          </div>
-          <h5 className="text-center mb-4">Merci de réserver une chambre</h5>
-          <div className="alert alert-info">
-            <p className="mb-0">
-              Présentez votre identifiant de réservation <strong>{reservationId}</strong> à l'hôtel pour transformer votre réservation en une location.
-            </p>
+          <div className="text-center">
+            <i className="bi bi-check-circle-fill text-success" style={{ fontSize: "3rem" }}></i>
+            <h4 className="mt-3">Votre réservation a été confirmée!</h4>
+            <p className="mt-3">Numéro de réservation: <strong>{reservationId}</strong></p>
+            <p>Vous pouvez consulter les détails de votre réservation dans votre espace client.</p>
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={closeSuccessModal}>
-            Fermer
-          </Button>
-          <Button 
-            variant="outline-primary" 
-            as={Link} 
-            to="/booking"
+          <Button
+            variant="primary"
+            onClick={closeSuccessModal}
+            style={{ backgroundColor: "#D1A062", borderColor: "#D1A062" }}
           >
-            Voir mes réservations
+            OK
           </Button>
         </Modal.Footer>
       </Modal>

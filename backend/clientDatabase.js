@@ -104,3 +104,158 @@ export const updateClientByNAS = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
+// Fonction pour obtenir les chambres disponibles par zone (ville)
+export const getRoomsByZone = async (req, res) => {
+    try {
+        const query = `
+            SELECT 
+                h.hotel_ID, h.nom_hotel, h.rue, h.ville, h.code_postal, h.etoile,
+                c.chambre_ID, c.prix, c.commodite, c.capacite, c.extensible, c.vue
+            FROM 
+                Hotel h
+            JOIN 
+                Chambre c ON h.hotel_ID = c.hotel_ID
+            WHERE 
+                c.dommage = 'non' 
+                AND c.chambre_ID NOT IN (
+                    SELECT chambre_ID FROM Location 
+                    WHERE current_date BETWEEN debut_date_location AND fin_date_location
+                    
+                    UNION
+                    
+                    SELECT chambre_ID FROM Reservation 
+                    WHERE current_date BETWEEN debut_date_reservation AND fin_date_reservation
+                )
+            ORDER BY h.ville, h.nom_hotel
+        `;
+
+        const result = await pool.query(query);
+
+        res.json(result.rows);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ error: err.message });
+    }
+};
+
+// Fonction pour obtenir les chambres disponibles par capacité
+export const getRoomsByCapacity = async (req, res) => {
+    try {
+        const query = `
+            SELECT 
+                h.hotel_ID, h.nom_hotel, h.rue, h.ville, h.code_postal, h.etoile,
+                c.chambre_ID, c.prix, c.commodite, c.capacite, c.extensible, c.vue
+            FROM 
+                Hotel h
+            JOIN 
+                Chambre c ON h.hotel_ID = c.hotel_ID
+            WHERE 
+                c.dommage = 'non' 
+                AND c.chambre_ID NOT IN (
+                    SELECT chambre_ID FROM Location 
+                    WHERE current_date BETWEEN debut_date_location AND fin_date_location
+                    
+                    UNION
+                    
+                    SELECT chambre_ID FROM Reservation 
+                    WHERE current_date BETWEEN debut_date_reservation AND fin_date_reservation
+                )
+            ORDER BY c.capacite, h.nom_hotel
+        `;
+
+        const result = await pool.query(query);
+
+        res.json(result.rows);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ error: err.message });
+    }
+};
+
+// Fonction pour créer une réservation
+export const createClientReservation = async (req, res) => {
+    const { NAS_client, chambre_ID, debut_date_reservation, fin_date_reservation } = req.body;
+
+    try {
+        // Vérifier si la chambre est disponible pour ces dates
+        const checkAvailable = await pool.query(
+            `SELECT * FROM Chambre
+             WHERE chambre_ID = $1
+             AND dommage = 'non'
+             AND chambre_ID NOT IN (
+                SELECT chambre_ID FROM Location 
+                WHERE $2 <= fin_date_location AND $3 >= debut_date_location
+                
+                UNION
+                
+                SELECT chambre_ID FROM Reservation 
+                WHERE $2 <= fin_date_reservation AND $3 >= debut_date_reservation
+             )`,
+            [chambre_ID, debut_date_reservation, fin_date_reservation]
+        );
+
+        if (checkAvailable.rows.length === 0) {
+            return res.status(400).json({
+                success: false,
+                message: "La chambre n'est pas disponible pour ces dates"
+            });
+        }
+
+        // Créer la réservation
+        const newReservation = await pool.query(
+            "INSERT INTO Reservation (debut_date_reservation, fin_date_reservation, NAS_client, chambre_ID) VALUES($1, $2, $3, $4) RETURNING *",
+            [debut_date_reservation, fin_date_reservation, NAS_client, chambre_ID]
+        );
+
+        res.status(201).json({
+            success: true,
+            reservation: newReservation.rows[0]
+        });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ success: false, error: err.message });
+    }
+};
+
+// Function to get all reservations for a client
+export const getmyReservations = async (req, res) => {
+    try {
+        const { nasClient } = req.params;
+
+        const query = `
+            SELECT 
+                r.reservation_ID, 
+                r.NAS_client,
+                r.chambre_ID,
+                r.debut_date_reservation,
+                r.fin_date_reservation,
+                h.nom_hotel as hotel_name,
+                h.rue,
+                h.ville,
+                h.code_postal,
+                h.etoile,
+                c.vue,
+                c.extensible,
+                c.commodite,
+                c.prix,
+                c.capacite
+            FROM 
+                Reservation r
+            JOIN 
+                Chambre c ON r.chambre_ID = c.chambre_ID
+            JOIN 
+                Hotel h ON c.hotel_ID = h.hotel_ID
+            WHERE 
+                r.NAS_client = $1
+            ORDER BY 
+                r.debut_date_reservation DESC
+        `;
+
+        const result = await pool.query(query, [nasClient]);
+        res.json(result.rows);
+    } catch (err) {
+        console.error("Error fetching client reservations:", err.message);
+        res.status(500).json({ error: err.message });
+    }
+};

@@ -1,7 +1,7 @@
 -- creation table: ChaineHotel
 CREATE TABLE IF NOT EXISTS ChaineHotel (
 	chaine_ID INTEGER NOT NULL UNIQUE,  
-    	nom_chaine VARCHAR(255),
+    nom_chaine VARCHAR(255),
 	rue VARCHAR(255),
 	ville VARCHAR(255),
 	code_postal VARCHAR(6),
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS Hotel (
 CREATE TABLE IF NOT EXISTS Chambre (
 	chambre_ID INTEGER NOT NULL UNIQUE,
 	prix INTEGER,
-    	commodite VARCHAR(255),
+    commodite VARCHAR(255),
 	capacite VARCHAR(255),
 	extensible VARCHAR(255),
 	dommage VARCHAR(255),
@@ -98,5 +98,5 @@ CREATE TABLE IF NOT EXISTS Location (
 	FOREIGN KEY (NAS_employe) REFERENCES Employe(NAS_employe) ON UPDATE CASCADE ON DELETE CASCADE,
 	FOREIGN KEY (NAS_client) REFERENCES Client(NAS_client) ON UPDATE CASCADE ON DELETE CASCADE,
 	FOREIGN KEY (chambre_ID) REFERENCES Chambre(chambre_ID) ON UPDATE CASCADE ON DELETE CASCADE,
-	FOREIGN KEY (reservation_ID) REFERENCES Reservation(reservation_ID) ON UPDATE CASCADE ON DELETE CASCADE
+	FOREIGN KEY (reservation_ID) REFERENCES Reservation(reservation_ID)
 );

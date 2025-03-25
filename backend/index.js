@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
-import { insertClient, validateClientLogin,getClientProfileByEmail, deleteClientByNAS, updateClientByNAS} from './clientDatabase.js';
-import { validateEmployeeLogin } from './employeeDatabase.js';
+import { insertClient, validateClientLogin,getClientProfileByEmail, deleteClientByNAS, updateClientByNAS, getRoomsByZone, getRoomsByCapacity, createClientReservation, getmyReservations} from './clientDatabase.js';
+import { validateEmployeeLogin, getClientReservation, cancelReservation, createLocationFromReservation, getClientLocation, getAvailableRooms, createDirectLocation} from './employeeDatabase.js';
 import { getEmployeesByHotelId, insertEmployee, updateEmployee, deleteEmployee, getClientsByHotelId, getClientReservations, getClientLocations, getHotelById, getChambresByHotelId, insertChambre, getChambreStatus, deleteChambre, updateChambre} from './managerDatabase.js';
 import env from 'dotenv';
 env.config(); 
@@ -19,8 +19,19 @@ app.post('/api/login/client', validateClientLogin);
 app.get('/api/client/:email', getClientProfileByEmail);
 app.delete('/api/client/:nas', deleteClientByNAS);
 app.put('/api/client/:nas', updateClientByNAS);
+app.get('/api/rooms/by-zone', getRoomsByZone);
+app.get('/api/rooms/by-capacity', getRoomsByCapacity);
+app.post('/api/reservations', createClientReservation);
+app.get('/api/client/:nasClient/reservations', getmyReservations);
+
 // =================================route pour employee===========================
 app.post('/api/login/employee', validateEmployeeLogin);
+app.get('/api/employee/:employeeId/reservations', getClientReservation);
+app.delete('/api/reservations/:reservationId', cancelReservation);
+app.post('/api/locations', createLocationFromReservation);
+app.get('/api/employee/:employeeId/locations', getClientLocation);
+app.get('/api/employee/:employeeId/availableRooms', getAvailableRooms);
+app.post('/api/locations/direct', createDirectLocation);
 
 // =================================route pour manager===========================
 app.get('/api/employees/:hotelId', getEmployeesByHotelId);
