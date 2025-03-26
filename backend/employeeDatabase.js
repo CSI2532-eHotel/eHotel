@@ -81,7 +81,13 @@ export const confirmClientReservation = async (req, res) => {
           chambre_ID
       } = reservation.rows[0];
 
-      // Step 2: Insert into location table (WITHOUT deleting the reservation)
+      // Step 2: Insert the reservation into the archive table
+      await pool.query(
+        "INSERT INTO archived_reservations (reservation_ID, debut_date_reservation, fin_date_reservation, NAS_client, chambre_ID) VALUES ($1, $2, $3, $4, $5)",
+        [reservation_ID, debut_date_reservation, fin_date_reservation, NAS_client, chambre_ID]
+      );
+
+      // Step 3: Insert into location table (WITHOUT deleting the reservation) ///bizn archive reservation using TRIGGER
       const newLocation = await pool.query(
           "INSERT INTO location (debut_date_location, fin_date_location, montant, transaction_date, NAS_employe, NAS_client, chambre_ID, reservation_ID) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *",
           [
@@ -96,8 +102,12 @@ export const confirmClientReservation = async (req, res) => {
           ]
       );
 
+      // Step 4: Delete the reservation after archiving
+      await pool.query("DELETE FROM reservation WHERE reservation_ID = $1", [reservation_ID]);
+
+
       res.status(201).json({
-          message: "Reservation confirmed and converted to location",
+          message: "Reservation confirme et est maintenant une location",
           location: newLocation.rows[0]
       });
   } catch (err) {

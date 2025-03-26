@@ -134,12 +134,12 @@ const EmployeeLocation = () => {
       };
 
       // Send data to backend
-      /* 
-      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/locations`, locationData);
-      console.log("Location created successfully:", response.data);
-      */
+      // Call the backend API
+      const response = await axios.post("http://localhost:5000/api/locations", locationData);
 
-      // For demo purposes, remove the room from local state
+      console.log("Votre location a ete creee", response.data);
+
+      // Remove the room from available list(since it is booked)
       setAvailableRooms(availableRooms.filter(
         room => room.chambre_ID !== selectedRoom.chambre_ID
       ));

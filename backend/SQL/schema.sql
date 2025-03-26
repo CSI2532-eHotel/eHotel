@@ -100,3 +100,49 @@ CREATE TABLE IF NOT EXISTS Location (
 	FOREIGN KEY (chambre_ID) REFERENCES Chambre(chambre_ID) ON UPDATE CASCADE ON DELETE CASCADE,
 	FOREIGN KEY (reservation_ID) REFERENCES Reservation(reservation_ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
+
+
+--creation table: ArchivedReservation
+CREATE TABLE IF NOT EXISTS ArchivedReservation (
+    reservation_ID INTEGER PRIMARY KEY,
+    debut_date_reservation DATE,
+    fin_date_reservation DATE,
+    NAS_client INTEGER,
+    chambre_ID INTEGER,
+    archived_at TIMESTAMP DEFAULT NOW()
+
+	- Foreign Keys for data consistency
+    FOREIGN KEY (NAS_client) REFERENCES Client(NAS_client) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (chambre_ID) REFERENCES Chambre(chambre_ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+--Create trigger for reservation to be archived automatically
+CREATE OR REPLACE FUNCTION archive_reservation()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO archived_reservations SELECT * FROM reservation WHERE reservation_ID = NEW.reservation_ID;
+    DELETE FROM reservation WHERE reservation_ID = NEW.reservation_ID;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+--trigger creation
+CREATE TRIGGER archive_reservation_trigger
+AFTER INSERT ON location
+FOR EACH ROW
+EXECUTE FUNCTION archive_reservation();
+
+--Create setTransactionFunction for setting up transaction date automatically
+CREATE OR REPLACE FUNCTION set_transaction_date()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Automatically set transaction_date to the current timestamp when inserting a new location
+    NEW.transaction_date := NOW();
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+--trigger creation
+CREATE TRIGGER trigger_set_transaction_date
+BEFORE INSERT ON Location
+FOR EACH ROW
+EXECUTE FUNCTION set_transaction_date();
