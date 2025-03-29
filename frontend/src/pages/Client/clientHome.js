@@ -708,9 +708,6 @@ const ClientHome = () => {
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="danger" style={{marginRight:"10px"}} onClick={closeReservationModal}>
-            Annuler
-          </Button>
           <Button 
             variant="primary" 
             onClick={submitReservation}

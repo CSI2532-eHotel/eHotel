@@ -7,37 +7,41 @@ import pool from "./configDatabase.js";
 //fonction pour validate employee login
 export const validateEmployeeLogin = async (req, res) => {
   try {
-    const { courriel, motpasse } = req.body;
-
-    const result = await pool.query(
-      "SELECT e.nas_employe, e.nom_employe, e.prenom_employe, e.courriel_employee, e.role, e.hotel_id " +
-        "FROM Employe e WHERE e.courriel_employee = $1 AND e.motpasse_employee = $2",
-      [courriel, motpasse]
-    );
-
-    console.log("result.rows", result.rows);
-
-    if (result.rows.length === 0) {
-      return res.status(401).json({
-        success: false,
-        message: "Courriel ou mot de passe incorrect",
+      const { courriel, motpasse } = req.body;
+      
+      const result = await pool.query(
+          "SELECT NAS_employe, nom_employe, prenom_employe, role, courriel_employee, hotel_ID FROM Employe WHERE courriel_employee = $1 AND motpasse_employee = $2",
+          [courriel, motpasse]
+      );
+      
+      if (result.rows.length === 0) {
+          return res.status(401).json({ success: false, message: "Courriel ou mot de passe incorrect" });
+      }
+      
+      const employee = result.rows[0];
+      const isManager = employee.role === 'gestionnaire';
+      const isReceptionist = employee.role === 'receptioniste';
+      
+      // seulement les gestionnaires (login into manager page) et receptionistes (login into employee page) peuvent se connecter
+      if (!isManager && !isReceptionist) {
+          return res.status(403).json({ 
+              success: false, 
+              message: "Accès non autorisé. Seuls les gestionnaires et receptionistes peuvent se connecter." 
+          });
+      }
+      
+      res.json({ 
+          success: true, 
+          userType: "employee", 
+          userData: {
+              ...employee,
+              est_gestionnaire: isManager,
+              est_receptioniste: isReceptionist
+          }
       });
-    }
-
-    //verifier si l'employé est gestionnaire
-    const userData = {
-      ...result.rows[0],
-      est_gestionnaire: result.rows[0].role === "gestionnaire",
-    };
-
-    res.json({
-      success: true,
-      userType: "employee",
-      userData: userData,
-    });
   } catch (err) {
-    console.error(err.message);
-    res.status(500).json({ success: false, error: err.message });
+      console.error(err.message);
+      res.status(500).json({ success: false, error: err.message });
   }
 };
 
