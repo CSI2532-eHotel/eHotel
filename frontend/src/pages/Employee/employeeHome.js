@@ -342,6 +342,31 @@ const EmployeeHome = () => {
           </Tab.Content>
         </Tab.Container>
       </Container>
+      {/* Payment Modal */}
+      <Modal show={showPaymentModal} onHide={() => setShowPaymentModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirmer le paiement</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form noValidate validated={validated} onSubmit={handlePaymentSubmit}>
+            {paymentError && <div className="alert alert-danger">{paymentError}</div>}
+            <Form.Group className="mb-3">
+              <Form.Label>Montant</Form.Label>
+              <Form.Control
+                type="text"
+                required
+                value={paymentAmount}
+                onChange={handlePaymentAmountChange}
+              />
+            </Form.Group>
+            <div className="d-flex justify-content-end">
+              <Button variant="primary" type="submit">
+                Confirmer
+              </Button>
+            </div>
+          </Form>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };
