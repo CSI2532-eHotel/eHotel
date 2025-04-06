@@ -17,4 +17,4 @@ courriel: admin-toronto@hilton-hotels.com , mot_de_passe: Password@3701
 ◼ npm start (démarrer l'application localement - localhost:3000)
 ### o Exécution backend :
 ◼ cd backend
-o npm run server (nodemon) ou npm run start (exécution sur localhost:5000 par défaut)
+◼ npm run server (nodemon) ou npm run start (exécution sur localhost:5000 par défaut)
